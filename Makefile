@@ -6,7 +6,7 @@
 #    By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/13 13:30:11 by loumouli          #+#    #+#              #
-#    Updated: 2023/03/22 14:55:37 by mpignet          ###   ########.fr        #
+#    Updated: 2023/03/22 16:36:15 by mpignet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,10 @@ SRC			=	$(addprefix src/,		\
 					)					\
 					$(addprefix client/,\
 						Client.cpp		\
+					)					\
+					$(addprefix commands/,\
+						nick.cpp		\
+						user.cpp		\
 					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\

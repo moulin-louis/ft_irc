@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 14:56:50 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/22 15:30:10 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <iostream>
 # include "irc.hpp"
 
+# define hostname "localhost"
 // create a class for our Server's Client in C++98, based on irssi client type
 
 class Client
@@ -32,7 +33,6 @@ class Client
 
 		string nickname;
 		string username;
-		string hostname;
 		string realname;
 
 		string channel;

@@ -24,9 +24,11 @@ class Server
 		const uint16_t	&getPort() const;
 		const string 	&getPassword() const;
 
-	string	msg_welcome(Client& client);
-	string	msg_invalid_nick(Client& client);
-	//Client*	register_connection(string& entry);
+	void	send_client(string& msg, Client& client);
+
+	//connection commands
+	void	nick(vector<string> params, Client& client);
+	void	user(vector<string> params, Client& client);
 };
 
 #endif
