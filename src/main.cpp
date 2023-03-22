@@ -1,11 +1,14 @@
 #include <iostream>
 #include "irc.hpp"
+#include "Server.hpp"
 
 int main( int ac, char **av ) {
 	if ( ac != 3 ) {
 		cout << "usage is : ./ircserv <port> <password>";
 		return EXIT_FAILURE;
 	}
+	// Test instantiation of Server class
+	Server server(av[1], av[2]);
 	int port = atoi(av[1]);
 	
 	Socket sock = socket( AF_INET, SOCK_STREAM  , 0);
