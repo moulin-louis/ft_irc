@@ -4,22 +4,23 @@
 
 # include <string>
 # include <iostream>
+# include <map>
+# include <cstdlib>
 # include "irc.hpp"
 
 class Server
 {
 	private:
-		const	string _port;
-		const	string _password;
-		const	uint16_t		_port_uint;
+		const	string 			_password;
+		const	uint16_t		_port;
+//		std::map<int, Client>	_fd_map;
 	public:
-		Server(const string &port, const string &password);
+		Server(const char *port, const string &password);
 		Server(const Server &copy);
 		~Server();
 		Server &operator=(const Server &assign);
 
-		const string 	&getPort() const;
-		uint16_t			getPort_uint() const;
+		const uint16_t	&getPort() const;
 		const string 	&getPassword() const;
 };
 

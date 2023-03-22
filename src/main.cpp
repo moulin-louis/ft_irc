@@ -3,13 +3,13 @@
 #include "Server.hpp"
 
 int main( int ac, char **av ) {
-	
-	// Test instantiation of Server class
-	Server server(av[1], av[2]);
-	try {
-		if ( ac != 3 ) {
-			throw invalid_argument("pas bien args");
-	}
+
+	try
+	{
+		if (ac != 3)
+			throw invalid_argument("Usage: ./ircserv <port> <password>");
+		check_port(av[1]);
+		Server server(av[1], av[2]);
 		Socket sock = socket( AF_INET , SOCK_STREAM  , 0);
 		if ( sock == -1 ) {
 			throw runtime_error(string("socket: ") + strerror(errno));

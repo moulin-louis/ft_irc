@@ -30,6 +30,8 @@
 #include <cstdio>
 #include <algorithm>
 
+#include "Tools.hpp"
+
 typedef int Socket;
 
 #define INVALID_SOCKET -1
