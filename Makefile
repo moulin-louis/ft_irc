@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+         #
+#    By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/13 13:30:11 by loumouli          #+#    #+#              #
-#    Updated: 2023/03/22 14:55:37 by mpignet          ###   ########.fr        #
+#    Updated: 2023/03/22 15:15:35 by loumouli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,9 @@ SRC			=	$(addprefix src/,		\
 					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\
+					)					\
+					$(addprefix client/,	\
+   						Client.cpp		\
 					)					\
 				)
 
