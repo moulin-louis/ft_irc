@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 16:43:37 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/22 17:02:52 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,13 @@ class Server
 		void	parse_command( string& input );
 
 	void	send_client(string& msg, Client& client);
+	bool	find_user(string nick);
 
 	//connection commands
 	void	nick(vector<string> params, Client& client);
 	void	user(vector<string> params, Client& client);
+	void	join(vector<string> params, Client& client);
+	void	private_msg(vector<string> params, Client& client);
 		Socket	sfd;
 		void	initiateSocket();
 };
