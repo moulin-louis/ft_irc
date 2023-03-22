@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 12:12:48 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 10:31:31 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/22 12:52:12 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <sys/epoll.h>
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
