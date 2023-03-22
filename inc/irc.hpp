@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 12:12:48 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/21 14:31:43 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/22 12:52:12 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <sys/epoll.h>
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
 #include <cerrno>
 #include <csignal>
 #include <cstdio>
+#include <algorithm>
 
 typedef int Socket;
 
