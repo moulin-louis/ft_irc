@@ -7,6 +7,7 @@
 # include <map>
 # include <cstdlib>
 # include "irc.hpp"
+# include "Client.hpp"
 
 class Server
 {
@@ -22,6 +23,10 @@ class Server
 
 		const uint16_t	&getPort() const;
 		const string 	&getPassword() const;
+
+	string	msg_accept_connection(Client& client);
+	string	msg_refuse_connection(Client& client);
+	//Client*	register_connection(string& entry);
 };
 
 #endif
