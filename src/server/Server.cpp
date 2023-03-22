@@ -1,11 +1,10 @@
 #include "Server.hpp"
 
-Server::Server(const string &port, const string &password): _port(port), _password(password), _port_uint(atoi(port.c_str()))
+Server::Server(const char *port, const string &password): _password(password), _port(std::strtoul(port, NULL, 10))//, _fd_map()
 {
-
 }
 
-Server::Server(const Server &copy): _port(copy._port), _password(copy._password), _port_uint(copy._port_uint)
+Server::Server(const Server &copy): _password(copy._password), _port(copy._port)//, _fd_map(copy._fd_map)
 {
 	*this = copy;
 }
@@ -21,17 +20,12 @@ Server &Server::operator=(const Server &assign)
 	return (*this);
 }
 
-const string &Server::getPort() const
-{
-	return (this->_port);
-}
-
 const string &Server::getPassword() const
 {
 	return (this->_password);
 }
 
-uint16_t Server::getPort_uint() const
+const uint16_t &Server::getPort() const
 {
-	return (this->_port_uint);
+	return (this->_port);
 }

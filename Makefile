@@ -31,6 +31,9 @@ SRC			=	$(addprefix src/,		\
 					$(addprefix server/,\
 						Server.cpp		\
 					)					\
+					$(addprefix tools/,	\
+   						Tools.cpp		\
+					)					\
 				)
 
 OBJ			=	$(SRC:%.cpp=$(BUILDIR)/%.o)
