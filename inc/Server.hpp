@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 17:02:52 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/22 17:10:10 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@
 # include "irc.hpp"
 # include "Client.hpp"
 
-typedef void (*command_function)( vector<string>, Client& );
 
 class Server
 {
+	typedef void (Server::*command_function)( vector<string>, Client& );
+	
 	private:
 		const string 	_password;
 		const uint16_t	_port;
@@ -51,5 +52,6 @@ class Server
 		Socket	sfd;
 		void	initiateSocket();
 };
+
 
 #endif
