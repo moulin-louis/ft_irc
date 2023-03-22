@@ -1,6 +1,7 @@
 #include <iostream>
 #include "irc.hpp"
 #include "Server.hpp"
+#include "Client.hpp"
 
 int main( int ac, char **av ) {
 
