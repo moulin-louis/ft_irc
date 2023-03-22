@@ -9,53 +9,62 @@ int main( int ac, char **av ) {
 	}
 	// Test instantiation of Server class
 	Server server(av[1], av[2]);
-	int port = atoi(av[1]);
-	
-	Socket sock = socket( AF_INET, SOCK_STREAM  , 0);
-	if (sock == -1) {
-		cout << "socket creatin: " << strerror(errno) << endl;
-		return EXIT_FAILURE;
-	}
-
-	cout << "Socket created" << endl;
-
-	sockaddr_in	sin;
-	sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(port);
-
-	if (bind(sock, (sockaddr *)&sin, sizeof(sin)) == -1 ) {
-		perror("bind: ");
+	try {
+		Socket sock = socket( AF_INET , SOCK_STREAM  , 0);
+		if ( sock == -1 ) {
+			throw runtime_error(string("socket: ") + strerror(errno));
+		}
+		cout << "Socket created" << endl;
+		sockaddr_in	sin;
+		sin.sin_addr.s_addr = htonl(INADDR_ANY);
+		sin.sin_family = AF_INET;
+		sin.sin_port = htons(server.getPort_uint());	
+		if ( bind(sock, (sockaddr *)&sin, sizeof(sin)) == -1 ) {
+			close(sock);
+			throw runtime_error(string("bind: ") + strerror(errno));
+		}
+		cout << "bind done" << endl;
+		if (listen(sock, 4096) == -1 ) {
+			close(sock);
+			throw runtime_error(strerror(errno));
+		}
+		cout << "socket is listening.." << endl;
+		while(1) {
+			struct	pollfd fds[200];
+			nfds_t	nfds = 1;
+			memset(&fds, 0, sizeof(fds));
+			fds[0].fd = sock;
+			fds[1].events = POLLOUT;
+			int rc = poll(fds, nfds, 30);
+			if ( rc == -1) {
+				close(sock);
+				throw runtime_error(strerror(errno));
+			}
+			if ( rc == 0 ) {
+				cout << "rc == 0, 0 connection waiting" << endl;
+				continue ;
+			}
+			sockaddr_in csin;
+			socklen_t crecsize = sizeof(csin);
+			Socket csock = accept(sock, (sockaddr*)&csin, &crecsize);
+			if ( csock == -1 ) {
+				close(sock);
+				throw runtime_error(string("accept: ") + strerror(errno));
+			}
+			cout << "connection accepted" << endl;
+			if ( send(csock, "Hello World\n", strlen("Hello Word") + 1, 0) == -1 ) {
+				close(sock);
+				close(csock);
+				throw runtime_error(string("send: ") + strerror(errno));
+			}
+			cout << "message sent" << endl;
+			close(csock);
+		}
 		close(sock);
+	}
+	catch ( exception& x )	{
+		cout << x.what() << endl;
 		return EXIT_FAILURE;
 	}
-
-	cout << "bind done" << endl;
-
-	if (listen(sock, 4096) == -1 ) {
-		perror("listen: ");
-		close(sock);
-		return EXIT_FAILURE;
-	}
-
-	cout << "socket is listening.." << endl;
-
-	sockaddr_in csin;
-	socklen_t crecsize = sizeof(csin);
-	Socket csock = accept(sock, (sockaddr*)&csin, &crecsize);
-	if (csock == -1) {
-		perror("accept: ");
-		close(sock);
-		return EXIT_FAILURE;
-	}
-	cout << "connection accepted" << endl;
-	if (send(csock, "Hello World\n", strlen("Hello Word") + 1, 0) == -1) {
-		perror("send: ");
-		close(sock);		
-		close(csock);
-		return EXIT_FAILURE;
-	}
-	close(sock);
-	close(csock);
 	return EXIT_SUCCESS;
 }

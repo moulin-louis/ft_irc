@@ -9,16 +9,18 @@
 class Server
 {
 	private:
-		const std::string _port;
-		const std::string _password;
+		const	string _port;
+		const	string _password;
+		const	uint16_t		_port_uint;
 	public:
-		Server(const std::string &port, const std::string &password);
+		Server(const string &port, const string &password);
 		Server(const Server &copy);
 		~Server();
 		Server &operator=(const Server &assign);
 
-		const std::string &getPort() const;
-		const std::string &getPassword() const;
+		const string 	&getPort() const;
+		uint16_t			getPort_uint() const;
+		const string 	&getPassword() const;
 };
 
 #endif

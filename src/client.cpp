@@ -29,8 +29,6 @@ int main( int ac, char **av )
 				close(sock);
 				return EXIT_FAILURE;
 			}
-			cout << len_recv << " read" << endl;
-			cout << "buf capacity is " << buf.capacity() << endl;
 			cout << buf << endl;
 		}
         else
