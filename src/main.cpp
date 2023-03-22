@@ -7,58 +7,30 @@ int main( int ac, char **av ) {
 
 	try
 	{
-		if (ac != 3)
-			throw invalid_argument("Usage: ./ircserv <port> <password>");
+		if (ac != 3) throw invalid_argument("Usage: ./ircserv <port> <password>");
+
 		check_port(av[1]);
 		Server server(av[1], av[2]);
 		Socket sock = socket( AF_INET , SOCK_STREAM  , 0);
-		if ( sock == -1 ) {
-			throw runtime_error(string("socket: ") + strerror(errno));
-		}
+		if ( sock == -1 ) { throw runtime_error(string("socket: ") + strerror(errno)); }
+
 		cout << "Socket created" << endl;
 		sockaddr_in	sin;
 		sin.sin_addr.s_addr = htonl(INADDR_ANY);
 		sin.sin_family = AF_INET;
 		sin.sin_port = htons(server.getPort());
-		if ( bind(sock, (sockaddr *)&sin, sizeof(sin)) == -1 ) {
-			close(sock);
-			throw runtime_error(string("bind: ") + strerror(errno));
-		}
+		if ( bind(sock, (sockaddr *)&sin, sizeof(sin)) == -1 ) { close(sock); throw runtime_error(string("bind: ") + strerror(errno)); }
+
 		cout << "bind done" << endl;
-		if (listen(sock, 4096) == -1 ) {
-			close(sock);
-			throw runtime_error(strerror(errno));
-		}
+		if (listen(sock, 4096) == -1 ) { close(sock); throw runtime_error(string("listend: ") + strerror(errno)); }
+
 		cout << "socket is listening.." << endl;
 		while(1) {
-			sockaddr_in csin;
+			sockaddr csin;
 			socklen_t crecsize = sizeof(csin);
-			Socket csock = accept(sock, (sockaddr*)&csin, &crecsize);
-			if ( csock == -1 ) {
-				close(sock);
-				throw runtime_error(string("accept: ") + strerror(errno));
-			}
-			cout << "connection accepted" << endl;
-			string buf;
-			buf.resize(500);
-			int len_recv = recv(csock, (void *)(buf.c_str()), 500, 0);
-			if (len_recv == -1) {
-				close(sock);
-				throw runtime_error(string("recv: ") + strerror(errno));
-			}
-			buf[len_recv] = '\0';
-			cout << len_recv << " received" << endl;
-			buf.resize(len_recv + 1);
-			while (buf.find('\r') != string::npos) {
-				buf.replace(buf.find('\r'), 1, "");
-			}
-			cout << buf << endl;
-			// if ( send(csock, "Hello World\n", strlen("Hello Word") + 1, 0) == -1 ) {
-			// 	close(sock);
-			// 	close(csock);
-			// 	throw runtime_error(string("send: ") + strerror(errno));
-			// }
-			// cout << "message sent" << endl;
+			Socket csock = accept(sock, &csin, &crecsize);
+			if ( csock == -1 ) { close(sock); throw runtime_error(string("accept: ") + strerror(errno)); }
+			server.fd_map.insert( pair<Socket, Client>(csock, Client()) );
 		}
 		close(sock);
 	}
