@@ -18,8 +18,11 @@
 # include <iostream>
 # include <map>
 # include <cstdlib>
+# include <sys/epoll.h>
 # include "irc.hpp"
 # include "Client.hpp"
+
+# define MAX_EVENTS 64
 
 typedef void (*command_function)( vector<string>, Client& );
 
@@ -28,6 +31,10 @@ class Server
 	private:
 		const string 	_password;
 		const uint16_t	_port;
+		Socket			_sfd;
+		Epollfd			_epfd;
+		epoll_event		_events[MAX_EVENTS];
+		Socket			_initiateSocket() const;
 	public:
 		map<int, Client>	fd_map;
 		map<string, command_function>	cmd_map;
@@ -40,11 +47,10 @@ class Server
 		const string 	&getPassword() const;
 		void	parse_command( string& input );
 
-		Socket	sfd;
-		void	initiateSocket();
 		string	msg_welcome(Client& client);
 		string	msg_invalid_nick(Client& client);
 		//Client*	register_connection(string& entry);
+		void run();
 };
 
 #endif
