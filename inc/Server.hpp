@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 14:58:27 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:38:13 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ class Server
 		const uint16_t	&getPort() const;
 		const string 	&getPassword() const;
 
-		string	msg_welcome(Client& client);
-		string	msg_invalid_nick(Client& client);
-		//Client*	register_connection(string& entry);
+	void	send_client(string& msg, Client& client);
+
+	//connection commands
+	void	nick(vector<string> params, Client& client);
+	void	user(vector<string> params, Client& client);
 };
 
 #endif
