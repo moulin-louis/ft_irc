@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 16:41:12 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/22 16:43:37 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ typedef void (*command_function)( vector<string>, Client& );
 class Server
 {
 	private:
-		const	string 			_password;
-		const	uint16_t		_port;
+		const string 	_password;
+		const uint16_t	_port;
 	public:
 		map<int, Client>	fd_map;
 		map<string, command_function>	cmd_map;
@@ -45,6 +45,8 @@ class Server
 	//connection commands
 	void	nick(vector<string> params, Client& client);
 	void	user(vector<string> params, Client& client);
+		Socket	sfd;
+		void	initiateSocket();
 };
 
 #endif
