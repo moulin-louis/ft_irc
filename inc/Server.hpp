@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 17:10:10 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/22 17:56:09 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@
 # include <cstdlib>
 # include "irc.hpp"
 # include "Client.hpp"
+#include <functional>
 
 
 class Server
 {
 	typedef void (Server::*command_function)( vector<string>, Client& );
+	
 	
 	private:
 		const string 	_password;
@@ -39,7 +41,7 @@ class Server
 
 		const uint16_t	&getPort() const;
 		const string 	&getPassword() const;
-		void	parse_command( string& input );
+		void	parse_command( string& input, Client& client );
 
 	void	send_client(string& msg, Client& client);
 	bool	find_user(string nick);
