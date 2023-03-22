@@ -35,6 +35,7 @@
 #include "Tools.hpp"
 
 typedef int Socket;
+typedef int Epollfd;
 
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
