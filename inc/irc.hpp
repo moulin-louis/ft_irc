@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <vector>
 
+#include "colors.h"
 #include "Tools.hpp"
 
 typedef int Socket;

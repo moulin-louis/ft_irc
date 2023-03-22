@@ -40,9 +40,9 @@ class Server
 		const string 	&getPassword() const;
 		void	parse_command( string& input );
 
-	string	msg_welcome(Client& client);
-	string	msg_invalid_nick(Client& client);
-	//Client*	register_connection(string& entry);
+		string	msg_welcome(Client& client);
+		string	msg_invalid_nick(Client& client);
+		//Client*	register_connection(string& entry);
 };
 
 #endif

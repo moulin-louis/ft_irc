@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 16:37:17 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:37:50 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,14 @@ bool is_valid_nickname(string &nickname)
 }
 
 string	Server::msg_welcome(Client& client)
-{	
+{
 	string msg;
 	msg = string(":localhost") + string("001") + client.nickname + string(" :Welcome to the Internet Relay Network ") + client.nickname + string("!") + client.username + string("@") + client.hostname;
 	return (msg);
 }
 
 string	Server::msg_invalid_nick(Client& client)
-{	
+{
 	string msg;
 	msg = string(":localhost") + string("001") + '*' + client.nickname + string(" :Nickname is already in use");
 	return (msg);

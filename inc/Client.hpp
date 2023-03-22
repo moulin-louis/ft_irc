@@ -36,7 +36,6 @@ class Client
 		string realname;
 
 		string channel;
-		
 
 		bool isRegistered;
 		bool isAway;
