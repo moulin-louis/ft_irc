@@ -12,11 +12,12 @@
 
 #include "Server.hpp"
 
-Server::Server(const char *port, const string &password): _password(password), _port(std::strtoul(port, NULL, 10))//, _fd_map()
+Server::Server(const char *port, const string &password): _password(password), _port(std::strtoul(port, NULL, 10)), fd_map()
 {
 	return ;
 }
-Server::Server(const Server &copy): _password(copy._password), _port(copy._port)//, _fd_map(copy._fd_map)
+
+Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
 {
 	*this = copy;
 }
@@ -69,14 +70,14 @@ bool is_valid_nickname(string &nickname)
 }
 
 string	Server::msg_welcome(Client& client)
-{	
+{
 	string msg;
 	msg = string(":localhost") + string("001") + client.nickname + string(" :Welcome to the Internet Relay Network ") + client.nickname + string("!") + client.username + string("@") + client.hostname;
 	return (msg);
 }
 
 string	Server::msg_invalid_nick(Client& client)
-{	
+{
 	string msg;
 	msg = string(":localhost") + string("001") + '*' + client.nickname + string(" :Nickname is already in use");
 	return (msg);
