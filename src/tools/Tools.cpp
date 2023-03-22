@@ -16,7 +16,6 @@ void	check_port(const char *port)
 		}
 	}
 	port_nb = std::strtoul(port, NULL, 10);
-	errno = 0;
 	if (port_nb > 65535 || port_nb < 1024)
 		throw std::invalid_argument("Port must be between 1024 and 65535");
 }
