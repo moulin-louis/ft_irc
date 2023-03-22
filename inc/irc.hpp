@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 12:12:48 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 12:52:12 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/22 15:33:18 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 #include <csignal>
 #include <cstdio>
 #include <algorithm>
+#include <vector>
 
 #include "Tools.hpp"
 

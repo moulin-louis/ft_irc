@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 14:54:00 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/22 16:37:17 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(const char *port, const string &password): _password(password), _port(std::strtoul(port, NULL, 10))//, _fd_map()
+Server::Server(const char *port, const string &password): _password(password), _port(std::strtoul(port, NULL, 10)), fd_map()
 {
+	this->cmd_map.insert("NICK", &Server::nick);
 	return ;
 }
-Server::Server(const Server &copy): _password(copy._password), _port(copy._port)//, _fd_map(copy._fd_map)
+Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
 {
 	*this = copy;
 }
@@ -82,3 +83,16 @@ string	Server::msg_invalid_nick(Client& client)
 	return (msg);
 }
 
+void	Server::parse_command( string& input ) {
+	vector<string>	result;
+	string delimiter = " ";
+	size_t			pos;
+
+	while ((pos = input.find(delimiter)) != string::npos) {
+		result.push_back(input.substr(0, pos));
+		input.erase(0, pos + delimiter.length());
+	}
+	return ;
+}
+
+	
