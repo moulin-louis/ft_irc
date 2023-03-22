@@ -24,8 +24,8 @@
 class Server
 {
 	private:
-		const	string 			_password;
-		const	uint16_t		_port;
+		const string 	_password;
+		const uint16_t	_port;
 	public:
 		std::map<int, Client>	fd_map;
 		Server(const char *port, const string &password);
@@ -36,6 +36,8 @@ class Server
 		const uint16_t	&getPort() const;
 		const string 	&getPassword() const;
 
+		Socket	sfd;
+		void	initiateSocket();
 		string	msg_welcome(Client& client);
 		string	msg_invalid_nick(Client& client);
 		//Client*	register_connection(string& entry);
