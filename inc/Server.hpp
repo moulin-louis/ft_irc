@@ -24,8 +24,8 @@ class Server
 		const uint16_t	&getPort() const;
 		const string 	&getPassword() const;
 
-	string	msg_accept_connection(Client& client);
-	string	msg_refuse_connection(Client& client);
+	string	msg_welcome(Client& client);
+	string	msg_invalid_nick(Client& client);
 	//Client*	register_connection(string& entry);
 };
 

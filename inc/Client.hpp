@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 14:51:38 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/22 14:56:50 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 # include <string>
 # include <iostream>
-# include "Server.hpp"
+# include "irc.hpp"
 
 // create a class for our Server's Client in C++98, based on irssi client type
 

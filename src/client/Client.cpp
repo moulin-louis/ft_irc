@@ -19,12 +19,6 @@ Client::Client(void)
 	return ;
 }
 
-Client::Client(Socket fd)
-{
-	this->fd = fd;
-	return ;
-}
-
 Client::Client(string &nick, string &user)
 {
 	this->nickname = nick;
