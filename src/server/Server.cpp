@@ -14,7 +14,7 @@
 
 Server::Server(const char *port, const string &password): _password(password), _port(std::strtoul(port, NULL, 10)), fd_map()
 {
-	return ;
+
 }
 
 Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
