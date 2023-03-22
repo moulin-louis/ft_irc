@@ -56,13 +56,13 @@ void	Server::send_client(string& msg, Client& client)
 
 void	Server::initiateSocket()
 {
-	this->sfd = socket( AF_INET , SOCK_STREAM, 0);
+	this->sfd = socket( AF_UNSPEC , SOCK_STREAM, 0);
 	if ( this->sfd == -1 )
 		throw runtime_error(string("socket: ") + strerror(errno));
 	cout << "Socket created" << endl;
 	sockaddr_in	sin = {};
 	sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	sin.sin_family = AF_INET;
+	sin.sin_family = AF_UNSPEC;
 	sin.sin_port = htons(this->_port);
 	if ( bind(this->sfd, (sockaddr *)&sin, sizeof(sin)) == -1 )
 		throw runtime_error(string("bind: ") + strerror(errno));
