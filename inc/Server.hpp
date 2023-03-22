@@ -13,7 +13,7 @@ class Server
 	private:
 		const	string 			_password;
 		const	uint16_t		_port;
-//		std::map<int, Client>	_fd_map;
+		std::map<int, Client>	_fd_map;
 	public:
 		Server(const char *port, const string &password);
 		Server(const Server &copy);
