@@ -15,7 +15,7 @@
 Server::Server(const char *port, const string &password): _password(password), _port(std::strtoul(port, NULL, 10)), fd_map()
 {
 	this->sfd = -1;
-	this->cmd_map.insert("NICK", &Server::nick);
+//	this->cmd_map.insert("NICK", &Server::nick);
 }
 
 Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
@@ -88,13 +88,13 @@ string	Server::msg_invalid_nick(Client& client)
 
 void	Server::initiateSocket()
 {
-	this->sfd = socket( AF_INET , SOCK_STREAM, 0);
+	this->sfd = socket( AF_UNSPEC , SOCK_STREAM, 0);
 	if ( this->sfd == -1 )
 		throw runtime_error(string("socket: ") + strerror(errno));
 	cout << "Socket created" << endl;
 	sockaddr_in	sin = {};
 	sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	sin.sin_family = AF_INET;
+	sin.sin_family = AF_UNSPEC;
 	sin.sin_port = htons(this->_port);
 	if ( bind(this->sfd, (sockaddr *)&sin, sizeof(sin)) == -1 )
 		throw runtime_error(string("bind: ") + strerror(errno));
