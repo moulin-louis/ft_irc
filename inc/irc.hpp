@@ -30,6 +30,7 @@
 #include <cstdio>
 #include <algorithm>
 
+#include "colors.h"
 #include "Tools.hpp"
 
 typedef int Socket;

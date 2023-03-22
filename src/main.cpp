@@ -73,7 +73,7 @@ int main( int ac, char **av ) {
 		close(sock);
 	}
 	catch ( exception& x )	{
-		cout << x.what() << endl;
+		cout << RED << x.what() << RESET << endl;
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
