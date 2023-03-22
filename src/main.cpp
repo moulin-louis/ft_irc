@@ -18,7 +18,7 @@ int main( int ac, char **av ) {
 		sockaddr_in	sin;
 		sin.sin_addr.s_addr = htonl(INADDR_ANY);
 		sin.sin_family = AF_INET;
-		sin.sin_port = htons(server.getPort_uint());	
+		sin.sin_port = htons(server.getPort());
 		if ( bind(sock, (sockaddr *)&sin, sizeof(sin)) == -1 ) {
 			close(sock);
 			throw runtime_error(string("bind: ") + strerror(errno));
