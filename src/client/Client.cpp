@@ -58,6 +58,11 @@ const string &Client::getRealname() const
 	return (this->realname);
 }
 
+const string &Client::getHostname() const
+{
+	return (this->hostname);
+}
+
 const Socket &Client::getFd() const
 {
 	return (this->fd);
@@ -81,6 +86,11 @@ void Client::setUsername(const string &username)
 void Client::setRealname(const string &realname)
 {
 	this->realname = realname;
+}
+
+void Client::setHostname(const string &hostname)
+{
+	this->hostname = hostname;
 }
 
 void Client::setFd(const Socket &fd)

@@ -53,7 +53,8 @@ class Server
 
 		void	send_client(string& msg, Client& clt_to);
 		void	send_client(string& msg, Client& clt_from, Client& clt_to);
-		int		find_user(string nick);
+		Client&	find_user(string nick);
+		void	is_valid_nickname(string &nickname);
 
 		//connection commands
 		void	nick(vector<string> params, Client& client);
@@ -62,8 +63,6 @@ class Server
 		void	private_msg(vector<string> params, Client& client);
 		Socket	sfd;
 		void	initiateSocket();
-		string	msg_welcome(Client& client);
-		string	msg_invalid_nick(Client& client);
 		//Client*	register_connection(string& entry);
 		void run();
 };

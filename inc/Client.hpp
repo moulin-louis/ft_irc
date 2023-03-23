@@ -18,7 +18,6 @@
 # include <iostream>
 #include "irc.hpp"
 
-# define hostname "localhost"
 // create a class for our Server's Client in C++98, based on irssi client type
 
 class Client
@@ -27,6 +26,7 @@ class Client
 		string nickname;
 		string username;
 		string realname;
+		string hostname;
 
 		Socket fd;
 		sockaddr_in sin;
@@ -47,12 +47,14 @@ class Client
 		const string &getNickname() const;
 		const string &getUsername() const;
 		const string &getRealname() const;
+		const string &getHostname() const;
 		const Socket &getFd() const;
 		const sockaddr_in &getSin() const;
 
 		void setNickname(const string &nickname);
 		void setUsername(const string &username);
 		void setRealname(const string &realname);
+		void setHostname(const string &hostname);
 		void setFd(const Socket &fd);
 		void setSin(const sockaddr_in &sin);
 };

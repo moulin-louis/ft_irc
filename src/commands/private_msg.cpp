@@ -13,18 +13,33 @@
 #include "irc.hpp"
 #include "Server.hpp"
 
+bool	verif_auth(Client& clt)
+{
+	if (clt.getNickname().empty() || clt.getUsername().empty())
+	{
+		//send_client(msg_not_registered(clt), clt);
+		return (false);
+	}
+	return (true);
+}
+
 void	Server::private_msg(vector<string> params, Client& clt_from)
 {
-	int	user_fd;
 	if (params.size() == 0 || params[0].empty())
 	{
 		throw	invalid_argument("params error");
 		return ;
 	}
-	user_fd = find_user(params[0]);
-	if (user_fd == -1)
+	verif_auth(clt_from);
+	try
+	{
+		Client& dest = find_user(params[0]);
+		send_client(params[1], dest, clt_from);
+	}
+	catch (exception& e)
+	{
+		cout << RED << e.what() << RESET << endl;
 		return ;
-	(void)clt_from;
-	//send_client(params[1], params[0], clt_from);
+	}
 	return ;
 }

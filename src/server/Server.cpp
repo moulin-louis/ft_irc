@@ -65,37 +65,27 @@ const uint16_t &Server::getPort() const
 	return (this->_port);
 }
 
-void	Server::send_client(string& msg, Client& clt_to)
-{
-	int dest_fd;
-
-	dest_fd = find_user(clt_to.getNickname());
-	if (dest_fd == -1)
-		return ;
-	send(dest_fd, msg.c_str(), msg.size(), MSG_DONTWAIT);
-	return ;
-}
-
-int	Server::find_user(string nick)
+Client&	Server::find_user(string nick)
 {
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
 	{
 		if (it->second.getNickname() == nick)
-			return it->first;
+			return it->second;
 	}
-	cout << "User not found" << endl;
-	return (-1);
+	throw runtime_error("User not found");
+}
+
+void	Server::send_client(string& msg, Client& clt_to)
+{
+	string msg_to_send = ":" + clt_to.getNickname() + "!" + clt_to.getUsername() + "@" + clt_to.getHostname() + " " + msg;
+	send(clt_to.getFd(), msg.c_str(), msg.size(), MSG_DONTWAIT);
+	return ;
 }
 
 void	Server::send_client(string& msg, Client& clt_from, Client& clt_to)
 {
-	int dest_fd;
-
-	dest_fd = find_user(clt_to.getNickname());
-	if (dest_fd == -1)
-		return ;
-	(void)clt_from;
-	send(dest_fd, msg.c_str(), msg.size(), MSG_DONTWAIT);
+	string msg_to_send = ":" + clt_from.getNickname() + "!" + clt_from.getUsername() + "@" + clt_from.getHostname() + " PRIVMSG " + clt_to.getNickname() + " :" + msg;
+	send(clt_to.getFd(), msg_to_send.c_str(), msg.size(), MSG_DONTWAIT);
 	return ;
 }
 
