@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 17:56:09 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/23 12:30:27 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,14 @@ class Server
 		void	user(vector<string> params, Client& client);
 		void	join(vector<string> params, Client& client);
 		void	private_msg(vector<string> params, Client& client);
-		Socket	sfd;
-		void	initiateSocket();
+		string	msg_welcome(Client& client);
+		string	msg_invalid_nick(Client& client);
 		//Client*	register_connection(string& entry);
-		void run();
+		void 	run();
+		void	accept_client();
+		void	disconect_client( int );
+		string	received_data_from_client( Socket );
+		void	process_input(Socket);
 };
 
 
