@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 16:33:54 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/23 14:45:42 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void Server::is_valid_username(string &username, Client& client)
 	{
 		string msg = ":localhost 433 * " + username + " :Username has invalid characters";
 		send_client(msg, client);
-		throw invalid_argument("invalid username");
+		throw invalid_argument("user: invalid username");
 	}
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
 	{
@@ -33,7 +33,7 @@ void Server::is_valid_username(string &username, Client& client)
 		{
 			string msg = ":localhost 433 * " + username + " :Username is already in use";
 			send_client(msg, client);
-			throw invalid_argument("username already taken");
+			throw invalid_argument("user: username already taken");
 		}
 	}
 }
