@@ -16,14 +16,14 @@
 string	msg_welcome(Client& client)
 {	
 	string msg;
-	msg = string(":localhost") + string("001") + client.nickname + string(" :Welcome to the Internet Relay Network ") + client.nickname + string("!") + client.username + string("@") + hostname;
+	msg = string(":localhost") + string("001") + client.getNickname() + string(" :Welcome to the Internet Relay Network ") + client.getNickname() + string("!") + client.getUsername() + string("@") + hostname;
 	return (msg);
 }
 
 string	msg_invalid_nick(Client& client)
 {	
 	string msg;
-	msg = string(":localhost") + string("433") + '*' + client.nickname + string(" :Nickname is already in use");
+	msg = string(":localhost") + string("433") + '*' + client.getNickname() + string(" :Nickname is already in use");
 	return (msg);
 }
 
@@ -47,7 +47,7 @@ void	Server::nick(vector<string> params, Client& client)
 		//send_client(msg_invalid_nick(client), client);
 		return ;
 	}
-	client.nickname = params[0];
+	client.setNickname(params[0]);
 	//send_client(msg_welcome(client), client);
 	return ;
 }

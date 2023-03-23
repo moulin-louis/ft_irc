@@ -33,7 +33,7 @@ void	Server::user(vector<string> params, Client& client)
 		//send_client(msg_invalid_user(client), client);
 		return ;
 	}
-	client.username = params[0];
+	client.setUsername(params[0]);
 	//send_client(msg_welcome(client), client);
 	return ;
 }

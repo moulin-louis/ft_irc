@@ -13,24 +13,18 @@
 #include "irc.hpp"
 #include "Server.hpp"
 
-bool	Server::find_user(string nick)
+void	Server::private_msg(vector<string> params, Client& clt_from)
 {
-	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
-	{
-		if (it->second.nickname == nick)
-			return true;
-	}
-	return false;
-}
-
-void	Server::private_msg(vector<string> params, Client& client)
-{
+	int	user_fd;
 	if (params.size() == 0 || params[0].empty())
 	{
 		throw	invalid_argument("params error");
 		return ;
 	}
-	find_user(params[0]);
-	(void)client;
+	user_fd = find_user(params[0]);
+	if (user_fd == -1)
+		return ;
+	(void)clt_from;
+	//send_client(params[1], params[0], clt_from);
 	return ;
 }

@@ -23,7 +23,13 @@
 
 class Client
 {
-	//private:
+	private:
+		string nickname;
+		string username;
+		string realname;
+
+		Socket fd;
+		sockaddr_in sin;
 	public:
 		Client();
 		Client(string &nick, string &user);
@@ -31,18 +37,24 @@ class Client
 		~Client();
 		Client &operator=(const Client &assign);
 
-		string nickname;
-		string username;
-		string realname;
 
 		string channel;
 
 		bool isRegistered;
 		bool isAway;
 		bool isOperator;
-		
-		Socket fd;
-		sockaddr_in sin;
+
+		const string &getNickname() const;
+		const string &getUsername() const;
+		const string &getRealname() const;
+		const Socket &getFd() const;
+		const sockaddr_in &getSin() const;
+
+		void setNickname(const string &nickname);
+		void setUsername(const string &username);
+		void setRealname(const string &realname);
+		void setFd(const Socket &fd);
+		void setSin(const sockaddr_in &sin);
 };
 
 #endif

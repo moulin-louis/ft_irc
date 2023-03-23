@@ -51,8 +51,9 @@ class Server
 		const string 	&getPassword() const;
 		void	parse_command( string& input, Client& client );
 
-		void	send_client(string& msg, Client& client);
-		bool	find_user(string nick);
+		void	send_client(string& msg, Client& clt_to);
+		void	send_client(string& msg, Client& clt_from, Client& clt_to);
+		int		find_user(string nick);
 
 		//connection commands
 		void	nick(vector<string> params, Client& client);

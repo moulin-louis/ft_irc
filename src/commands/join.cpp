@@ -15,6 +15,7 @@
 
 void	Server::join(vector<string> params, Client& client)
 {
-	
+	(void)params;
+	(void)client;
 	return ;
 }

@@ -37,11 +37,13 @@ SRC			=	$(addprefix src/,		\
 					$(addprefix commands/,\
 						nick.cpp		\
 						user.cpp		\
+						private_msg.cpp	\
+						join.cpp		\
 					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\
 					)					\
-					$(addprefix client/,	\
+					$(addprefix client/,\
    						Client.cpp		\
 					)					\
 				)

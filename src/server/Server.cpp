@@ -65,10 +65,37 @@ const uint16_t &Server::getPort() const
 	return (this->_port);
 }
 
-void	Server::send_client(string& msg, Client& client)
+void	Server::send_client(string& msg, Client& clt_to)
 {
-	(void)msg;
-	(void)client;
+	int dest_fd;
+
+	dest_fd = find_user(clt_to.getNickname());
+	if (dest_fd == -1)
+		return ;
+	send(dest_fd, msg.c_str(), msg.size(), MSG_DONTWAIT);
+	return ;
+}
+
+int	Server::find_user(string nick)
+{
+	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
+	{
+		if (it->second.getNickname() == nick)
+			return it->first;
+	}
+	cout << "User not found" << endl;
+	return (-1);
+}
+
+void	Server::send_client(string& msg, Client& clt_from, Client& clt_to)
+{
+	int dest_fd;
+
+	dest_fd = find_user(clt_to.getNickname());
+	if (dest_fd == -1)
+		return ;
+	(void)clt_from;
+	send(dest_fd, msg.c_str(), msg.size(), MSG_DONTWAIT);
 	return ;
 }
 
