@@ -59,12 +59,14 @@ class Server
 		void	user(vector<string> params, Client& client);
 		void	join(vector<string> params, Client& client);
 		void	private_msg(vector<string> params, Client& client);
-		Socket	sfd;
-		void	initiateSocket();
 		string	msg_welcome(Client& client);
 		string	msg_invalid_nick(Client& client);
 		//Client*	register_connection(string& entry);
-		void run();
+		void 	run();
+		void	accept_client();
+		void	disconect_client( int );
+		string	received_data_from_client( Socket );
+		void	process_input(Socket);
 };
 
 

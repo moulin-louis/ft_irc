@@ -16,14 +16,13 @@ bool stop = false;
 
 void handler(int)
 {
-	std::cout << "Signal received" << std::endl;
+	cout << YELLOW << "Signal received" << RESET << endl;
 	stop = true;
 }
 
 Server::Server(const char *port, const string &password)
-	: _password(password), _port(std::strtoul(port, NULL, 10)), fd_map()
+	: _password(password), _port(strtoul(port, NULL, 10)), fd_map()
 {
-	this->sfd = -1;
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
 	if (this->_epfd == -1)
@@ -84,17 +83,21 @@ Socket	Server::_initiateSocket() const
 	sfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sfd < 0)
 		throw runtime_error(string("socket: ") + strerror(errno));
-	cout << "Socket created" << endl;
+	cout << GREEN << "Socket created" << RESET << endl;
+
 	if (setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
 		throw runtime_error(string("setsockopt: ") + strerror(errno));
+
 	if (fcntl(sfd, F_SETFL, O_NONBLOCK) == -1)
 		throw runtime_error(string("fcntl: ") + strerror(errno));
+
 	if (bind(sfd, (sockaddr *)&sin, sizeof(sin)) == -1 )
 		throw runtime_error(string("bind: ") + strerror(errno));
-	cout << "bind done" << endl;
+	cout << GREEN << "Bind done" << RESET << endl;
+
 	if (listen(sfd, SOMAXCONN) < 0)
-		throw runtime_error(string("listend: ") + strerror(errno));
-	cout << "socket is listening.." << endl;
+		throw runtime_error(string("listen: ") + strerror(errno));
+	cout << GREEN << "Socket is listening.." << RESET << endl;
 	return (sfd);
 }
 
@@ -112,46 +115,77 @@ void	Server::run()
 	while (!stop)
 	{
 		nfds = epoll_wait(this->_epfd, this->_events, MAX_EVENTS, -1);
-		if (nfds == -1)
-		{
+		if (nfds == -1) {
 			if (errno == EINTR)
 				continue;
 			throw runtime_error(string("epoll_wait: ") + strerror(errno));
 		}
-		for (n = 0; n < nfds; ++n)
-		{
-			if (this->_events[n].events & EPOLLIN)
-			{
-				if (this->_events[n].data.fd == this->_sfd)
-				{
-					// mettre ca ailleurs et faire une fonction
-					// c'est la qu'est ajouté le Client à la MAP
-					std::cout << "new connection -> client to be added to map" << std::endl;
-					sockaddr csin = {};
-					socklen_t crecsize = sizeof(csin);
-					Socket csock = accept(this->_sfd, &csin, &crecsize);
-					if ( csock == -1 )
-						{
-							close(this->_sfd);
-							throw runtime_error(string("accept: ") + strerror(errno));
-						}
-					this->fd_map.insert( pair<Socket, Client>(csock, Client()) );
-				}
-				else
-				{
-					// Gérer les event autres que la connection
-					std::cout << "new event" << std::endl;
+		for (n = 0; n < nfds; ++n) {
+			Socket temp_fd = this->_events[n].data.fd;
+			if (this->_events[n].events & EPOLLIN) {
+				if (temp_fd == this->_sfd)
+					this->accept_client();
+				else {
+					if (this->fd_map.find(temp_fd) != this->fd_map.end()) {
+						this->process_input(temp_fd);
+					}
 				}
 			}
-			else
-			{
-				if (this->_events[n].events & (EPOLLHUP | EPOLLRDHUP))
-				{
-					std::cout << "client disconnected" << std::endl;
-				}
+			else {
+				if (this->_events[n].events & EPOLLHUP || this->_events[n].events & EPOLLRDHUP)
+					this->disconect_client(n);
 			}
 		}
 	}
+	cout << RED << "Stoping the server" << RESET << endl;
+}
+
+void	Server::accept_client( void ) {
+	epoll_event ev = {};
+	sockaddr csin = {};
+	socklen_t crecsize = sizeof(csin);
+
+	Socket csock = accept(this->_sfd, &csin, &crecsize);
+	if ( csock == -1 ) {
+		close(this->_sfd);
+		throw runtime_error(string("accept: ") + strerror(errno));
+	}
+	cout << GREEN << "New connection" << RESET << endl;
+	ev.events = EPOLLIN | EPOLLOUT;
+	ev.data.fd = csock;
+	this->fd_map.insert(make_pair(csock, Client()) );
+	this->fd_map[csock].fd = csock;
+	epoll_ctl(this->_epfd, EPOLL_CTL_ADD, csock, &ev);
+}
+
+void	Server::disconect_client( int pos_events ) {
+	epoll_event ev = {};
+
+	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, this->_events[pos_events].data.fd, &ev);
+	this->fd_map.erase( this->fd_map.find(this->_events[pos_events].data.fd));
+	cout << GREEN << "client disconnected" << RESET << endl;
+}
+
+void	Server::process_input(Socket fd ) {
+	string temp = this->received_data_from_client(fd);
+	if (temp.empty()) {
+		return ;
+	}
+	cout << temp << endl;	
+	this->parse_command(temp, this->fd_map[fd]);
+}
+
+string	Server::received_data_from_client(Socket fd) {
+	string result;
+	result.resize(512);
+	int ret_val = recv(fd, (void *)result.c_str(), 512, 0);
+	if (ret_val == -1 ) {
+		throw invalid_argument(string("Recv: ") + strerror(errno));
+	}
+	if (ret_val == 0) {
+		return (result.clear(), result);
+	}
+	return result;
 }
 
 void	Server::parse_command( string& input, Client& client ) {
@@ -166,7 +200,7 @@ void	Server::parse_command( string& input, Client& client ) {
 	result.push_back(input);
 	string cmd = result[0];
 	result.erase(result.begin());
-	map<string, command_function>::iterator it = this->cmd_map.find("NICK");
+	map<string, command_function>::iterator it = this->cmd_map.find(cmd);
 	if (it == this->cmd_map.end()) {
 		cout << "cant find pair" << endl;
 		return ;
