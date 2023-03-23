@@ -13,13 +13,13 @@
 #include "irc.hpp"
 #include "Server.hpp"
 
-string	msg_welcome(Client& client)
+string	Server::msg_welcome(Client& client)
 {	
 	string msg = ":localhost 001" + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname();
 	return (msg);
 }
 
-string	msg_invalid_nick(Client& client)
+string	Server::msg_invalid_nick(Client& client)
 {	
 	string msg = ":localhost 433 * " + client.getNickname() + " :Nickname is already in use";
 	return (msg);

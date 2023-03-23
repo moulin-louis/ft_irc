@@ -171,7 +171,7 @@ void	Server::accept_client( void ) {
 	ev.events = EPOLLIN | EPOLLOUT;
 	ev.data.fd = csock;
 	this->fd_map.insert(make_pair(csock, Client()) );
-	this->fd_map[csock].fd = csock;
+	this->fd_map[csock].setFd(csock);
 	epoll_ctl(this->_epfd, EPOLL_CTL_ADD, csock, &ev);
 }
 

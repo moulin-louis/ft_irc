@@ -27,7 +27,6 @@ class Client
 		string username;
 		string realname;
 		string hostname;
-
 		Socket fd;
 		sockaddr_in sin;
 	public:
