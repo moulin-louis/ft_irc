@@ -54,15 +54,14 @@ class Server
 		void	send_client(string& msg, Client& clt_to);
 		void	send_client(string& msg, Client& clt_from, Client& clt_to);
 		Client&	find_user(string nick);
-		void	is_valid_nickname(string &nickname);
+		void	is_valid_nickname(string &nickname, Client& client);
+		void	is_valid_username(string &username, Client& client);
 
 		//connection commands
 		void	nick(vector<string> params, Client& client);
 		void	user(vector<string> params, Client& client);
 		void	join(vector<string> params, Client& client);
 		void	private_msg(vector<string> params, Client& client);
-		string	msg_welcome(Client& client);
-		string	msg_invalid_nick(Client& client);
 		//Client*	register_connection(string& entry);
 		void 	run();
 		void	accept_client();
@@ -71,5 +70,6 @@ class Server
 		void	process_input(Socket);
 };
 
+string	msg_welcome(Client& client);
 
 #endif
