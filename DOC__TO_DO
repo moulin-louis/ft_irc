@@ -1,0 +1,53 @@
+RFC IRC:
+https://datatracker.ietf.org/doc/html/rfc1459
+https://datatracker.ietf.org/doc/html/rfc2810
+https://datatracker.ietf.org/doc/html/rfc2811
+https://datatracker.ietf.org/doc/html/rfc2812
+https://datatracker.ietf.org/doc/html/rfc2813
+
+DOC COMMANDES:
+https://irssi.org/documentation/help/mode/
+https://www.mirc.com/help/html/index.html?basic_irc_commands.html
+quackenet: serveur IRC avec liste des channels disponibles
+
+
+COMMANDES:
+MODE: Modifie les modes d'un canal ou d'un utilisateur.
+JOIN: Rejoint un canal (channel) spécifié.
+PART: Quitte un canal spécifié.
+AWAY: Indique que l'utilisateur est absent.
+PRIVMSG: Envoie un message privé à un utilisateur ou à un canal spécifié.
+NOTICE: Envoie une notification à un utilisateur ou à un canal spécifié.
+TOPIC: Modifie le sujet d'un canal.
+KICK: Expulse un utilisateur d'un canal.
+LIST: Affiche la liste des canaux disponibles sur le serveur.
+NAMES: Affiche la liste des utilisateurs présents sur un canal spécifié.
+OPER: Accorde les privilèges d'opérateur (IRCop) à un utilisateur spécifié.
+PING: Teste la connexion au serveur IRC.
+PONG: Répond à un message PING.
+QUIT: Quitte le serveur IRC.
+WHOIS: Fournit des informations sur un utilisateur spécifié.
+MOTD: Affiche le message du jour (MOTD) du serveur.
+
+
+
+Liste complete des commandes:
+NICK: Définit le pseudonyme (nickname) de l'utilisateur.
+USER: Définit le nom d'utilisateur (username) de l'utilisateur et fournit des informations supplémentaires, telles que le nom réel et l'adresse électronique.
+JOIN: Rejoint un canal (channel) spécifié.
+PART: Quitte un canal spécifié.
+QUIT: Quitte le serveur IRC.
+PRIVMSG: Envoie un message privé à un utilisateur ou à un canal spécifié.
+NOTICE: Envoie une notification à un utilisateur ou à un canal spécifié.
+MODE: Modifie les modes d'un canal ou d'un utilisateur.
+TOPIC: Modifie le sujet d'un canal.
+KICK: Expulse un utilisateur d'un canal.
+WHOIS: Fournit des informations sur un utilisateur spécifié.
+LIST: Affiche la liste des canaux disponibles sur le serveur.
+NAMES: Affiche la liste des utilisateurs présents sur un canal spécifié.
+PING: Teste la connexion au serveur IRC.
+PONG: Répond à un message PING.
+OPER: Accorde les privilèges d'opérateur (IRCop) à un utilisateur spécifié.
+TOPIC: Modifie le sujet d'un canal.
+AWAY: Indique que l'utilisateur est absent.
+MOTD: Affiche le message du jour (MOTD) du serveur.

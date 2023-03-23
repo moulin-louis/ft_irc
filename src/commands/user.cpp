@@ -35,5 +35,7 @@ void	Server::user(vector<string> params, Client& client)
 	}
 	client.setUsername(params[0]);
 	//send_client(msg_welcome(client), client);
+	string result = msg_welcome(client);
+	send_client(result, client);
 	return ;
 }

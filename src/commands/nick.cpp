@@ -15,7 +15,7 @@
 
 string	Server::msg_welcome(Client& client)
 {	
-	string msg = ":localhost 001" + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname();
+	string msg = ":localhost 001 " + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname();
 	return (msg);
 }
 
@@ -38,16 +38,19 @@ void Server::is_valid_nickname(string &nickname)
 
 void	Server::nick(vector<string> params, Client& client)
 {
+	cout << "in nick" << endl;
 	try
 	{		
 		is_valid_nickname(params[0]);
 	}
 	catch(exception& e)
 	{
+		cout << "execption found" << endl;
 		string msg = msg_invalid_nick(client);
-		send_client(msg, client);
+//		send_client(msg, client);
 		return ;
 	}
+	cout << "testing done" << endl;
 	client.setNickname(params[0]);
 	string msg = msg_welcome(client);
 	send_client(msg, client);

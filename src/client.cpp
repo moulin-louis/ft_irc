@@ -19,17 +19,22 @@ int main( int ac, char **av )
 	if(connect(sock, (sockaddr*)&sin, sizeof(sin)) != SOCKET_ERROR)
 	{
 		cout << "Connexion à " << inet_ntoa(sin.sin_addr) << " sur le port " << htons(sin.sin_port) << endl;
-//		string buf;
-//		buf.resize(500);
-//		int len_recv = recv(sock, (void *)(buf.c_str()), 500, 0);
-//		if (len_recv == -1) {
-//			cout << "receive failed" << endl;
-//			close(sock);
-//			return EXIT_FAILURE;
-//		}
-//		cout << buf << endl;
+
 		string buf = "NICK llr";
 		send(sock, (void *)buf.c_str(), buf.size(), 0);
+		buf = "USER loumouli";
+		if (send(sock, (void *)buf.c_str(), buf.size(), 0) == -1) {
+			cout << "send failed " << 	strerror(errno) << endl;
+			return 1;
+		}
+		buf.resize(500);
+		int len_recv = recv(sock, (void *)(buf.c_str()), 500, 0);
+		if (len_recv == -1) {
+			cout << "receive failed" << endl;
+			close(sock);
+			return EXIT_FAILURE;
+		}
+		cout << buf << endl;
 	}
 	else
 		cout << "Cant connect" << endl;

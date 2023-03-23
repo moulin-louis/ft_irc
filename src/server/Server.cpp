@@ -77,7 +77,14 @@ Client&	Server::find_user(string nick)
 void	Server::send_client(string& msg, Client& clt_to)
 {
 	string msg_to_send = ":" + clt_to.getNickname() + "!" + clt_to.getUsername() + "@" + clt_to.getHostname() + " " + msg;
-	send(clt_to.getFd(), msg.c_str(), msg.size(), MSG_DONTWAIT);
+	cout << "sending..." << endl;
+
+	int ret_val = send(clt_to.getFd(), msg.c_str(), msg.size(), MSG_DONTWAIT);
+	if (ret_val == -1) {
+		cout << "Send failed" << endl;
+		return ;
+	}
+	cout << ret_val << " char sent" << endl;
 	return ;
 }
 
@@ -183,14 +190,6 @@ void	Server::disconect_client( int pos_events ) {
 	cout << GREEN << "client disconnected" << RESET << endl;
 }
 
-void	Server::process_input(Socket fd ) {
-	string temp = this->received_data_from_client(fd);
-	if (temp.empty()) {
-		return ;
-	}
-	cout << temp << endl;	
-	this->parse_command(temp, this->fd_map[fd]);
-}
 
 string	Server::received_data_from_client(Socket fd) {
 	string result;
@@ -205,15 +204,34 @@ string	Server::received_data_from_client(Socket fd) {
 	return result;
 }
 
+void	Server::process_input(Socket fd ) {
+	string temp = this->received_data_from_client(fd);
+	if (temp.empty()) {
+		return ;
+	}
+	cout << "data received:" << endl;
+	cout << temp << endl;
+	while (1) {
+		if (temp.find('\n') == string::npos) {
+			break ;
+		}
+		string tok = temp.substr(0, temp.find('\n'));
+		parse_command(tok, this->fd_map[fd]);
+		temp.erase(0, temp.find('\n') + 1);
+	}
+	parse_command(temp, this->fd_map[fd]);
+}
+
 void	Server::parse_command( string& input, Client& client ) {
 	vector<string>	result;
 	size_t			pos;
 	string delimiter = " ";
-
+	cout << "parsing : " << input << endl;
 	while ((pos = input.find(delimiter)) != string::npos) {
 		result.push_back(input.substr(0, pos));
 		input.erase(0, pos + delimiter.length());
 	}
+	cout << "parsing done" << endl;
 	result.push_back(input);
 	string cmd = result[0];
 	result.erase(result.begin());
