@@ -77,14 +77,15 @@ Client&	Server::find_user(string nick)
 void	Server::send_client(string& msg, Client& clt_to)
 {
 	string msg_to_send = ":" + clt_to.getNickname() + "!" + clt_to.getUsername() + "@" + clt_to.getHostname() + " " + msg;
-	cout << "sending..." << endl;
 
 	int ret_val = send(clt_to.getFd(), msg.c_str(), msg.size(), MSG_DONTWAIT);
 	if (ret_val == -1) {
-		cout << "Send failed" << endl;
+		if ( errno == ECONNRESET ) {
+			cout << RED << "connection reset by peer" << RESET << endl;
+			this->disconect_client(clt_to.getFd());
+		}
 		return ;
 	}
-	cout << ret_val << " char sent" << endl;
 	return ;
 }
 
@@ -144,6 +145,7 @@ void	Server::run()
 				continue;
 			throw runtime_error(string("epoll_wait: ") + strerror(errno));
 		}
+//		cout << "size map of user is " << this->fd_map.size() << endl;
 		for (n = 0; n < nfds; ++n) {
 			Socket temp_fd = this->_events[n].data.fd;
 			if (this->_events[n].events & EPOLLIN) {
@@ -157,7 +159,10 @@ void	Server::run()
 			}
 			else {
 				if (this->_events[n].events & EPOLLHUP || this->_events[n].events & EPOLLRDHUP)
-					this->disconect_client(n);
+				{
+					cout << "Found event EPOLLHUP OR EPOLLRDHUP" << endl;
+					this->disconect_client(this->_events[n].data.fd);
+				}
 			}
 		}
 	}
@@ -182,12 +187,23 @@ void	Server::accept_client( void ) {
 	epoll_ctl(this->_epfd, EPOLL_CTL_ADD, csock, &ev);
 }
 
-void	Server::disconect_client( int pos_events ) {
+void	Server::disconect_client( Socket fd ) {
 	epoll_event ev = {};
-
-	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, this->_events[pos_events].data.fd, &ev);
-	this->fd_map.erase( this->fd_map.find(this->_events[pos_events].data.fd));
-	cout << GREEN << "client disconnected" << RESET << endl;
+//	cout << "deleting socket from epoll" << endl;
+	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, &ev);
+//	map<int, Client>::iterator  it = this->fd_map.find(this->_events[pos_events].data.fd);
+//	if (it == this->fd_map.end()) {
+//		cout << RED << "problem finding client in database, cant disconect" << RESET << endl;
+//		return ;
+//	}
+//	cout << "deleting client from client map" << endl;
+	if ( this->fd_map.erase(fd) == 0 ) {
+		cout << RED << "problem deleting client from database" << RESET << endl;
+	}
+	else {
+		cout << GREEN << "client disconnected" << RESET << endl;
+	}
+	cout << "map size is now " << this->fd_map.size() << endl;
 }
 
 
@@ -196,6 +212,10 @@ string	Server::received_data_from_client(Socket fd) {
 	result.resize(512);
 	int ret_val = recv(fd, (void *)result.c_str(), 512, 0);
 	if (ret_val == -1 ) {
+		if ( errno == ECONNRESET ) {
+			this->disconect_client(fd);
+			return (result.clear(), result);
+		}
 		throw invalid_argument(string("Recv: ") + strerror(errno));
 	}
 	if (ret_val == 0) {
@@ -209,8 +229,6 @@ void	Server::process_input(Socket fd ) {
 	if (temp.empty()) {
 		return ;
 	}
-	cout << "data received:" << endl;
-	cout << temp << endl;
 	while (1) {
 		if (temp.find('\n') == string::npos) {
 			break ;
@@ -226,18 +244,15 @@ void	Server::parse_command( string& input, Client& client ) {
 	vector<string>	result;
 	size_t			pos;
 	string delimiter = " ";
-	cout << "parsing : " << input << endl;
 	while ((pos = input.find(delimiter)) != string::npos) {
 		result.push_back(input.substr(0, pos));
 		input.erase(0, pos + delimiter.length());
 	}
-	cout << "parsing done" << endl;
 	result.push_back(input);
 	string cmd = result[0];
 	result.erase(result.begin());
 	map<string, command_function>::iterator it = this->cmd_map.find(cmd);
 	if (it == this->cmd_map.end()) {
-		cout << "cant find pair" << endl;
 		return ;
 	}
 	(this->*(it->second))(result, client);

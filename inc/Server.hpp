@@ -74,7 +74,7 @@ class Server
 		//server run functions
 		void 	run();
 		void	accept_client();
-		void	disconect_client( int );
+		void	disconect_client( Socket );
 		string	received_data_from_client( Socket );
 		void	process_input(Socket);
 };

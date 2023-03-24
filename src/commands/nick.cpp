@@ -48,7 +48,6 @@ void	Server::nick(vector<string> params, Client& client)
 //		send_client(msg, client);
 		return ;
 	}
-	cout << "testing done" << endl;
 	client.setNickname(params[0]);
 	// string msg = msg_welcome(client);
 	// send_client(msg, client);
