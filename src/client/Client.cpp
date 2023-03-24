@@ -16,11 +16,19 @@ Client &parse_entry(string &entry);
 
 Client::Client(void)
 {
+	this->passwd_provided = false;
+	this->isRegistered = false;
+	this->isAway = false;
+	this->isOperator = false;
 	return ;
 }
 
 Client::Client(string &nick, string &user)
 {
+	this->passwd_provided = false;
+	this->isRegistered = false;
+	this->isAway = false;
+	this->isOperator = false;
 	this->nickname = nick;
 	this->username = user;
 	return ;

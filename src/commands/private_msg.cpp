@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:57:21 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 16:14:05 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:25:53 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 bool	verif_auth(Client& client)
 {
-	if (client.getNickname().empty() || client.getUsername().empty())
+	if (client.isRegistered == false)
 	{
 		string msg = ":localhost 433 * * :you are not registered : please set a nickname and a username" + endmsg;
 		client.setBuff(client.getBuff() + msg);

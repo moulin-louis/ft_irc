@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 16:18:56 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:38:20 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 string	msg_welcome(Client& client)
 {
-	cout << "nickname bug : " << client.getNickname() << endl;
 	string msg = ":localhost 001 " + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + endmsg;
 	return (msg);
 }
@@ -38,6 +37,11 @@ void Server::is_valid_username(string &username, Client& client)
 
 void	Server::user(vector<string> params, Client& client)
 {
+	if (client.passwd_provided == false) {
+		string msg = ":localhost 464 * :You did not provide the password" + endmsg;
+		client.setBuff(client.getBuff() + msg);
+		return ;
+	}
 	try {
 		is_valid_username(params[0], client);
 	}
@@ -46,6 +50,7 @@ void	Server::user(vector<string> params, Client& client)
 		return ;
 	}
 	client.setUsername(params[0]);
+	client.isRegistered = true;
 	client.setBuff(client.getBuff() + msg_welcome(client));
 	return ;
 }
