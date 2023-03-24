@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 16:21:55 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:23:30 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,6 @@ string	Server::received_data_from_client(Socket fd) {
 	int ret_val = recv(fd, (void *)result.c_str(), 512, 0);
 	if (ret_val == -1 ) {
 		if ( errno == ECONNRESET ) {
-			cout << "debug receive data" << endl;
 			this->disconect_client(fd);
 			return (result.clear(), result);
 		}

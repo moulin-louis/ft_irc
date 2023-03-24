@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 16:37:45 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:31:09 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class Client
 
 		string channel;
 
+		bool passwd_provided;
 		bool isRegistered;
 		bool isAway;
 		bool isOperator;

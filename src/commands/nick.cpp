@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 16:15:05 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:34:07 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 
 void	Server::nick(vector<string> params, Client& client)
 {
+	if (client.passwd_provided == false) {
+		string msg = ":localhost 464 * :You did not provide the password" + endmsg;
+		client.setBuff(client.getBuff() + msg);
+		return ;
+	}
 	try {
 		if (params.size() == 0 || params[0].empty())
 			throw	invalid_argument("nick: wrong number of parameters");
