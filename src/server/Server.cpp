@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 13:04:43 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:50:29 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("NICK", &Server::nick));
 	this->cmd_map.insert(make_pair("USER", &Server::user));
 	this->cmd_map.insert(make_pair("JOIN", &Server::join));
-	this->cmd_map.insert(make_pair("PRVTMSG", &Server::private_msg));
+	this->cmd_map.insert(make_pair("PRIVMSG", &Server::private_msg));
 }
 
 Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
@@ -171,9 +171,14 @@ void	Server::accept_client( void ) {
 		throw runtime_error(string("accept: ") + strerror(errno));
 	}
 	cout << GREEN << "New connection" << RESET << endl;
-	ev.events = EPOLLIN | EPOLLOUT;
+	ev.events = EPOLLIN | EPOLLOUT | EPOLLRDHUP;
 	ev.data.fd = csock;
 	this->fd_map.insert(make_pair(csock, Client()) );
+	char hostname[NI_MAXHOST];
+	if (getnameinfo(&csin, sizeof(csin), hostname, sizeof(hostname), NULL, 0, 0) != 0)
+		this->fd_map[csock].setHostname("unknown");
+	else
+		this->fd_map[csock].setHostname(hostname);
 	this->fd_map[csock].setFd(csock);
 	epoll_ctl(this->_epfd, EPOLL_CTL_ADD, csock, &ev);
 }
@@ -196,6 +201,7 @@ string	Server::received_data_from_client(Socket fd) {
 	int ret_val = recv(fd, (void *)result.c_str(), 512, 0);
 	if (ret_val == -1 ) {
 		if ( errno == ECONNRESET ) {
+			cout << "debug receive data" << endl;
 			this->disconect_client(fd);
 			return (result.clear(), result);
 		}
@@ -252,6 +258,7 @@ void Server::flush_buff( Socket fd ) {
 	int ret_val = send(fd, buff.c_str(), buff.size(), 0);
 	if ( ret_val == -1 ) {
 		if ( errno == ECONNRESET ) {
+			cout << "debug flushbuf" << endl;
 			this->disconect_client(fd);
 			return ;
 		}
