@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 15:19:28 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:15:47 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ void	Server::parse_command( string& input, Client& client ) {
 
 void	Server::add_cmd_client(string& content, Client& client, string cmd)
 {
-	string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + " " + cmd + " :" + content + "\n";
+	string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + " " + cmd + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	return ;
 }

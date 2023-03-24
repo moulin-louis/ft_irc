@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:45:46 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 15:16:19 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:15:13 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	Server::is_valid_chan_name(vector<string> params)
 void	Channel::notify_clients(Channel& channel, Client& client, string cmd)
 {
 	for (vector<Client>::iterator it = channel.clients.begin(); it != channel.clients.end(); it++) {
-		string msg = ":" + client.getNickname() + " " + cmd + " " + channel.getName() + "\n";
+		string msg = ":" + client.getNickname() + " " + cmd + " " + channel.getName() + endmsg;
 		it->setBuff(it->getBuff() + msg);
 	}
 }

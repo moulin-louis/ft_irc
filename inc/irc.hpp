@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 12:12:48 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/22 16:41:10 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:13:38 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef int Epollfd;
 
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
+#define endmsg string("\r\n")
 
 using namespace std;
 
