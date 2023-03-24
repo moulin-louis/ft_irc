@@ -14,7 +14,6 @@
 #include "Server.hpp"
 
 void	Server::pass(vector<string> params, Client& clt_from) {
-	cout << "fn pass called" << endl;
 	if (params[0] == this->_password) {
 		clt_from.passwd_provided = true;
 		return ;
