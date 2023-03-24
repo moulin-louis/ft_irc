@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 17:52:21 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/24 13:04:43 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ Server::Server(const char *port, const string &password)
 	}
 	this->cmd_map.insert(make_pair("NICK", &Server::nick));
 	this->cmd_map.insert(make_pair("USER", &Server::user));
+	this->cmd_map.insert(make_pair("JOIN", &Server::join));
+	this->cmd_map.insert(make_pair("PRVTMSG", &Server::private_msg));
 }
 
 Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
@@ -202,6 +204,7 @@ string	Server::received_data_from_client(Socket fd) {
 	if (ret_val == 0) {
 		return (result.clear(), result);
 	}
+	result.resize(ret_val + 1);
 	return result;
 }
 
