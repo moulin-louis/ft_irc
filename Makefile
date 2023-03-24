@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: armendi <armendi@student.42.fr>            +#+  +:+       +#+         #
+#    By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/13 13:30:11 by loumouli          #+#    #+#              #
-#    Updated: 2023/03/23 14:36:21 by armendi          ###   ########.fr        #
+#    Updated: 2023/03/24 16:40:26 by mpignet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ SRC			=	$(addprefix src/,		\
 						Channel.cpp		\
 					)					\
 					$(addprefix commands/,\
-						pass			\
+						pass.cpp		\
 						nick.cpp		\
 						user.cpp		\
 						private_msg.cpp	\
