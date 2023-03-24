@@ -6,18 +6,19 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:57:21 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 17:08:03 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:14:05 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 #include "Server.hpp"
 
-bool	verif_auth(Client& clt)
+bool	verif_auth(Client& client)
 {
-	if (clt.getNickname().empty() || clt.getUsername().empty())
+	if (client.getNickname().empty() || client.getUsername().empty())
 	{
-		//send_client(msg_not_registered(clt), clt);
+		string msg = ":localhost 433 * * :you are not registered : please set a nickname and a username" + endmsg;
+		client.setBuff(client.getBuff() + msg);
 		return (false);
 	}
 	return (true);
@@ -34,7 +35,7 @@ void	Server::private_msg(vector<string> params, Client& clt_from)
 	try
 	{
 		Client& dest = find_user(params[0]);
-		send_client(params[1], dest, clt_from);
+		add_cmd_client(params[1], dest, "PRIVMSG");
 	}
 	catch (exception& e)
 	{

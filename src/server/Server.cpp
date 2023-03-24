@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 13:04:43 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:15:47 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("NICK", &Server::nick));
 	this->cmd_map.insert(make_pair("USER", &Server::user));
 	this->cmd_map.insert(make_pair("JOIN", &Server::join));
-	this->cmd_map.insert(make_pair("PRVTMSG", &Server::private_msg));
+	this->cmd_map.insert(make_pair("PRIVMSG", &Server::private_msg));
 }
 
 Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
@@ -74,13 +74,6 @@ Client&	Server::find_user(string nick)
 			return it->second;
 	}
 	throw runtime_error("User not found");
-}
-
-void	Server::send_client(string& msg, Client& clt_from, Client& clt_to)
-{
-	string msg_to_send = ":" + clt_from.getNickname() + "!" + clt_from.getUsername() + "@" + clt_from.getHostname() + " PRIVMSG " + clt_to.getNickname() + " :" + msg;
-	send(clt_to.getFd(), msg_to_send.c_str(), msg.size(), MSG_DONTWAIT);
-	return ;
 }
 
 Socket	Server::_initiateSocket() const
@@ -172,9 +165,14 @@ void	Server::accept_client( void ) {
 		throw runtime_error(string("accept: ") + strerror(errno));
 	}
 	cout << GREEN << "New connection" << RESET << endl;
-	ev.events = EPOLLIN | EPOLLOUT;
+	ev.events = EPOLLIN | EPOLLOUT | EPOLLRDHUP;
 	ev.data.fd = csock;
 	this->fd_map.insert(make_pair(csock, Client()) );
+	char hostname[NI_MAXHOST];
+	if (getnameinfo(&csin, sizeof(csin), hostname, sizeof(hostname), NULL, 0, 0) != 0)
+		this->fd_map[csock].setHostname("unknown");
+	else
+		this->fd_map[csock].setHostname(hostname);
 	this->fd_map[csock].setFd(csock);
 	epoll_ctl(this->_epfd, EPOLL_CTL_ADD, csock, &ev);
 }
@@ -196,6 +194,7 @@ string	Server::received_data_from_client(Socket fd) {
 	int ret_val = recv(fd, (void *)result.c_str(), 512, 0);
 	if (ret_val == -1 ) {
 		if ( errno == ECONNRESET ) {
+			cout << "debug receive data" << endl;
 			this->disconect_client(fd);
 			return (result.clear(), result);
 		}
@@ -240,6 +239,13 @@ void	Server::parse_command( string& input, Client& client ) {
 		return ;
 	}
 	(this->*(it->second))(result, client);
+	return ;
+}
+
+void	Server::add_cmd_client(string& content, Client& client, string cmd)
+{
+	string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + " " + cmd + " :" + content + endmsg;
+	client.setBuff(client.getBuff() + msg);
 	return ;
 }
 

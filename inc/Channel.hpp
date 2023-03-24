@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/23 14:35:22 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:05:54 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ class Channel
 {
     private:
         string _name;
-        vector<Client> _clients;
     public:
         Channel();
         Channel(string &name, Client& client);
@@ -33,15 +32,15 @@ class Channel
         ~Channel();
         Channel &operator=(const Channel &rhs);
 
-        const string            &getName() const;
-        const vector<Client>    &getClients() const;
+        vector<Client> clients;
 
-        void    setName(string &name);
-        void    setClients(vector<Client> &clients);
+        const string    &getName() const;
+        void            setName(string &name);
 
         void    addClient(Client &client);
         void    removeClient(Client &client);
         void    removeClient(string &nick);
+        void	notify_clients(Channel& channel, Client& client, string cmd);
 };
 
 #endif
