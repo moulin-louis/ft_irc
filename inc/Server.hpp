@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/23 12:30:27 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/23 14:50:25 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,12 @@
 # include <sys/epoll.h>
 # include "irc.hpp"
 # include "Client.hpp"
+# include "Channel.hpp"
 #include <functional>
 
 # define MAX_EVENTS 64
+
+class Channel;
 
 typedef void (*command_function)( vector<string>, Client& );
 
@@ -42,6 +45,7 @@ class Server
 	public:
 		map<int, Client>	fd_map;
 		map<string, command_function>	cmd_map;
+		map<string, Channel>	chan_map;
 		Server(const char *port, const string &password);
 		Server(const Server &copy);
 		~Server();
@@ -51,19 +55,23 @@ class Server
 		const string 	&getPassword() const;
 		void	parse_command( string& input, Client& client );
 
+		//send msg functions
 		void	send_client(string& msg, Client& clt_to);
 		void	send_client(string& msg, Client& clt_from, Client& clt_to);
+		//checks
 		Client&	find_user(string nick);
-		void	is_valid_nickname(string &nickname);
+		void	is_valid_nickname(string &nickname, Client& client);
+		void	is_valid_username(string &username, Client& client);
+		void	is_valid_chan_name(vector<string> params);
+		void	channel_exists(string &channel_name, Client& client);
 
-		//connection commands
+		//commands
 		void	nick(vector<string> params, Client& client);
 		void	user(vector<string> params, Client& client);
 		void	join(vector<string> params, Client& client);
 		void	private_msg(vector<string> params, Client& client);
-		string	msg_welcome(Client& client);
-		string	msg_invalid_nick(Client& client);
-		//Client*	register_connection(string& entry);
+
+		//server run functions
 		void 	run();
 		void	accept_client();
 		void	disconect_client( int );
@@ -71,5 +79,6 @@ class Server
 		void	process_input(Socket);
 };
 
+string	msg_welcome(Client& client);
 
 #endif

@@ -3,56 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 17:50:13 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/23 14:45:19 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 #include "Server.hpp"
 
-string	Server::msg_welcome(Client& client)
-{	
-	string msg = ":localhost 001 " + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname();
-	return (msg);
-}
-
-string	Server::msg_invalid_nick(Client& client)
-{	
-	string msg = ":localhost 433 * " + client.getNickname() + " :Nickname is already in use";
-	return (msg);
-}
-
-void Server::is_valid_nickname(string &nickname)
+void Server::is_valid_nickname(string &nickname, Client& client)
 {
 	if (nickname.size() > 9)
-		throw invalid_argument("invalid nickname");
+	{
+		string msg = ":localhost 433 * " + nickname + " :Nickname has invalid characters";
+		send_client(msg, client);
+		throw invalid_argument("nick: invalid nickname");
+	}
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
 	{
 		if (it->second.getNickname() == nickname)
-			throw invalid_argument("nickname already taken");
+		{
+			string msg = ":localhost 433 * " + nickname + " :Nickname is already in use";
+			send_client(msg, client);
+			throw invalid_argument("nick: nickname already taken");
+		}
 	}
 }
 
 void	Server::nick(vector<string> params, Client& client)
 {
-	cout << "in nick" << endl;
+	if (params.size() == 0 || params[0].empty())
+	{
+		throw	invalid_argument("nick: wrong number of parameters");
+		return ;
+	}
 	try
 	{		
-		is_valid_nickname(params[0]);
+		is_valid_nickname(params[0], client);
 	}
 	catch(exception& e)
 	{
-		cout << "execption found" << endl;
-		string msg = msg_invalid_nick(client);
 //		send_client(msg, client);
 		return ;
 	}
 	cout << "testing done" << endl;
 	client.setNickname(params[0]);
-	string msg = msg_welcome(client);
-	send_client(msg, client);
+	// string msg = msg_welcome(client);
+	// send_client(msg, client);
 	return ;
 }
