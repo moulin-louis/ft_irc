@@ -11,43 +11,31 @@ https://www.mirc.com/help/html/index.html?basic_irc_commands.html
 quackenet: serveur IRC avec liste des channels disponibles
 
 
-COMMANDES:
-MODE: Modifie les modes d'un canal ou d'un utilisateur.
-JOIN: Rejoint un canal (channel) spécifié.
-PART: Quitte un canal spécifié.
-AWAY: Indique que l'utilisateur est absent.
-PRIVMSG: Envoie un message privé à un utilisateur ou à un canal spécifié.
-NOTICE: Envoie une notification à un utilisateur ou à un canal spécifié.
-TOPIC: Modifie le sujet d'un canal.
-KICK: Expulse un utilisateur d'un canal.
-LIST: Affiche la liste des canaux disponibles sur le serveur.
-NAMES: Affiche la liste des utilisateurs présents sur un canal spécifié.
-OPER: Accorde les privilèges d'opérateur (IRCop) à un utilisateur spécifié.
-PING: Teste la connexion au serveur IRC.
-PONG: Répond à un message PING.
-QUIT: Quitte le serveur IRC.
-WHOIS: Fournit des informations sur un utilisateur spécifié.
-MOTD: Affiche le message du jour (MOTD) du serveur.
-
-
-
-Liste complete des commandes:
+COMMANDES MANDATORY:
 NICK: Définit le pseudonyme (nickname) de l'utilisateur.
 USER: Définit le nom d'utilisateur (username) de l'utilisateur et fournit des informations supplémentaires, telles que le nom réel et l'adresse électronique.
 JOIN: Rejoint un canal (channel) spécifié.
 PART: Quitte un canal spécifié.
-QUIT: Quitte le serveur IRC.
 PRIVMSG: Envoie un message privé à un utilisateur ou à un canal spécifié.
-NOTICE: Envoie une notification à un utilisateur ou à un canal spécifié.
-MODE: Modifie les modes d'un canal ou d'un utilisateur.
-TOPIC: Modifie le sujet d'un canal.
-KICK: Expulse un utilisateur d'un canal.
-WHOIS: Fournit des informations sur un utilisateur spécifié.
 LIST: Affiche la liste des canaux disponibles sur le serveur.
-NAMES: Affiche la liste des utilisateurs présents sur un canal spécifié.
 PING: Teste la connexion au serveur IRC.
 PONG: Répond à un message PING.
+QUIT: Quitte le serveur IRC.
+
+COMMANDES OPERATORS ONLY:
+KICK: Expulse un utilisateur d'un canal.
 OPER: Accorde les privilèges d'opérateur (IRCop) à un utilisateur spécifié.
-TOPIC: Modifie le sujet d'un canal.
+KILL: Expulse un utilisateur du serveur IRC.
+
+COMMANDES OPTIONAL:
 AWAY: Indique que l'utilisateur est absent.
+TOPIC: Modifie le sujet d'un canal.
+NAMES: Affiche la liste des utilisateurs présents sur un canal spécifié.
+WHOIS: Fournit des informations sur un utilisateur spécifié.
 MOTD: Affiche le message du jour (MOTD) du serveur.
+INVITE: Invite un utilisateur à rejoindre un canal spécifié.
+WHO: Affiche la liste des utilisateurs connectés au serveur IRC.
+
+COMMANDES A PRIORI NON:
+MODE: Modifie les modes d'un canal ou d'un utilisateur.
+NOTICE: Envoie une notification à un utilisateur ou à un canal spécifié.
