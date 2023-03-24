@@ -142,6 +142,7 @@ void	Server::run()
 				}
 			}
 			if (this->_events[n].events & EPOLLOUT ) {
+//				cout << "found epollout on fd" << endl;
 				if (this->fd_map.find(temp_fd) != this->fd_map.end() ) {
 					this->flush_buff(temp_fd);
 				}
@@ -185,9 +186,7 @@ void	Server::disconect_client( Socket fd ) {
 	else {
 		cout << GREEN << "client disconnected" << RESET << endl;
 	}
-	cout << "map size is now " << this->fd_map.size() << endl;
 }
-
 
 string	Server::received_data_from_client(Socket fd) {
 	string result;
@@ -255,5 +254,6 @@ void Server::flush_buff( Socket fd ) {
 		}
 		throw invalid_argument(string("send") + strerror(errno));
 	}
+	cout << YELLOW << "send " << ret_val << " bytes" << RESET << endl;
 	this->fd_map[fd].clearBuff();
 }
