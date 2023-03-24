@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 16:15:47 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:21:55 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,12 +213,12 @@ void	Server::process_input(Socket fd ) {
 		return ;
 	}
 	while (1) {
-		if (temp.find('\n') == string::npos) {
+		if (temp.find(endmsg) == string::npos) {
 			break ;
 		}
-		string tok = temp.substr(0, temp.find('\n'));
+		string tok = temp.substr(0, temp.find(endmsg));
 		parse_command(tok, this->fd_map[fd]);
-		temp.erase(0, temp.find('\n') + 1);
+		temp.erase(0, temp.find(endmsg) + 2);
 	}
 	parse_command(temp, this->fd_map[fd]);
 }
