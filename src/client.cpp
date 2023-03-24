@@ -43,4 +43,4 @@ int main( int ac, char **av )
 	close(sock);
 	cout << "socket close" << endl;
     return EXIT_SUCCESS;
-}	
+}
