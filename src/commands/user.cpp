@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 13:03:22 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:51:48 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 string	msg_welcome(Client& client)
 {	
-	string msg = ":localhost 001" + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname();
+	string msg = ":localhost 001 " + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname();
 	return (msg);
 }
 
@@ -44,6 +44,7 @@ void	Server::user(vector<string> params, Client& client)
 		is_valid_username(params[0], client);
 	}
 	catch(exception& e) {
+		cout << RED << e.what() << RESET << endl;
 		return ;
 	}
 	client.setUsername(params[0]);

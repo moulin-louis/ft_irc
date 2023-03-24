@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 13:03:35 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:18:54 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 
 void	Server::nick(vector<string> params, Client& client)
 {
-	if (params.size() == 0 || params[0].empty()) {
-		throw	invalid_argument("nick: wrong number of parameters");
-	}
 	try {
+		if (params.size() == 0 || params[0].empty())
+			throw	invalid_argument("nick: wrong number of parameters");
 		is_valid_nickname(params[0], client);
 	}
 	catch(exception& e) {
+		cout << RED << e.what() << RESET << endl;
 		return ;
 	}
 	client.setNickname(params[0]);
