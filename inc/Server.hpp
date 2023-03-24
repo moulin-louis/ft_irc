@@ -66,6 +66,7 @@ class Server
 
 		//commands
 		void	nick(vector<string> params, Client& client);
+		void	pass(vector<string> params, Client& client);
 		void	user(vector<string> params, Client& client);
 		void	join(vector<string> params, Client& client);
 		void	private_msg(vector<string> params, Client& client);

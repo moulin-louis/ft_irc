@@ -38,6 +38,7 @@ SRC			=	$(addprefix src/,		\
 						Channel.cpp		\
 					)					\
 					$(addprefix commands/,\
+						pass			\
 						nick.cpp		\
 						user.cpp		\
 						private_msg.cpp	\
