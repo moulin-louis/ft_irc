@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:57:21 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/22 17:08:03 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:23:25 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	Server::private_msg(vector<string> params, Client& clt_from)
 	try
 	{
 		Client& dest = find_user(params[0]);
-		send_client(params[1], dest, clt_from);
+		add_cmd_client(params[1], dest, "PRIVMSG");
 	}
 	catch (exception& e)
 	{

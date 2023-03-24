@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/23 14:50:25 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:19:40 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ class Server
 		void	parse_command( string& input, Client& client );
 
 		//send msg functions
-		void	send_client(string& msg, Client& clt_to);
-		void	send_client(string& msg, Client& clt_from, Client& clt_to);
+		void	add_cmd_client(string& content, Client& client, string cmd);
 		//checks
 		Client&	find_user(string nick);
 		void	is_valid_nickname(string &nickname, Client& client);

@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 13:50:29 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:19:28 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,6 @@ Client&	Server::find_user(string nick)
 			return it->second;
 	}
 	throw runtime_error("User not found");
-}
-
-void	Server::send_client(string& msg, Client& clt_from, Client& clt_to)
-{
-	string msg_to_send = ":" + clt_from.getNickname() + "!" + clt_from.getUsername() + "@" + clt_from.getHostname() + " PRIVMSG " + clt_to.getNickname() + " :" + msg;
-	send(clt_to.getFd(), msg_to_send.c_str(), msg.size(), MSG_DONTWAIT);
-	return ;
 }
 
 Socket	Server::_initiateSocket() const
@@ -249,6 +242,13 @@ void	Server::parse_command( string& input, Client& client ) {
 	return ;
 }
 
+void	Server::add_cmd_client(string& content, Client& client, string cmd)
+{
+	string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + " " + cmd + " :" + content + "\n";
+	client.setBuff(client.getBuff() + msg);
+	return ;
+}
+
 void Server::flush_buff( Socket fd ) {
 	string buff;
 	buff = this->fd_map[fd].getBuff();
@@ -258,7 +258,6 @@ void Server::flush_buff( Socket fd ) {
 	int ret_val = send(fd, buff.c_str(), buff.size(), 0);
 	if ( ret_val == -1 ) {
 		if ( errno == ECONNRESET ) {
-			cout << "debug flushbuf" << endl;
 			this->disconect_client(fd);
 			return ;
 		}

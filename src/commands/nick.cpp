@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 13:18:54 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:16:29 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,15 @@
 
 void Server::is_valid_nickname(string &nickname, Client& client)
 {
-	if (nickname.size() > 9)
-	{
-		string msg = ":localhost 433 * " + nickname + " :Nickname has invalid characters";
-		client.setBuff(client.getBuff() + "\n" + msg);
+	if (nickname.size() > 9) {
+		string msg = ":localhost 433 * " + nickname + " :Nickname has invalid characters\n";
+		client.setBuff(client.getBuff() + msg);
 		throw invalid_argument("nick: invalid nickname");
 	}
-	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
-	{
-		if (it->second.getNickname() == nickname)
-		{
-			string msg = ":localhost 433 * " + nickname + " :Nickname is already in use";
-			client.setBuff(client.getBuff() + "\n" + msg);
+	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
+		if (it->second.getNickname() == nickname) {
+			string msg = ":localhost 433 * " + nickname + " :Nickname is already in use\n";
+			client.setBuff(client.getBuff() + msg);
 			throw invalid_argument("nick: nickname already taken");
 		}
 	}
