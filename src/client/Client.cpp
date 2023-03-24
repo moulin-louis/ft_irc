@@ -73,6 +73,10 @@ const sockaddr_in &Client::getSin() const
 	return (this->sin);
 }
 
+string Client::getBuff() const {
+	return this->buffer;
+}
+
 void Client::setNickname(const string &nickname)
 {
 	this->nickname = nickname;
@@ -101,4 +105,12 @@ void Client::setFd(const Socket &fd)
 void Client::setSin(const sockaddr_in &sin)
 {
 	this->sin = sin;
+}
+
+void Client::clearBuff() {
+	this->buffer.clear();
+}
+
+void Client::setBuff(const string &buffer) {
+	this->buffer = buffer;
 }

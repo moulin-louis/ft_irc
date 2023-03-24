@@ -24,7 +24,7 @@ void Server::is_valid_username(string &username, Client& client)
 	if (username.size() > 9)
 	{
 		string msg = ":localhost 433 * " + username + " :Username has invalid characters";
-		send_client(msg, client);
+		client.setBuff(client.getBuff() + "\n" + msg);
 		throw invalid_argument("user: invalid username");
 	}
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
@@ -32,7 +32,7 @@ void Server::is_valid_username(string &username, Client& client)
 		if (it->second.getUsername() == username)
 		{
 			string msg = ":localhost 433 * " + username + " :Username is already in use";
-			send_client(msg, client);
+			client.setBuff(client.getBuff() + "\n" + msg);
 			throw invalid_argument("user: username already taken");
 		}
 	}
@@ -40,16 +40,13 @@ void Server::is_valid_username(string &username, Client& client)
 
 void	Server::user(vector<string> params, Client& client)
 {
-	try
-	{		
+	try {
 		is_valid_username(params[0], client);
 	}
-	catch(exception& e)
-	{
+	catch(exception& e) {
 		return ;
 	}
 	client.setUsername(params[0]);
-	string msg = msg_welcome(client);
-	send_client(msg, client);
+	client.setBuff(client.getBuff() + "\n" + msg_welcome(client));
 	return ;
 }

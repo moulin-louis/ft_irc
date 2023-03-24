@@ -27,6 +27,7 @@ class Client
 		string username;
 		string realname;
 		string hostname;
+		string buffer;
 		Socket fd;
 		sockaddr_in sin;
 	public:
@@ -49,6 +50,7 @@ class Client
 		const string &getHostname() const;
 		const Socket &getFd() const;
 		const sockaddr_in &getSin() const;
+		string 		 getBuff() const;
 
 		void setNickname(const string &nickname);
 		void setUsername(const string &username);
@@ -56,6 +58,8 @@ class Client
 		void setHostname(const string &hostname);
 		void setFd(const Socket &fd);
 		void setSin(const sockaddr_in &sin);
+		void setBuff( const string& buffer );
+		void clearBuff();
 };
 
 #endif

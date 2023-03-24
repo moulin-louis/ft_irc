@@ -45,7 +45,7 @@ void	Server::join(vector<string> params, Client& client)
 		if (it->first == params[0])
 		{
 			string msg = "joined " + params[0];
-			send_client(msg, client);
+			client.setBuff(client.getBuff() + "\n" + msg);
 			it->second.addClient(client);
 			return ;
 		}

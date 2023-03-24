@@ -74,21 +74,6 @@ Client&	Server::find_user(string nick)
 	throw runtime_error("User not found");
 }
 
-void	Server::send_client(string& msg, Client& clt_to)
-{
-	string msg_to_send = ":" + clt_to.getNickname() + "!" + clt_to.getUsername() + "@" + clt_to.getHostname() + " " + msg;
-
-	int ret_val = send(clt_to.getFd(), msg.c_str(), msg.size(), MSG_DONTWAIT);
-	if (ret_val == -1) {
-		if ( errno == ECONNRESET ) {
-			cout << RED << "connection reset by peer" << RESET << endl;
-			this->disconect_client(clt_to.getFd());
-		}
-		return ;
-	}
-	return ;
-}
-
 void	Server::send_client(string& msg, Client& clt_from, Client& clt_to)
 {
 	string msg_to_send = ":" + clt_from.getNickname() + "!" + clt_from.getUsername() + "@" + clt_from.getHostname() + " PRIVMSG " + clt_to.getNickname() + " :" + msg;
@@ -145,7 +130,6 @@ void	Server::run()
 				continue;
 			throw runtime_error(string("epoll_wait: ") + strerror(errno));
 		}
-//		cout << "size map of user is " << this->fd_map.size() << endl;
 		for (n = 0; n < nfds; ++n) {
 			Socket temp_fd = this->_events[n].data.fd;
 			if (this->_events[n].events & EPOLLIN) {
@@ -155,6 +139,11 @@ void	Server::run()
 					if (this->fd_map.find(temp_fd) != this->fd_map.end()) {
 						this->process_input(temp_fd);
 					}
+				}
+			}
+			if (this->_events[n].events & EPOLLOUT ) {
+				if (this->fd_map.find(temp_fd) != this->fd_map.end() ) {
+					this->flush_buff(temp_fd);
 				}
 			}
 			else {
@@ -189,14 +178,7 @@ void	Server::accept_client( void ) {
 
 void	Server::disconect_client( Socket fd ) {
 	epoll_event ev = {};
-//	cout << "deleting socket from epoll" << endl;
 	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, &ev);
-//	map<int, Client>::iterator  it = this->fd_map.find(this->_events[pos_events].data.fd);
-//	if (it == this->fd_map.end()) {
-//		cout << RED << "problem finding client in database, cant disconect" << RESET << endl;
-//		return ;
-//	}
-//	cout << "deleting client from client map" << endl;
 	if ( this->fd_map.erase(fd) == 0 ) {
 		cout << RED << "problem deleting client from database" << RESET << endl;
 	}
@@ -257,4 +239,21 @@ void	Server::parse_command( string& input, Client& client ) {
 	}
 	(this->*(it->second))(result, client);
 	return ;
+}
+
+void Server::flush_buff( Socket fd ) {
+	string buff;
+	buff = this->fd_map[fd].getBuff();
+	if ( buff.empty() == true ) {
+		return ;
+	}
+	int ret_val = send(fd, buff.c_str(), buff.size(), 0);
+	if ( ret_val == -1 ) {
+		if ( errno == ECONNRESET ) {
+			this->disconect_client(fd);
+			return ;
+		}
+		throw invalid_argument(string("send") + strerror(errno));
+	}
+	this->fd_map[fd].clearBuff();
 }

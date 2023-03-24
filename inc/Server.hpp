@@ -76,7 +76,8 @@ class Server
 		void	accept_client();
 		void	disconect_client( Socket );
 		string	received_data_from_client( Socket );
-		void	process_input(Socket);
+		void	process_input( Socket );
+		void	flush_buff( Socket );
 };
 
 string	msg_welcome(Client& client);

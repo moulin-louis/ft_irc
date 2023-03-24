@@ -18,7 +18,7 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 	if (nickname.size() > 9)
 	{
 		string msg = ":localhost 433 * " + nickname + " :Nickname has invalid characters";
-		send_client(msg, client);
+		client.setBuff(client.getBuff() + "\n" + msg);
 		throw invalid_argument("nick: invalid nickname");
 	}
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
@@ -26,7 +26,7 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 		if (it->second.getNickname() == nickname)
 		{
 			string msg = ":localhost 433 * " + nickname + " :Nickname is already in use";
-			send_client(msg, client);
+			client.setBuff(client.getBuff() + "\n" + msg);
 			throw invalid_argument("nick: nickname already taken");
 		}
 	}
@@ -34,22 +34,15 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 
 void	Server::nick(vector<string> params, Client& client)
 {
-	if (params.size() == 0 || params[0].empty())
-	{
+	if (params.size() == 0 || params[0].empty()) {
 		throw	invalid_argument("nick: wrong number of parameters");
-		return ;
 	}
-	try
-	{		
+	try {
 		is_valid_nickname(params[0], client);
 	}
-	catch(exception& e)
-	{
-//		send_client(msg, client);
+	catch(exception& e) {
 		return ;
 	}
 	client.setNickname(params[0]);
-	// string msg = msg_welcome(client);
-	// send_client(msg, client);
 	return ;
 }

@@ -8,7 +8,6 @@ int main( int ac, char **av )
 		return EXIT_FAILURE;
 	}
 	int port = atoi(av[1]);
-    int erreur = 0;
     Socket sock;
     sockaddr_in sin;
 	sock = socket(AF_INET, SOCK_STREAM, 0);
