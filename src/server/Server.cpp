@@ -34,6 +34,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("USER", &Server::user));
 	this->cmd_map.insert(make_pair("JOIN", &Server::join));
 	this->cmd_map.insert(make_pair("PRIVMSG", &Server::private_msg));
+	this->cmd_map.insert(make_pair("PASS", &Server::pass));
 }
 
 Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)

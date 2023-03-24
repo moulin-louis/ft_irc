@@ -38,8 +38,6 @@ void Server::is_valid_username(string &username, Client& client)
 void	Server::user(vector<string> params, Client& client)
 {
 	if (client.passwd_provided == false) {
-		string msg = ":localhost 464 * :You did not provide the password" + endmsg;
-		client.setBuff(client.getBuff() + msg);
 		return ;
 	}
 	try {
