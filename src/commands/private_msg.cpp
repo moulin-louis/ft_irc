@@ -17,7 +17,7 @@ bool	verif_auth(Client& client)
 {
 	if (client.isRegistered == false)
 	{
-		string msg = ":localhost 433 * * :you are not registered : please set a nickname and a username" + endmsg;
+		string msg = ":localhost " + int_to_string(ERR_NICKNAMEINUSE) + " * * :you are not registered : please set a nickname and a username" + endmsg;
 		client.setBuff(client.getBuff() + msg);
 		return (false);
 	}

@@ -11,7 +11,12 @@
 # include <iostream>
 # include <cstdio>
 # include <cerrno>
+#include <sstream>
+# include "irc.hpp"
+
+using namespace std;
 
 void	check_port(const char *port);
+string	int_to_string(int i);
 
 #endif

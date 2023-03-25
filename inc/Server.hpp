@@ -46,17 +46,20 @@ class Server
 		map<int, Client>	fd_map;
 		map<string, command_function>	cmd_map;
 		map<string, Channel>	chan_map;
+
 		Server(const char *port, const string &password);
 		Server(const Server &copy);
 		~Server();
 		Server &operator=(const Server &assign);
 
-		const uint16_t	&getPort() const;
-		const string 	&getPassword() const;
-		void	parse_command( string& input, Client& client );
+		//request from client
+		string	received_data_from_client( Socket );
+		void	process_input( Socket );
 
-		//send msg functions
+		//respond from server
+		void	flush_buff( Socket );
 		void	add_cmd_client(string& content, Client& client, string cmd);
+
 		//checks
 		Client&	find_user(string nick);
 		void	is_valid_nickname(string &nickname, Client& client);
@@ -65,21 +68,20 @@ class Server
 		void	channel_exists(string &channel_name, Client& client);
 
 		//commands
+		void	parse_command( string& input, Client& client );
 		void	nick(vector<string> params, Client& client);
 		void	pass(vector<string> params, Client& client);
 		void	user(vector<string> params, Client& client);
 		void	join(vector<string> params, Client& client);
 		void	private_msg(vector<string> params, Client& client);
+		void	oper( vector<string> params, Client& client);
 
 		//server run functions
 		void 	run();
 		void	accept_client();
 		void	disconect_client( Socket );
-		string	received_data_from_client( Socket );
-		void	process_input( Socket );
-		void	flush_buff( Socket );
 };
 
-string	msg_welcome(Client& client);
+//string	msg_welcome(Client& client);
 
 #endif

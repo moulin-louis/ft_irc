@@ -57,16 +57,6 @@ Server &Server::operator=(const Server &assign)
 	return (*this);
 }
 
-const string &Server::getPassword() const
-{
-	return (this->_password);
-}
-
-const uint16_t &Server::getPort() const
-{
-	return (this->_port);
-}
-
 Client&	Server::find_user(string nick)
 {
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
@@ -252,7 +242,7 @@ void	Server::add_cmd_client(string& content, Client& client, string cmd)
 void Server::flush_buff( Socket fd ) {
 	string buff;
 	buff = this->fd_map[fd].getBuff();
-	if ( buff.empty() == true ) {
+	if (buff.empty()) {
 		return ;
 	}
 	int ret_val = send(fd, buff.c_str(), buff.size(), 0);

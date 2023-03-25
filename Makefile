@@ -38,11 +38,12 @@ SRC			=	$(addprefix src/,		\
 						Channel.cpp		\
 					)					\
 					$(addprefix commands/,\
-						pass.cpp		\
-						nick.cpp		\
-						user.cpp		\
-						private_msg.cpp	\
 						join.cpp		\
+						nick.cpp		\
+						oper.cpp		\
+						pass.cpp		\
+						private_msg.cpp	\
+						user.cpp		\
 					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\

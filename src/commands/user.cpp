@@ -15,20 +15,20 @@
 
 string	msg_welcome(Client& client)
 {
-	string msg = ":localhost 001 " + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + endmsg;
+	string msg = ":localhost " + int_to_string(RPL_WELCOME) + " " + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + endmsg;
 	return (msg);
 }
 
 void Server::is_valid_username(string &username, Client& client)
 {
 	if (username.size() > 9) {
-		string msg = ":localhost 433 * " + username + " :Username has invalid characters" + endmsg;
+		string msg = ":localhost" + int_to_string(ERR_NICKNAMEINUSE) + " * "  + username + " :Username has invalid characters" + endmsg;
 		client.setBuff(client.getBuff() + msg);
 		throw invalid_argument("user: invalid username");
 	}
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getUsername() == username) {
-			string msg = ":localhost 433 * " + username + " :Username is already in use" + endmsg;
+			string msg = ":localhost" + int_to_string(ERR_NICKNAMEINUSE) + " * " + username + " :Username is already in use" + endmsg;
 			client.setBuff(client.getBuff() + msg);
 			throw invalid_argument("user: username already taken");
 		}
@@ -37,10 +37,19 @@ void Server::is_valid_username(string &username, Client& client)
 
 void	Server::user(vector<string> params, Client& client)
 {
-	if (client.passwd_provided == false) {
+	if ( !client.passwd_provided ) {
+		return ;
+	}
+	if ( client.isRegistered ) {
+		string msg = ":localhost " + int_to_string(ERR_ALREADYREGISTRED) + " " + client.getNickname() + " :Unauthorized command (already registered)" + endmsg;
 		return ;
 	}
 	try {
+		if (params.empty()) {
+			string msg = ":localhost " + int_to_string(ERR_NEEDMOREPARAMS) + " * * " + ":Not enough parameters";
+			client.setBuff(client.getBuff() + msg);
+			throw invalid_argument("user: need more parametres");
+		}
 		is_valid_username(params[0], client);
 	}
 	catch(exception& e) {

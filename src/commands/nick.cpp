@@ -16,13 +16,20 @@
 void Server::is_valid_nickname(string &nickname, Client& client)
 {
 	if (nickname.size() > 9) {
-		string msg = ":localhost 433 * " + nickname + " :Nickname has invalid characters" + endmsg;
+		string msg = ":localhost" + int_to_string(ERR_ERRONEUSNICKNAME) + " * " + nickname + " :Nickname has invalid characters" + endmsg;
 		client.setBuff(client.getBuff() + msg);
-		throw invalid_argument("nick: invalid nickname");
+		throw invalid_argument("nick: nickname too long");
+	}
+	for (unsigned int i = 0; i < nickname.size(); i++) {
+		if (i == ' ' || i == '@') {
+			string msg = ":localhost" + int_to_string(ERR_ERRONEUSNICKNAME) + " * " + nickname + " :Erroneous nickname" + endmsg;
+			client.setBuff(client.getBuff() + msg);
+			throw invalid_argument("nick: invalid character in nickname");
+		}
 	}
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getNickname() == nickname) {
-			string msg = ":localhost 433 * " + nickname + " :Nickname is already in use" + endmsg;
+			string msg = ":localhost" + int_to_string(ERR_NICKNAMEINUSE) + " * " + nickname + " :Nickname is already in use" + endmsg;
 			client.setBuff(client.getBuff() + msg);
 			throw invalid_argument("nick: nickname already taken");
 		}
@@ -31,14 +38,17 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 
 void	Server::nick(vector<string> params, Client& client)
 {
-	if (client.passwd_provided == false) {
-		string msg = ":localhost 464 * :You did not provide the password" + endmsg;
+	if (!client.passwd_provided) {
+		string msg = ":localhost " + int_to_string(ERR_PASSWDMISMATCH) + " * :You did not provide the password" + endmsg;
 		client.setBuff(client.getBuff() + msg);
 		return ;
 	}
 	try {
-		if (params.size() == 0 || params[0].empty())
+		if (params.empty() || params[0].empty()) {
+			string msg = ":localhost" + int_to_string(ERR_NONICKNAMEGIVEN) + " * " + " :No nickname given" + endmsg;
+			client.setBuff(client.getBuff() + msg);
 			throw	invalid_argument("nick: wrong number of parameters");
+		}
 		is_valid_nickname(params[0], client);
 	}
 	catch(exception& e) {

@@ -33,6 +33,7 @@
 
 #include "colors.h"
 #include "Tools.hpp"
+#include "cmd_enum.hpp"
 
 typedef int Socket;
 typedef int Epollfd;

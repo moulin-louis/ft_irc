@@ -85,40 +85,40 @@ string Client::getBuff() const {
 	return this->buffer;
 }
 
-void Client::setNickname(const string &nickname)
+void Client::setNickname(const string &nickname_input)
 {
-	this->nickname = nickname;
+	this->nickname = nickname_input;
 }
 
-void Client::setUsername(const string &username)
+void Client::setUsername(const string &username_input)
 {
-	this->username = username;
+	this->username = username_input;
 }
 
-void Client::setRealname(const string &realname)
+void Client::setRealname(const string &rlname_input)
 {
-	this->realname = realname;
+	this->realname = rlname_input;
 }
 
-void Client::setHostname(const string &hostname)
+void Client::setHostname(const string &hostname_input)
 {
-	this->hostname = hostname;
+	this->hostname = hostname_input;
 }
 
-void Client::setFd(const Socket &fd)
+void Client::setFd(const Socket &fd_input)
 {
-	this->fd = fd;
+	this->fd = fd_input;
 }
 
-void Client::setSin(const sockaddr_in &sin)
+void Client::setSin(const sockaddr_in &sin_input)
 {
-	this->sin = sin;
+	this->sin = sin_input;
 }
 
 void Client::clearBuff() {
 	this->buffer.clear();
 }
 
-void Client::setBuff(const string &buffer) {
-	this->buffer = buffer;
+void Client::setBuff(const string &buffer_input) {
+	this->buffer = buffer_input;
 }
