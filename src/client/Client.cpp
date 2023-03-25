@@ -42,7 +42,8 @@ Client::Client(const Client &copy)
 
 Client::~Client()
 {
-
+	cout << "client destructor called" << endl;
+	close(this->fd);
 }
 
 Client &Client::operator=(const Client &assign)
