@@ -152,8 +152,9 @@ void	Server::run()
 					}
 				}
 			}
-			if (this->_events[n].events & EPOLLOUT ) {
+			if ((this->_events[n].events & EPOLLOUT) == EPOLLOUT) {
 //				cout << "found epollout on fd" << endl;
+				cout << "n = " << n << endl;
 				if (this->fd_map.find(temp_fd) != this->fd_map.end() ) {
 					cout << PURPLE << temp_fd << " is ready to receive some data" << RESET << endl;
 					this->flush_buff(temp_fd);
