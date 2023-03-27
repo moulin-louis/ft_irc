@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 14:22:28 by armendi           #+#    #+#             */
-/*   Updated: 2023/03/27 15:56:08 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:36:23 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ bool	Channel::user_in_chan(Client& client)
 		if (it->getNickname() == client.getNickname())
 			return (true);
 	}
-	string msg = ":localhost " + int_to_string(ERR_CANNOTSENDTOCHAN) + client.getNickname() + " " + this->getName() + " :Cannot send to channel" + endmsg;
-	client.setBuff(client.getBuff() + msg);
 	return (false);
 }
 
