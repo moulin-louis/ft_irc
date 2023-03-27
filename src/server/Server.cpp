@@ -125,6 +125,7 @@ void	Server::run()
 					this->accept_client();
 				else {
 					if (this->fd_map.find(temp_fd) != this->fd_map.end()) {
+						cout << PURPLE << temp_fd << " is ready to send some data" << RESET << endl;
 						this->process_input(temp_fd);
 					}
 				}
@@ -132,13 +133,14 @@ void	Server::run()
 			if (this->_events[n].events & EPOLLOUT ) {
 //				cout << "found epollout on fd" << endl;
 				if (this->fd_map.find(temp_fd) != this->fd_map.end() ) {
+					cout << PURPLE << temp_fd << " is ready to receive some data" << RESET << endl;
 					this->flush_buff(temp_fd);
 				}
 			}
 			else {
 				if (this->_events[n].events & EPOLLHUP || this->_events[n].events & EPOLLRDHUP)
 				{
-					cout << "Found event EPOLLHUP OR EPOLLRDHUP" << endl;
+//					cout << "Found event EPOLLHUP OR EPOLLRDHUP" << endl;
 					this->disconect_client(this->_events[n].data.fd);
 				}
 			}
@@ -184,6 +186,7 @@ void	Server::disconect_client( Socket fd ) {
 string	Server::received_data_from_client(Socket fd) {
 	string result;
 	result.resize(512);
+	
 	int ret_val = recv(fd, (void *)result.c_str(), 512, 0);
 	if (ret_val == -1 ) {
 		if ( errno == ECONNRESET ) {
@@ -193,6 +196,7 @@ string	Server::received_data_from_client(Socket fd) {
 		throw invalid_argument(string("Recv: ") + strerror(errno));
 	}
 	if (ret_val == 0) {
+		cout << "nothing received" << endl;
 		return (result.clear(), result);
 	}
 	cout << YELLOW << ret_val << " bytes received" << RESET << endl;
@@ -248,13 +252,18 @@ void Server::flush_buff( Socket fd ) {
 	if (buff.empty()) {
 		return ;
 	}
-	int ret_val = send(fd, buff.c_str(), buff.size(), 0);
+
+	int ret_val = send(fd, buff.c_str(), buff.size(), 0 );
 	if ( ret_val == -1 ) {
 		if ( errno == ECONNRESET ) {
 			this->disconect_client(fd);
 			return ;
 		}
 		throw invalid_argument(string("send") + strerror(errno));
+	}
+	if ( ret_val == 0 ) {
+		cout << "nothing sent" << endl;
+		return ;
 	}
 	cout << YELLOW << "send " << ret_val << " bytes" << RESET << endl;
 	this->fd_map[fd].clearBuff();

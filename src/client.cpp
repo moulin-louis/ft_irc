@@ -24,6 +24,7 @@ int main( int ac, char **av )
 		send(sock, (void *)buf.c_str(), buf.size(), 0);
 
 		cout << "receiving data" << endl;
+		buf.clear();
 		buf.resize(500);
 		int len_recv = recv(sock, (void *)(buf.c_str()), 500, 0);
 		if (len_recv == -1) {
@@ -37,6 +38,7 @@ int main( int ac, char **av )
 		buf = "QUIT TEST";
 		cout << "sending data..." << endl;
 		send(sock, (void *)buf.c_str(), buf.size(), 0);
+		buf.clear();
 
 		buf.resize(500);
 		cout << "receiving data" << endl;
