@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   oper.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <mpignet@student.42.fr>           +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/24 15:19:40 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/27 13:44:32 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void Server::oper(vector<string> params, Client &client) {
 	if (params.empty()) {
-		string msg = ":localhost " + int_to_string(ERR_ALREADYREGISTRED) + " " + client.getNickname() + " :Not enough parameters" + endmsg;
+		string msg = ":localhost " + int_to_string(ERR_NEEDMOREPARAMS) + " " + client.getNickname() + " :Not enough parameters" + endmsg;
 		client.setBuff(client.getBuff() + msg);
 		return ;
 	}
