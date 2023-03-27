@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/24 15:19:40 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:08:12 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 void	Server::pass(vector<string> params, Client& client) {
 	if ( params.empty() ) {
-		string msg = ":localhost" + int_to_string(ERR_NEEDMOREPARAMS) + " *  * PASS :Not enough parameters" + endmsg;
+		add_rply_from_server(":Not enough parameters", client, "PASS", ERR_NEEDMOREPARAMS);
 	}
 	if ( client.passwd_provided == true ) {
-		string msg = ":localhost" + int_to_string(ERR_ALREADYREGISTRED) + " " + client.getNickname() +" PASS :Not enough parameters" + endmsg;
+		add_rply_from_server(":Unauthorized command (already registered)", client, "PASS", ERR_ALREADYREGISTRED);
 	}
 	if ( params[0] == this->_password ) {
 		client.passwd_provided = true;

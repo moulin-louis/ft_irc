@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:57:21 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 15:53:16 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:10:07 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,11 @@
 void	Server::private_msg(vector<string> params, Client& author)
 {
 	if (params.size() == 0 || params[0].empty()) {
-		string msg = ":localhost" + int_to_string(ERR_NORECIPIENT) + " * " + " :No recipient given PRIVMSG" + endmsg;
-		author.setBuff(author.getBuff() + msg);
+		add_rply_from_server(":No recipient given", author, "PRIVMSG", ERR_NORECIPIENT);
 		return ;
 	}
 	if (params.size() == 1) {
-		string msg = ":localhost" + int_to_string(ERR_NOTEXTTOSEND) + " * " + " :No text to send" + endmsg;
-		author.setBuff(author.getBuff() + msg);
+		add_rply_from_server(":No text to send", author, "PRIVMSG", ERR_NOTEXTTOSEND);
 		return ;
 	}
 	try	{

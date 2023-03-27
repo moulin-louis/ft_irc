@@ -6,18 +6,12 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 16:38:20 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:20:29 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 #include "Server.hpp"
-
-string	msg_welcome(Client& client)
-{
-	string msg = ":localhost " + int_to_string(RPL_WELCOME) + " " + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + endmsg;
-	return (msg);
-}
 
 void Server::is_valid_username(string &username, Client& client)
 {
@@ -41,12 +35,11 @@ void	Server::user(vector<string> params, Client& client)
 		return ;
 	}
 	if ( client.isRegistered ) {
-		string msg = ":localhost " + int_to_string(ERR_ALREADYREGISTRED) + " " + client.getNickname() + " :Unauthorized command (already registered)" + endmsg;
+		add_rply_from_server(":Unauthorized command (already registered)", client, "USER", ERR_ALREADYREGISTRED);
 		return ;
 	}
 	if (params.empty()) {
-		string msg = ":localhost " + int_to_string(ERR_NEEDMOREPARAMS) + " * * " + ":Not enough parameters";
-		client.setBuff(client.getBuff() + msg);
+		add_rply_from_server(":Not enough parameters", client, "USER", ERR_NEEDMOREPARAMS);
 		return ;
 	}
 	try {
@@ -58,6 +51,6 @@ void	Server::user(vector<string> params, Client& client)
 	}
 	client.setUsername(params[0]);
 	client.isRegistered = true;
-	client.setBuff(client.getBuff() + msg_welcome(client));
+	add_rply_from_server(":Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname(), client, "USER", RPL_WELCOME);
 	return ;
 }

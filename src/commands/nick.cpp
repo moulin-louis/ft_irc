@@ -6,31 +6,27 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 13:13:20 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:06:46 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
 #include "Server.hpp"
 
 void Server::is_valid_nickname(string &nickname, Client& client)
 {
 	if (nickname.size() > 9) {
-		string msg = ":localhost" + int_to_string(ERR_ERRONEUSNICKNAME) + " * " + nickname + " :Nickname has invalid characters" + endmsg;
-		client.setBuff(client.getBuff() + msg);
+		add_rply_from_server(":Nickname is too long", client, "NICK", ERR_ERRONEUSNICKNAME);
 		throw invalid_argument("nick: nickname too long");
 	}
 	for (unsigned int i = 0; i < nickname.size(); i++) {
 		if (nickname[i] == ' ' || nickname[i] == '@') {
-			string msg = ":localhost" + int_to_string(ERR_ERRONEUSNICKNAME) + " * " + nickname + " :Erroneous nickname" + endmsg;
-			client.setBuff(client.getBuff() + msg);
+			add_rply_from_server(" :Erroneous nickname", client, "NICK", ERR_ERRONEUSNICKNAME);
 			throw invalid_argument("nick: invalid character in nickname");
 		}
 	}
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getNickname() == nickname) {
-			string msg = ":localhost" + int_to_string(ERR_NICKNAMEINUSE) + " * " + nickname + " :Nickname is already in use" + endmsg;
-			client.setBuff(client.getBuff() + msg);
+			add_rply_from_server(" :Nickname is already in use", client, "NICK", ERR_NICKNAMEINUSE);
 			throw invalid_argument("nick: nickname already taken");
 		}
 	}
@@ -39,13 +35,11 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 void	Server::nick(vector<string> params, Client& client)
 {
 	if (!client.passwd_provided) {
-		string msg = ":localhost " + int_to_string(ERR_PASSWDMISMATCH) + " * :You did not provide the password" + endmsg;
-		client.setBuff(client.getBuff() + msg);
+		add_rply_from_server(":You did not provide the password", client, "NICK", ERR_PASSWDMISMATCH);
 		return ;
 	}
 	if (params.empty() || params[0].empty()) {
-		string msg = ":localhost" + int_to_string(ERR_NONICKNAMEGIVEN) + " * " + " :No nickname given" + endmsg;
-		client.setBuff(client.getBuff() + msg);
+		add_rply_from_server(":No nickname given", client, "NICK", ERR_NONICKNAMEGIVEN);
 		return ;
 	}
 	try {

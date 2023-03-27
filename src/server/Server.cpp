@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 15:50:20 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:10:30 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,17 @@ void	Server::add_cmd_client(string& content, Client& client, Client& author, str
 {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
+	return ;
+}
+
+void	Server::add_rply_from_server(string msg, Client& dest, string cmd, int code)
+{
+	string dest_nick = dest.getNickname();
+	if (dest_nick.empty())
+		dest_nick = "*";
+	dest_nick = " " + dest_nick;
+	string result = ":localhost" + int_to_string(code) + dest_nick + cmd + msg + endmsg;
+	dest.setBuff(dest.getBuff() + result);
 	return ;
 }
 
