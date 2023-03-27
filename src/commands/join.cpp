@@ -33,6 +33,11 @@ void	Channel::notify_clients(Channel& channel, Client& client, string cmd)
 
 void	Server::join(vector<string> params, Client& client)
 {
+	if ( !client.isRegistered ) {
+		string msg = ":localhost " + int_to_string(ERR_NOTREGISTERED) + " * JOIN:You have not registered.:" + endmsg;
+		client.setBuff(client.getBuff() + msg);
+		return ;
+	}
 	try {
 		is_valid_chan_name(params);
 	}
