@@ -18,18 +18,21 @@
 # include <iostream>
 #include "irc.hpp"
 
+typedef uint32_t Mode;
+
 // create a class for our Server's Client in C++98, based on irssi client type
 
 class Client
 {
 	private:
-		string nickname;
-		string username;
-		string realname;
-		string hostname;
-		string buffer;
-		Socket fd;
-		sockaddr_in sin;
+		string		nickname;
+		string		username;
+		string		realname;
+		string		hostname;
+		string		buffer;
+		Socket		fd;
+		sockaddr_in	sin;
+		Mode		mode;
 	public:
 		Client();
 		Client(string &nick, string &user);
@@ -37,30 +40,30 @@ class Client
 		~Client();
 		Client &operator=(const Client &assign);
 
-
 		string channel;
-
 		bool passwd_provided;
 		bool isRegistered;
 		bool isAway;
 		bool isOperator;
 
-		const string &getNickname() const;
-		const string &getUsername() const;
-		const string &getRealname() const;
-		const string &getHostname() const;
-		const Socket &getFd() const;
-		const sockaddr_in &getSin() const;
-		string 		 getBuff() const;
+		const string 		&getNickname() const;
+		const string 		&getUsername() const;
+		const string 		&getRealname() const;
+		const string 		&getHostname() const;
+		const Socket 		&getFd() const;
+		const sockaddr_in	&getSin() const;
+		const string		getBuff() const;
+		Mode 				getMode() const;
 
-		void setNickname(const string &nickname);
-		void setUsername(const string &username);
-		void setRealname(const string &realname);
-		void setHostname(const string &hostname);
-		void setFd(const Socket &fd);
-		void setSin(const sockaddr_in &sin);
-		void setBuff( const string& buffer );
-		void clearBuff();
+		void 	setNickname(const string &nickname);
+		void 	setUsername(const string &username);
+		void 	setRealname(const string &realname);
+		void 	setHostname(const string &hostname);
+		void 	setFd(const Socket &fd);
+		void 	setSin(const sockaddr_in &sin);
+		void 	setBuff( const string& buffer );
+		void 	clearBuff();
+		void 	setMode( Mode );
 };
 
 #endif

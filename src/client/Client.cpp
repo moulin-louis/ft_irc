@@ -19,11 +19,13 @@ Client::Client(void)
 	this->isAway = false;
 	this->isOperator = false;
 	this->fd = 0;
+	this->mode = 0;
 	return ;
 }
 
 Client::Client(string &nick, string &user)
 {
+	this->mode = 0;
 	this->passwd_provided = false;
 	this->isRegistered = false;
 	this->isAway = false;
@@ -48,6 +50,7 @@ Client::~Client()
 
 Client &Client::operator=(const Client &assign)
 {
+	this->mode = assign.mode;
 	this->nickname = assign.nickname;
 	this->username = assign.username;
 	this->realname = assign.realname;
@@ -92,8 +95,12 @@ const sockaddr_in &Client::getSin() const
 	return (this->sin);
 }
 
-string Client::getBuff() const {
+const string Client::getBuff() const {
 	return this->buffer;
+}
+
+Mode Client::getMode() const {
+	return (this->mode);
 }
 
 void Client::setNickname(const string &nickname_input)
@@ -126,10 +133,14 @@ void Client::setSin(const sockaddr_in &sin_input)
 	this->sin = sin_input;
 }
 
+void Client::setBuff(const string &buffer_input) {
+	this->buffer = buffer_input;
+}
+
 void Client::clearBuff() {
 	this->buffer.clear();
 }
 
-void Client::setBuff(const string &buffer_input) {
-	this->buffer = buffer_input;
+void Client::setMode(Mode input) {
+	this->mode = input;
 }

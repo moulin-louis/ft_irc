@@ -195,7 +195,7 @@ string	Server::received_data_from_client(Socket fd) {
 	if (ret_val == 0) {
 		return (result.clear(), result);
 	}
-	cout << ret_val << " bytes received" << endl;
+	cout << YELLOW << ret_val << " bytes received" << RESET << endl;
 	result.resize(ret_val + 1);
 	return result;
 }
