@@ -39,6 +39,7 @@ class Client
 		~Client();
 		Client &operator=(const Client &assign);
 
+		epoll_event	ev;
 		string 	channel;
 		Mode	mode[4];
 		bool 	passwd_provided;

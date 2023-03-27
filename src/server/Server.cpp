@@ -134,6 +134,7 @@ void	Server::run()
 	signal(SIGINT, handler);
 	while (!stop)
 	{
+		cout << PURPLE << "waiting epoll" << RESET << endl;
 		nfds = epoll_wait(this->_epfd, this->_events, MAX_EVENTS, -1);
 		if (nfds == -1) {
 			if (errno == EINTR)
@@ -143,29 +144,24 @@ void	Server::run()
 		for (n = 0; n < nfds; ++n) {
 			Socket temp_fd = this->_events[n].data.fd;
 			if (this->_events[n].events & EPOLLIN) {
+				cout << PURPLE << "In epollin" << RESET << endl;
 				if (temp_fd == this->_sfd)
 					this->accept_client();
 				else {
 					if (this->fd_map.find(temp_fd) != this->fd_map.end()) {
-						cout << PURPLE << temp_fd << " is ready to send some data" << RESET << endl;
 						this->process_input(temp_fd);
 					}
 				}
 			}
-			if ((this->_events[n].events & EPOLLOUT) == EPOLLOUT) {
-//				cout << "found epollout on fd" << endl;
-				cout << "n = " << n << endl;
+			if (this->_events[n].events & EPOLLOUT) {
+				cout << PURPLE << "In epollout" << RESET << endl;
 				if (this->fd_map.find(temp_fd) != this->fd_map.end() ) {
-					cout << PURPLE << temp_fd << " is ready to receive some data" << RESET << endl;
 					this->flush_buff(temp_fd);
 				}
 			}
 			else {
 				if (this->_events[n].events & EPOLLHUP || this->_events[n].events & EPOLLRDHUP)
-				{
-//					cout << "Found event EPOLLHUP OR EPOLLRDHUP" << endl;
 					this->disconect_client(this->_events[n].data.fd);
-				}
 			}
 		}
 	}
@@ -173,9 +169,9 @@ void	Server::run()
 }
 
 void	Server::accept_client( void ) {
-	epoll_event ev = {};
 	sockaddr csin = {};
 	socklen_t crecsize = sizeof(csin);
+	Client	temp;
 
 	Socket csock = accept(this->_sfd, &csin, &crecsize);
 	if ( csock == -1 ) {
@@ -183,8 +179,8 @@ void	Server::accept_client( void ) {
 		throw runtime_error(string("accept: ") + strerror(errno));
 	}
 	cout << GREEN << "New connection" << RESET << endl;
-	ev.events = EPOLLIN | EPOLLOUT | EPOLLRDHUP;
-	ev.data.fd = csock;
+	temp.ev.events = EPOLLIN ;
+	temp.ev.data.fd = csock;
 	this->fd_map.insert(make_pair(csock, Client()) );
 	char hostname[NI_MAXHOST];
 	if (getnameinfo(&csin, sizeof(csin), hostname, sizeof(hostname), NULL, 0, 0) != 0)
@@ -192,7 +188,7 @@ void	Server::accept_client( void ) {
 	else
 		this->fd_map[csock].setHostname(hostname);
 	this->fd_map[csock].setFd(csock);
-	epoll_ctl(this->_epfd, EPOLL_CTL_ADD, csock, &ev);
+	epoll_ctl(this->_epfd, EPOLL_CTL_ADD, this->fd_map[csock].getFd(), &(this->fd_map[csock].ev));
 }
 
 void	Server::disconect_client( Socket fd ) {
@@ -219,9 +215,11 @@ string	Server::received_data_from_client(Socket fd) {
 		throw invalid_argument(string("Recv: ") + strerror(errno));
 	}
 	if (ret_val == 0) {
-		cout << "nothing received" << endl;
+		cout << YELLOW << "nothing received" << endl;
 		return (result.clear(), result);
 	}
+	this->fd_map[fd].ev.events |= EPOLLOUT;
+	epoll_ctl(this->_epfd, EPOLL_CTL_MOD, fd, &(this->fd_map[fd].ev));
 	cout << YELLOW << ret_val << " bytes received" << RESET << endl;
 	result.resize(ret_val + 1);
 	return result;
@@ -280,6 +278,12 @@ void	Server::add_rply_from_server(string msg, Client& dest, string cmd, int code
 	return ;
 }
 
+void	Server::flush_all_buffer() {
+	for ( map<Socket, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
+		flush_buff(it->second.getFd());
+	}
+}
+
 void Server::flush_buff( Socket fd ) {
 	string buff;
 	buff = this->fd_map[fd].getBuff();
@@ -287,8 +291,11 @@ void Server::flush_buff( Socket fd ) {
 		return ;
 	}
 
-	int ret_val = send(fd, buff.c_str(), buff.size(), 0 );
+	int ret_val = send(fd, buff.c_str(), buff.size(), MSG_DONTWAIT );
 	if ( ret_val == -1 ) {
+		if (errno == EAGAIN) {
+			return ;
+		}
 		if ( errno == ECONNRESET ) {
 			this->disconect_client(fd);
 			return ;

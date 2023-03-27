@@ -57,6 +57,7 @@ class Server
 
 		//respond from server
 		void	flush_buff( Socket );
+		void 	flush_all_buffer( void );
 		void	add_cmd_client(string& content, Client& client, Client& author, string cmd);
 		void	add_cmd_channel(string& content, Channel& chan, Client& author, string cmd);
 		void	add_rply_from_server(string msg, Client& dest, string cmd, int code);

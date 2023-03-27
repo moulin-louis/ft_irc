@@ -32,7 +32,7 @@ int main( int ac, char **av )
 			close(sock);
 			return EXIT_FAILURE;
 		}
-		buf.resize(len_recv + 1);
+		buf.resize(len_recv);
 		cout << buf << endl;
 
 		buf = "QUIT TEST";
@@ -48,7 +48,7 @@ int main( int ac, char **av )
 			close(sock);
 			return EXIT_FAILURE;
 		}
-		buf.resize(len_recv + 1);
+		buf.resize(len_recv);
 		cout << buf << endl;
 	}
 	else

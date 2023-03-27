@@ -11,39 +11,24 @@
 /* ************************************************************************** */
 
 #include "Client.hpp"
-
+#include <cstdlib>
 Client::Client(void)
 {
-	this->passwd_provided = false;
-	this->isRegistered = false;
-	this->isAway = false;
-	this->isOperator = false;
-	this->fd = 0;
-	this->mode[0] = 0;
-	this->mode[1] = 0;
-	this->mode[2] = 0;
-	this->mode[3] = 0;
+	memset(this, 0, sizeof(Client));
 	return ;
 }
 
 Client::Client(string &nick, string &user)
 {
-	this->mode[0] = 0;
-	this->mode[1] = 0;
-	this->mode[2] = 0;
-	this->mode[3] = 0;
-	this->passwd_provided = false;
-	this->isRegistered = false;
-	this->isAway = false;
-	this->isOperator = false;
+	memset(this, 0, sizeof(Client));
 	this->nickname = nick;
 	this->username = user;
-	this->fd = 0;
 	return ;
 }
 
 Client::Client(const Client &copy)
 {
+	memset(this, 0, sizeof(Client));
 	*this = copy;
 	return ;
 }
@@ -56,21 +41,7 @@ Client::~Client()
 
 Client &Client::operator=(const Client &assign)
 {
-	this->mode[0] = assign.mode[0];
-	this->mode[1] = assign.mode[1];
-	this->mode[2] = assign.mode[2];
-	this->mode[3] = assign.mode[3];
-	this->nickname = assign.nickname;
-	this->username = assign.username;
-	this->realname = assign.realname;
-	this->hostname = assign.hostname;
-	this->buffer = assign.buffer;
-	this->fd = assign.fd;
-	this->sin = assign.sin;
-	this->passwd_provided = assign.passwd_provided;
-	this->isRegistered = assign.isRegistered;
-	this->isAway = assign.isAway;
-	this->isOperator = assign.isOperator;
+	memcpy(this, &assign, sizeof(Client));
 	return (*this);
 }
 

@@ -13,13 +13,13 @@
 #include "Server.hpp"
 
 void Server::quit(vector<string> params, Client &client) {
-	cout << YELLOW << "QUIT cmd received" << RESET << endl;
 	if ( params.size() != 1 ) {
 		return ;
 	}
 	string msg = "ERROR :Closing link: (" + client.getUsername() + "@" + client.getHostname();
 	msg += ") [" + params[0] + "]" + endmsg;
 	client.setBuff(client.getBuff() + msg);
+	this->flush_buff(client.getFd());
 	this->disconect_client(client.getFd());
 	return ;
 }
