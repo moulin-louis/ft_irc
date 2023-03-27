@@ -6,11 +6,13 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 14:22:28 by armendi           #+#    #+#             */
-/*   Updated: 2023/03/24 15:14:46 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 15:56:08 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+
+/*-------------------------------CONSTRUCTORS---------------------------------*/
 
 Channel::Channel()
 {
@@ -31,10 +33,15 @@ Channel::Channel(const Channel &src)
     return ;
 }
 
+/*---------------------------------DESTRUCTOR---------------------------------*/
+
 Channel::~Channel()
 {
     return ;
 }
+
+/*---------------------------------OPERATORS----------------------------------*/
+
 
 Channel &Channel::operator=(const Channel &rhs)
 {
@@ -42,6 +49,8 @@ Channel &Channel::operator=(const Channel &rhs)
     this->clients = rhs.clients;
     return (*this);
 }
+
+/*------------------------------MEMBER FUNCTIONS------------------------------*/
 
 const string    &Channel::getName() const
 {
@@ -52,6 +61,17 @@ void    Channel::setName(string &name)
 {
     this->_name = name;
     return ;
+}
+
+bool	Channel::user_in_chan(Client& client)
+{
+	for (vector<Client>::iterator it = this->clients.begin(); it != this->clients.end(); it++) {
+		if (it->getNickname() == client.getNickname())
+			return (true);
+	}
+	string msg = ":localhost " + int_to_string(ERR_CANNOTSENDTOCHAN) + client.getNickname() + " " + this->getName() + " :Cannot send to channel" + endmsg;
+	client.setBuff(client.getBuff() + msg);
+	return (false);
 }
 
 void    Channel::addClient(Client &client)
@@ -70,4 +90,19 @@ void    Channel::removeClient(Client &client)
             return ;
         }
     }
+}
+
+void	Channel::add_cmd_client(string& content, Client& client, Client& author, string cmd)
+{
+	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
+	client.setBuff(client.getBuff() + msg);
+	return ;
+}
+
+void	Channel::add_cmd_channel(string& content, Client& author, string cmd)
+{
+	for (vector<Client>::iterator it = this->clients.begin(); it != this->clients.end(); it++) {
+		this->add_cmd_client(content, *it, author, cmd);
+	}
+	return ;
 }

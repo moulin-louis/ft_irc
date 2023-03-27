@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 15:05:54 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 15:53:07 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class Channel
 {
     private:
         string _name;
+        string _topic;
     public:
         Channel();
         Channel(string &name, Client& client);
@@ -37,6 +38,14 @@ class Channel
         const string    &getName() const;
         void            setName(string &name);
 
+    //checks
+        bool	user_in_chan(Client& client);
+       
+    //sens messages
+        void	add_cmd_client(string& content, Client& client, Client& author, string cmd);
+        void	add_cmd_channel(string& content, Client& author, string cmd);
+
+    //actions
         void    addClient(Client &client);
         void    removeClient(Client &client);
         void    removeClient(string &nick);

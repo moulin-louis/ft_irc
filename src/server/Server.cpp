@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 13:58:57 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 15:50:20 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void handler(int)
 	cout << YELLOW << "Signal received" << RESET << endl;
 	stop = true;
 }
+
+/*-------------------------------CONSTRUCTORS---------------------------------*/
 
 Server::Server(const char *port, const string &password)
 	: _password(password), _port(strtoul(port, NULL, 10)), fd_map()
@@ -44,6 +46,8 @@ Server::Server(const Server &copy): _password(copy._password), _port(copy._port)
 	*this = copy;
 }
 
+/*---------------------------------DESTRUCTOR---------------------------------*/
+
 Server::~Server()
 {
 	if (this->_sfd >= 0)
@@ -52,12 +56,16 @@ Server::~Server()
 		close(this->_epfd);
 }
 
+/*---------------------------------OPERATORS----------------------------------*/
+
 Server &Server::operator=(const Server &assign)
 {
 	this->_sfd = assign._sfd;
 	this->fd_map = assign.fd_map;
 	return (*this);
 }
+
+/*------------------------------MEMBER FUNCTIONS------------------------------*/
 
 Client&	Server::find_user(string nick, Client client)
 {
@@ -67,6 +75,18 @@ Client&	Server::find_user(string nick, Client client)
 			return it->second;
 	}
 	string msg = ":localhost" + int_to_string(ERR_NOSUCHNICK) + nick + " :No such nick/channel" + endmsg;
+	client.setBuff(client.getBuff() + msg);
+	throw runtime_error("User not found");
+}
+
+Channel&	Server::find_channel(string name, Client client)
+{
+	for (vector<Channel>::iterator it = this->chan_map.begin(); it != this->chan_map.end(); it++)
+	{
+		if (it->getName() == name)
+			return *it;
+	}
+	string msg = ":localhost" + int_to_string(ERR_NOSUCHCHANNEL) + name + " :No such nick/channel" + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	throw runtime_error("User not found");
 }
@@ -237,9 +257,9 @@ void	Server::parse_command( string& input, Client& client ) {
 	return ;
 }
 
-void	Server::add_cmd_client(string& content, Client& client, string cmd)
+void	Server::add_cmd_client(string& content, Client& client, Client& author, string cmd)
 {
-	string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + " " + cmd + " :" + content + endmsg;
+	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	return ;
 }

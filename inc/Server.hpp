@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/27 13:59:59 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 15:42:16 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,16 @@ class Server
 
 		//respond from server
 		void	flush_buff( Socket );
-		void	add_cmd_client(string& content, Client& client, string cmd);
+		void	add_cmd_client(string& content, Client& client, Client& author, string cmd);
+		void	add_cmd_channel(string& content, Channel& chan, Client& author, string cmd);
 
 		//checks
-		Client&	find_user(string nick, Client client);
-		void	is_valid_nickname(string &nickname, Client& client);
-		void	is_valid_username(string &username, Client& client);
-		void	is_valid_chan_name(vector<string> params);
-		void	channel_exists(string &channel_name, Client& client);
+		Client&		find_user(string nick, Client client);
+		Channel&	find_channel(string name, Client client);
+		void		is_valid_nickname(string &nickname, Client& client);
+		void		is_valid_username(string &username, Client& client);
+		void		is_valid_chan_name(vector<string> params);
+		void		channel_exists(string &channel_name, Client& client);
 
 		//commands
 		void	parse_command( string& input, Client& client );
@@ -73,7 +75,7 @@ class Server
 		void	ping(vector<string> params, Client& client);
 		void	user(vector<string> params, Client& client);
 		void	join(vector<string> params, Client& client);
-		void	private_msg(vector<string> params, Client& client);
+		void	private_msg(vector<string> params, Client& author);
 		void	oper( vector<string> params, Client& client);
 		void	quit( vector<string> params, Client& client);
 
