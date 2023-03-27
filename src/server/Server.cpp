@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 16:23:30 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 13:58:57 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,15 @@ Server &Server::operator=(const Server &assign)
 	return (*this);
 }
 
-Client&	Server::find_user(string nick)
+Client&	Server::find_user(string nick, Client client)
 {
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
 	{
 		if (it->second.getNickname() == nick)
 			return it->second;
 	}
+	string msg = ":localhost" + int_to_string(ERR_NOSUCHNICK) + nick + " :No such nick/channel" + endmsg;
+	client.setBuff(client.getBuff() + msg);
 	throw runtime_error("User not found");
 }
 

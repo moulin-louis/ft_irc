@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/24 16:34:07 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 13:13:20 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 		throw invalid_argument("nick: nickname too long");
 	}
 	for (unsigned int i = 0; i < nickname.size(); i++) {
-		if (i == ' ' || i == '@') {
+		if (nickname[i] == ' ' || nickname[i] == '@') {
 			string msg = ":localhost" + int_to_string(ERR_ERRONEUSNICKNAME) + " * " + nickname + " :Erroneous nickname" + endmsg;
 			client.setBuff(client.getBuff() + msg);
 			throw invalid_argument("nick: invalid character in nickname");

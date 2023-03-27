@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/24 15:19:40 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 13:59:59 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ class Server
 	public:
 		map<int, Client>				fd_map;
 		map<string, command_function>	cmd_map;
-		map<string, Channel>			chan_map;
+		vector<Channel>					chan_map;
 
 		Server(const char *port, const string &password);
 		Server(const Server &copy);
@@ -60,7 +60,7 @@ class Server
 		void	add_cmd_client(string& content, Client& client, string cmd);
 
 		//checks
-		Client&	find_user(string nick);
+		Client&	find_user(string nick, Client client);
 		void	is_valid_nickname(string &nickname, Client& client);
 		void	is_valid_username(string &username, Client& client);
 		void	is_valid_chan_name(vector<string> params);
