@@ -14,13 +14,11 @@
 #include <cstdlib>
 Client::Client(void)
 {
-	memset(this, 0, sizeof(Client));
 	return ;
 }
 
 Client::Client(string &nick, string &user)
 {
-	memset(this, 0, sizeof(Client));
 	this->nickname = nick;
 	this->username = user;
 	return ;
@@ -28,7 +26,6 @@ Client::Client(string &nick, string &user)
 
 Client::Client(const Client &copy)
 {
-	memset(this, 0, sizeof(Client));
 	*this = copy;
 	return ;
 }
@@ -41,7 +38,7 @@ Client::~Client()
 
 Client &Client::operator=(const Client &assign)
 {
-	memcpy(this, &assign, sizeof(Client));
+	(void)assign;
 	return (*this);
 }
 
@@ -75,7 +72,7 @@ const sockaddr_in &Client::getSin() const
 	return (this->sin);
 }
 
-const string Client::getBuff() const {
+string Client::getBuff() const {
 	return this->buffer;
 }
 

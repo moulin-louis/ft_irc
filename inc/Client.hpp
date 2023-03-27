@@ -16,7 +16,7 @@
 
 # include <string>
 # include <iostream>
-#include "irc.hpp"
+# include "irc.hpp"
 
 typedef uint32_t Mode;
 
@@ -53,7 +53,7 @@ class Client
 		const string 		&getHostname() const;
 		const Socket 		&getFd() const;
 		const sockaddr_in	&getSin() const;
-		const string		getBuff() const;
+		string		getBuff() const;
 		Mode				getMode(int );
 
 		void 	setNickname(const string &nickname);

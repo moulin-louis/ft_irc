@@ -20,6 +20,20 @@ void handler(int)
 	stop = true;
 }
 
+static int epoll_ctl_add(int epfd, int fd, uint32_t events)
+{
+	struct epoll_event ev = {};
+	bzero(&ev.data, sizeof(ev.data));
+	ev.events = events;
+	ev.data.fd = fd;
+	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
+}
+
+void	sendMessage(Client &client, const std::string& message)
+{
+	send(client.getFd(), message.c_str(), message.length(), 0);
+}
+
 /*-------------------------------CONSTRUCTORS---------------------------------*/
 
 Server::Server(const char *port, const string &password)
@@ -123,122 +137,140 @@ void	Server::run()
 {
 	epoll_event ev = {};
 	int nfds;
-	int n;
 
-	ev.events = EPOLLIN;
-	ev.data.fd = this->_sfd;
-	if (epoll_ctl(this->_epfd, EPOLL_CTL_ADD, this->_sfd, &ev) == -1)
+	if (epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN) == -1)
 		throw runtime_error(string("epoll_ctl: ") + strerror(errno));
 	signal(SIGINT, handler);
 	while (!stop)
 	{
-		cout << PURPLE << "waiting epoll" << RESET << endl;
-		nfds = epoll_wait(this->_epfd, this->_events, MAX_EVENTS, -1);
-		if (nfds == -1) {
+		nfds = epoll_wait(this->_epfd, this->_events, 10, -1);
+		if (nfds == -1)
+		{
 			if (errno == EINTR)
 				continue;
 			throw runtime_error(string("epoll_wait: ") + strerror(errno));
 		}
-		for (n = 0; n < nfds; ++n) {
-			Socket temp_fd = this->_events[n].data.fd;
-			if (this->_events[n].events & EPOLLIN) {
-				cout << PURPLE << "In epollin" << RESET << endl;
-				if (temp_fd == this->_sfd)
-					this->accept_client();
-				else {
-					if (this->fd_map.find(temp_fd) != this->fd_map.end()) {
-						this->process_input(temp_fd);
-					}
+		for (int n = 0; n < nfds; ++n)
+		{
+			ev = this->_events[n];
+			if (ev.events & EPOLLIN)
+			{
+				if (ev.data.fd == this->_sfd)
+					this->_accept_client();
+				else
+				{
+					this->process_input(ev.data.fd);
 				}
 			}
-			if (this->_events[n].events & EPOLLOUT) {
-				cout << PURPLE << "In epollout" << RESET << endl;
-				if (this->fd_map.find(temp_fd) != this->fd_map.end() ) {
-					this->flush_buff(temp_fd);
-				}
-			}
-			else {
-				if (this->_events[n].events & EPOLLHUP || this->_events[n].events & EPOLLRDHUP)
-					this->disconect_client(this->_events[n].data.fd);
-			}
+			if (ev.events & (EPOLLHUP | EPOLLRDHUP))
+				this->_disconect_client(ev.data.fd);
 		}
 	}
-	cout << RED << "Stoping the server" << RESET << endl;
+	cout << RED << "Server stopped" << RESET << endl;
 }
 
-void	Server::accept_client( void ) {
+void	Server::_accept_client( void ) {
 	sockaddr csin = {};
 	socklen_t crecsize = sizeof(csin);
 	Client	temp;
 
-	Socket csock = accept(this->_sfd, &csin, &crecsize);
-	if ( csock == -1 ) {
+	Socket csock = accept(this->_sfd, (struct sockaddr *)&csin, &crecsize);
+	if (csock < 0)
+	{
 		throw runtime_error(string("accept: ") + strerror(errno));
 	}
 	cout << GREEN << "New connection" << RESET << endl;
-	temp.ev.events = EPOLLIN ;
-	temp.ev.data.fd = csock;
 	this->fd_map.insert(make_pair(csock, Client()) );
 	char hostname[NI_MAXHOST];
 	if (getnameinfo(&csin, sizeof(csin), hostname, sizeof(hostname), NULL, 0, 0) != 0)
 		this->fd_map[csock].setHostname("unknown");
 	else
 		this->fd_map[csock].setHostname(hostname);
+	std::cout << "Server: got connection from " << this->fd_map[csock].getHostname() << std::endl;
 	this->fd_map[csock].setFd(csock);
-	epoll_ctl(this->_epfd, EPOLL_CTL_ADD, this->fd_map[csock].getFd(), &(this->fd_map[csock].ev));
+	epoll_ctl_add(this->_epfd, this->fd_map[csock].getFd(), EPOLLIN | EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
 }
 
-void	Server::disconect_client( Socket fd ) {
-	epoll_event ev = {};
-	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, &ev);
-	if ( this->fd_map.erase(fd) == 0 ) {
+void	Server::_disconect_client( Socket fd )
+{
+	map_iter it = this->fd_map.find(fd);
+	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, NULL);
+	if ( this->fd_map.erase(fd) == 0 )
+	{
 		cout << RED << "problem deleting client from database" << RESET << endl;
 	}
-	else {
-		cout << GREEN << "client disconnected" << RESET << endl;
+	else
+	{
+		cout << GREEN << "client disconnected: " + it->second.getNickname() << RESET << endl;
 	}
+	close (fd);
 }
 
-string	Server::received_data_from_client(Socket fd) {
+string	Server::received_data_from_client(Socket fd)
+{
 	string result;
 	result.resize(512);
 	
 	int ret_val = recv(fd, (void *)result.c_str(), 512, 0);
-	if (ret_val == -1 ) {
-		if ( errno == ECONNRESET ) {
-			this->disconect_client(fd);
+	if (ret_val == -1 )
+	{
+		if ( errno == ECONNRESET )
+		{
+			this->_disconect_client(fd);
 			return (result.clear(), result);
 		}
 		throw invalid_argument(string("Recv: ") + strerror(errno));
 	}
-	if (ret_val == 0) {
+	if (ret_val == 0)
+	{
 		cout << YELLOW << "nothing received" << endl;
 		return (result.clear(), result);
 	}
-	this->fd_map[fd].ev.events |= EPOLLOUT;
-	epoll_ctl(this->_epfd, EPOLL_CTL_MOD, fd, &(this->fd_map[fd].ev));
 	cout << YELLOW << ret_val << " bytes received" << RESET << endl;
 	result.resize(ret_val + 1);
-	return result;
+	return (result);
 }
 
-void	Server::process_input(Socket fd ) {
-	string temp = this->received_data_from_client(fd);
-	if (temp.empty()) {
-		return ;
+#define MSG ":" + client.getHostname() + " 001 " + client.getNickname() + " Welcome to the Internet Relay Network TNO " + endmsg
+
+void	Server::process_input(Socket fd )
+{
+	//string temp = this->received_data_from_client(fd);
+	//if (temp.empty())
+	//{
+	//	return ;
+	//}
+	//while (1)
+	//{
+	//	if (temp.find(endmsg) == string::npos)
+	//	{
+	//		break ;
+	//	}
+	//	string tok = temp.substr(0, temp.find(endmsg));
+	//	parse_command(tok, this->fd_map[fd]);
+	//	temp.erase(0, temp.find(endmsg) + 2);
+	//}
+
+	map_iter 	it = this->fd_map.find(fd);
+	Client			&client = it->second;
+	int 			byte_count;
+	char			buf[2048];
+
+	byte_count = recv(fd, buf, sizeof(buf), 0);
+	buf[byte_count] = '\0';
+	cout << client.getHostname() << " : " << buf << endl;
+	client.getBuff().append(buf);
+	if (client.getBuff()[client.getBuff().length() - 1] == '\n')
+	{
+		std::cout << "Command received from : " << client.getHostname() << std::endl;
+		std::cout << CYAN << client.getBuff() << RESET;
 	}
-	while (1) {
-		if (temp.find(endmsg) == string::npos) {
-			break ;
-		}
-		string tok = temp.substr(0, temp.find(endmsg));
-		parse_command(tok, this->fd_map[fd]);
-		temp.erase(0, temp.find(endmsg) + 2);
-	}
-	parse_command(temp, this->fd_map[fd]);
+	sendMessage(client, MSG);
+	parse_command((const string)client.getBuff(), client);
 }
 
-void	Server::parse_command( string& input, Client& client ) {
+void	Server::parse_command(basic_string<char> input, Client& client )
+{
 	vector<string>	result;
 	size_t			pos;
 	string delimiter = " ";
@@ -254,7 +286,6 @@ void	Server::parse_command( string& input, Client& client ) {
 		return ;
 	}
 	(this->*(it->second))(result, client);
-	return ;
 }
 
 void	Server::add_cmd_client(string& content, Client& client, Client& author, string cmd)
@@ -284,17 +315,20 @@ void	Server::flush_all_buffer() {
 void Server::flush_buff( Socket fd ) {
 	string buff;
 	buff = this->fd_map[fd].getBuff();
-	if (buff.empty()) {
+	if (buff.empty())
+	{
 		return ;
 	}
-
-	int ret_val = send(fd, buff.c_str(), buff.size(), MSG_DONTWAIT );
-	if ( ret_val == -1 ) {
-		if (errno == EAGAIN) {
+	int ret_val = send(fd, buff.c_str(), buff.length(), 0);
+	if ( ret_val == -1 )
+	{
+		if (errno == EAGAIN)
+		{
 			return ;
 		}
-		if ( errno == ECONNRESET ) {
-			this->disconect_client(fd);
+		if ( errno == ECONNRESET )
+		{
+			this->_disconect_client(fd);
 			return ;
 		}
 		throw invalid_argument(string("send") + strerror(errno));

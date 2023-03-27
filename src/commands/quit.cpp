@@ -20,6 +20,5 @@ void Server::quit(vector<string> params, Client &client) {
 	msg += ") [" + params[0] + "]" + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	this->flush_buff(client.getFd());
-	this->disconect_client(client.getFd());
-	return ;
+	this->_disconect_client(client.getFd());
 }

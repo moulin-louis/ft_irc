@@ -41,10 +41,13 @@ class Server
 		Epollfd			_epfd;
 		epoll_event		_events[MAX_EVENTS];
 		Socket			_initiateSocket() const;
+		void			_accept_client();
+		void			_disconect_client( Socket );
 	public:
 		map<int, Client>				fd_map;
 		map<string, command_function>	cmd_map;
 		vector<Channel>					chan_map;
+		typedef std::map<int, Client>::iterator	map_iter;
 
 		Server(const char *port, const string &password);
 		Server(const Server &copy);
@@ -71,7 +74,7 @@ class Server
 		void		channel_exists(string &channel_name, Client& client);
 
 		//commands
-		void	parse_command( string& input, Client& client );
+		void	parse_command(basic_string<char> input, Client& client );
 		void	nick(vector<string> params, Client& client);
 		void	pass(vector<string> params, Client& client);
 		void	ping(vector<string> params, Client& client);
@@ -84,8 +87,6 @@ class Server
 
 		//server run functions
 		void 	run();
-		void	accept_client();
-		void	disconect_client( Socket );
 };
 
 //string	msg_welcome(Client& client);
