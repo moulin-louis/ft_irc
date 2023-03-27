@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 17:10:30 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:41:54 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ Client&	Server::find_user(string nick, Client client)
 		if (it->second.getNickname() == nick)
 			return it->second;
 	}
-	string msg = ":localhost" + int_to_string(ERR_NOSUCHNICK) + nick + " :No such nick/channel" + endmsg;
-	client.setBuff(client.getBuff() + msg);
+	add_rply_from_server(nick + " :No such nick/channel", client, "NICK", ERR_NOSUCHNICK);
 	throw runtime_error("User not found");
 }
 
@@ -86,8 +85,7 @@ Channel&	Server::find_channel(string name, Client client)
 		if (it->getName() == name)
 			return *it;
 	}
-	string msg = ":localhost" + int_to_string(ERR_NOSUCHCHANNEL) + name + " :No such nick/channel" + endmsg;
-	client.setBuff(client.getBuff() + msg);
+	add_rply_from_server(name + " :No such nick/channel", client, "JOIN", ERR_NOSUCHCHANNEL);
 	throw runtime_error("User not found");
 }
 

@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:57:21 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 17:10:07 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:36:39 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	Server::private_msg(vector<string> params, Client& author)
 			Channel& dest = find_channel(params[0], author);
 			if (dest.user_in_chan(author) == true)
 				dest.add_cmd_channel(params[1], author, "PRIVMSG");
+			else
+				add_rply_from_server(":" + dest.getName() + " :Cannot send to channel", author, "PRIVMSG", ERR_CANNOTSENDTOCHAN);
 		}
 		else {
 			Client& dest = find_user(params[0], author);
