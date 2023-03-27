@@ -35,6 +35,8 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("JOIN", &Server::join));
 	this->cmd_map.insert(make_pair("PRIVMSG", &Server::private_msg));
 	this->cmd_map.insert(make_pair("PASS", &Server::pass));
+	this->cmd_map.insert(make_pair("OPER", &Server::oper));
+	this->cmd_map.insert(make_pair("QUIT", &Server::quit));
 }
 
 Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
@@ -193,6 +195,7 @@ string	Server::received_data_from_client(Socket fd) {
 	if (ret_val == 0) {
 		return (result.clear(), result);
 	}
+	cout << ret_val << " bytes received" << endl;
 	result.resize(ret_val + 1);
 	return result;
 }

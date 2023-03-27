@@ -22,7 +22,6 @@
 # include "irc.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
-#include <functional>
 
 # define MAX_EVENTS 64
 
@@ -43,9 +42,9 @@ class Server
 		epoll_event		_events[MAX_EVENTS];
 		Socket			_initiateSocket() const;
 	public:
-		map<int, Client>	fd_map;
+		map<int, Client>				fd_map;
 		map<string, command_function>	cmd_map;
-		map<string, Channel>	chan_map;
+		map<string, Channel>			chan_map;
 
 		Server(const char *port, const string &password);
 		Server(const Server &copy);
@@ -76,6 +75,7 @@ class Server
 		void	join(vector<string> params, Client& client);
 		void	private_msg(vector<string> params, Client& client);
 		void	oper( vector<string> params, Client& client);
+		void	quit( vector<string> params, Client& client);
 
 		//server run functions
 		void 	run();

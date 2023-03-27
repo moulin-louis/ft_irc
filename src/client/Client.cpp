@@ -12,14 +12,13 @@
 
 #include "Client.hpp"
 
-Client &parse_entry(string &entry);
-
 Client::Client(void)
 {
 	this->passwd_provided = false;
 	this->isRegistered = false;
 	this->isAway = false;
 	this->isOperator = false;
+	this->fd = 0;
 	return ;
 }
 
@@ -31,6 +30,7 @@ Client::Client(string &nick, string &user)
 	this->isOperator = false;
 	this->nickname = nick;
 	this->username = user;
+	this->fd = 0;
 	return ;
 }
 
@@ -42,13 +42,23 @@ Client::Client(const Client &copy)
 
 Client::~Client()
 {
-	cout << "client destructor called" << endl;
-	close(this->fd);
+	if (this->fd)
+		close(this->fd);
 }
 
 Client &Client::operator=(const Client &assign)
 {
-	(void) assign;
+	this->nickname = assign.nickname;
+	this->username = assign.username;
+	this->realname = assign.realname;
+	this->hostname = assign.hostname;
+	this->buffer = assign.buffer;
+	this->fd = assign.fd;
+	this->sin = assign.sin;
+	this->passwd_provided = assign.passwd_provided;
+	this->isRegistered = assign.isRegistered;
+	this->isAway = assign.isAway;
+	this->isOperator = assign.isOperator;
 	return (*this);
 }
 

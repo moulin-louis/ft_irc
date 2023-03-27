@@ -43,12 +43,12 @@ void	Server::nick(vector<string> params, Client& client)
 		client.setBuff(client.getBuff() + msg);
 		return ;
 	}
+	if (params.empty() || params[0].empty()) {
+		string msg = ":localhost" + int_to_string(ERR_NONICKNAMEGIVEN) + " * " + " :No nickname given" + endmsg;
+		client.setBuff(client.getBuff() + msg);
+		return ;
+	}
 	try {
-		if (params.empty() || params[0].empty()) {
-			string msg = ":localhost" + int_to_string(ERR_NONICKNAMEGIVEN) + " * " + " :No nickname given" + endmsg;
-			client.setBuff(client.getBuff() + msg);
-			throw	invalid_argument("nick: wrong number of parameters");
-		}
 		is_valid_nickname(params[0], client);
 	}
 	catch(exception& e) {

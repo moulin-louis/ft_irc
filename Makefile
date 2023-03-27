@@ -44,6 +44,7 @@ SRC			=	$(addprefix src/,		\
 						pass.cpp		\
 						ping.cpp		\
 						private_msg.cpp	\
+						quit.cpp		\
 						user.cpp		\
 					)					\
 					$(addprefix tools/,	\

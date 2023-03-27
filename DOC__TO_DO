@@ -12,15 +12,15 @@ quackenet: serveur IRC avec liste des channels disponibles
 
 
 COMMANDES MANDATORY:
-NICK: Définit le pseudonyme (nickname) de l'utilisateur.
-USER: Définit le nom d'utilisateur (username) de l'utilisateur et fournit des informations supplémentaires, telles que le nom réel et l'adresse électronique.
+NICK: Définit le pseudonyme (nickname) de l'utilisateur. //kind of done
+USER: Définit le nom d'utilisateur (username) de l'utilisateur et fournit des informations supplémentaires, telles que le nom réel et l'adresse électronique. //kind of done
 JOIN: Rejoint un canal (channel) spécifié.
 PART: Quitte un canal spécifié.
-PRIVMSG: Envoie un message privé à un utilisateur ou à un canal spécifié.
+PRIVMSG: Envoie un message privé à un utilisateur ou à un canal spécifié. //kind of done
 LIST: Affiche la liste des canaux disponibles sur le serveur.
 PING: Teste la connexion au serveur IRC.
 PONG: Répond à un message PING.
-QUIT: Quitte le serveur IRC.
+QUIT: Quitte le serveur IRC. //done (already handle by irssi)
 
 COMMANDES OPERATORS ONLY:
 KICK: Expulse un utilisateur d'un canal.

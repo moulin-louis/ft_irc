@@ -44,12 +44,12 @@ void	Server::user(vector<string> params, Client& client)
 		string msg = ":localhost " + int_to_string(ERR_ALREADYREGISTRED) + " " + client.getNickname() + " :Unauthorized command (already registered)" + endmsg;
 		return ;
 	}
+	if (params.empty()) {
+		string msg = ":localhost " + int_to_string(ERR_NEEDMOREPARAMS) + " * * " + ":Not enough parameters";
+		client.setBuff(client.getBuff() + msg);
+		return ;
+	}
 	try {
-		if (params.empty()) {
-			string msg = ":localhost " + int_to_string(ERR_NEEDMOREPARAMS) + " * * " + ":Not enough parameters";
-			client.setBuff(client.getBuff() + msg);
-			throw invalid_argument("user: need more parametres");
-		}
 		is_valid_username(params[0], client);
 	}
 	catch(exception& e) {
