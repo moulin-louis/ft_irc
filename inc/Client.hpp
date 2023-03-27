@@ -32,7 +32,6 @@ class Client
 		string		buffer;
 		Socket		fd;
 		sockaddr_in	sin;
-		Mode		mode;
 	public:
 		Client();
 		Client(string &nick, string &user);
@@ -40,11 +39,12 @@ class Client
 		~Client();
 		Client &operator=(const Client &assign);
 
-		string channel;
-		bool passwd_provided;
-		bool isRegistered;
-		bool isAway;
-		bool isOperator;
+		string 	channel;
+		Mode	mode[4];
+		bool 	passwd_provided;
+		bool	 isRegistered;
+		bool 	isAway;
+		bool 	isOperator;
 
 		const string 		&getNickname() const;
 		const string 		&getUsername() const;
@@ -53,7 +53,7 @@ class Client
 		const Socket 		&getFd() const;
 		const sockaddr_in	&getSin() const;
 		const string		getBuff() const;
-		Mode 				getMode() const;
+		Mode				getMode(int );
 
 		void 	setNickname(const string &nickname);
 		void 	setUsername(const string &username);
@@ -63,7 +63,7 @@ class Client
 		void 	setSin(const sockaddr_in &sin);
 		void 	setBuff( const string& buffer );
 		void 	clearBuff();
-		void 	setMode( Mode );
+		void 	setMode( int , Mode );
 };
 
 #endif

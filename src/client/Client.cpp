@@ -19,13 +19,19 @@ Client::Client(void)
 	this->isAway = false;
 	this->isOperator = false;
 	this->fd = 0;
-	this->mode = 0;
+	this->mode[0] = 0;
+	this->mode[1] = 0;
+	this->mode[2] = 0;
+	this->mode[3] = 0;
 	return ;
 }
 
 Client::Client(string &nick, string &user)
 {
-	this->mode = 0;
+	this->mode[0] = 0;
+	this->mode[1] = 0;
+	this->mode[2] = 0;
+	this->mode[3] = 0;
 	this->passwd_provided = false;
 	this->isRegistered = false;
 	this->isAway = false;
@@ -50,7 +56,10 @@ Client::~Client()
 
 Client &Client::operator=(const Client &assign)
 {
-	this->mode = assign.mode;
+	this->mode[0] = assign.mode[0];
+	this->mode[1] = assign.mode[1];
+	this->mode[2] = assign.mode[2];
+	this->mode[3] = assign.mode[3];
 	this->nickname = assign.nickname;
 	this->username = assign.username;
 	this->realname = assign.realname;
@@ -99,8 +108,8 @@ const string Client::getBuff() const {
 	return this->buffer;
 }
 
-Mode Client::getMode() const {
-	return (this->mode);
+Mode	Client::getMode(int idx ) {
+	return (this->mode[idx]);
 }
 
 void Client::setNickname(const string &nickname_input)
@@ -141,6 +150,6 @@ void Client::clearBuff() {
 	this->buffer.clear();
 }
 
-void Client::setMode(Mode input) {
-	this->mode = input;
+void Client::setMode( int idx, Mode input) {
+	this->mode[idx] = input;
 }

@@ -44,7 +44,7 @@ class Server
 	public:
 		map<int, Client>				fd_map;
 		map<string, command_function>	cmd_map;
-		map<string, Channel>			chan_map;
+		vector<Channel>			chan_map;
 
 		Server(const char *port, const string &password);
 		Server(const Server &copy);
@@ -76,6 +76,7 @@ class Server
 		void	private_msg(vector<string> params, Client& client);
 		void	oper( vector<string> params, Client& client);
 		void	quit( vector<string> params, Client& client);
+		void	mode( vector<string> params, Client& client );
 
 		//server run functions
 		void 	run();

@@ -46,14 +46,14 @@ void	Server::join(vector<string> params, Client& client)
 		cout << RED << e.what() << RESET << endl;
 		return ;
 	}
-	for (map<string, Channel>::iterator it = this->chan_map.begin(); it != this->chan_map.end(); it++) {
-		if (it->first == params[0]) {
-			it->second.addClient(client);
-			it->second.notify_clients(it->second, client, "JOIN");
-			return ;
-		}
-	}
+//	for (vector<Channel>::iterator it = this->chan_map.begin(); it != this->chan_map.end(); it++) {
+//		if (*it == params[0]) {
+//			it->second.addClient(client);
+//			it->second.notify_clients(it->second, client, "JOIN");
+//			return ;
+//		}
+//	}
 	Channel new_channel(params[0], client);
-	this->chan_map.insert(pair<string, Channel>(params[0], new_channel));
+//	this->chan_map.insert(pair<string, Channel>(params[0], new_channel));
 	return ;
 }

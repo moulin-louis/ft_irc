@@ -39,6 +39,7 @@ SRC			=	$(addprefix src/,		\
 					)					\
 					$(addprefix commands/,\
 						join.cpp		\
+						mode.cpp		\
 						nick.cpp		\
 						oper.cpp		\
 						pass.cpp		\
