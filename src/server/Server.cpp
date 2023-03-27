@@ -173,7 +173,6 @@ void	Server::accept_client( void ) {
 
 	Socket csock = accept(this->_sfd, &csin, &crecsize);
 	if ( csock == -1 ) {
-		close(this->_sfd);
 		throw runtime_error(string("accept: ") + strerror(errno));
 	}
 	cout << GREEN << "New connection" << RESET << endl;
