@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-string mode_to_str( Mode arr[4]) {
+string mode_to_str( const Mode (&arr)[4]) {
 	string result = "+";
 	if (arr[0]) { result += "a"; }
 	if (arr[1]) { result += "i"; }
