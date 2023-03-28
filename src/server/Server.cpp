@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 17:41:54 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/28 11:55:27 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void	Server::_accept_client( void ) {
 
 void	Server::_disconect_client( Socket fd )
 {
-	map_iter it = this->fd_map.find(fd);
+	client_iter it = this->fd_map.find(fd);
 	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
 	if ( this->fd_map.erase(fd) == 0 )
@@ -251,7 +251,7 @@ void	Server::process_input(Socket fd )
 	//	temp.erase(0, temp.find(endmsg) + 2);
 	//}
 
-	map_iter 	it = this->fd_map.find(fd);
+	client_iter 	it = this->fd_map.find(fd);
 	Client			&client = it->second;
 	int 			byte_count;
 	char			buf[2048];
