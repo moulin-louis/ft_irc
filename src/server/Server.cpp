@@ -129,14 +129,23 @@ void	Server::run() {
 		for (int n = 0; n < nfds; ++n) {
 			ev = this->_events[n];
 			if (ev.events & EPOLLIN) {
-				if (ev.data.fd == this->_sfd)
+				if (ev.data.fd == this->_sfd) {
 					this->_accept_client();
+				}
 				else {
+					try {
 						this->process_input(ev.data.fd);
+					}
+					catch (exception& e) {
+						cout << RED << e.what() << RESET << endl;
+					}
 				}
 			}
 			if (ev.events & (EPOLLHUP | EPOLLRDHUP))
-				this->_disconect_client(ev.data.fd);
+			{
+//				this->_disconect_client(ev.data.fd);
+
+			}
 		}
 	}
 	cout << RED << "Server stopped" << RESET << endl;
@@ -195,10 +204,7 @@ void	Server::process_input(Socket fd ) {
 		parse_command(tok, this->fd_map[fd]);
 		temp.erase(0, temp.find(endmsg) + 2);
 	}
-	cout << client.getHostname() << " : " << temp << endl;
 	parse_command((const string)client.getBuff(), client);
-	cout << client.getBuff() << endl;
-
 	byte_count = send(client.getFd(), client.getBuff().c_str(), client.getBuff().length(), 0);
 	if (byte_count == -1) {
 		throw runtime_error(string("send: ") + strerror(errno));
@@ -259,7 +265,7 @@ void Server::flush_buff( Socket fd ) {
 			return ;
 		}
 		if ( errno == ECONNRESET ) {
-			this->_disconect_client(fd);
+//			this->_disconect_client(fd);
 			return ;
 		}
 		throw invalid_argument(string("send") + strerror(errno));
