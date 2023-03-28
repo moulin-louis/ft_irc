@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/28 11:55:27 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/28 11:57:24 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,6 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("QUIT", &Server::quit));
 }
 
-Server::Server(const Server &copy): _password(copy._password), _port(copy._port), fd_map(copy.fd_map)
-{
-	*this = copy;
-}
-
 /*---------------------------------DESTRUCTOR---------------------------------*/
 
 Server::~Server()
@@ -70,14 +65,6 @@ Server::~Server()
 		close(this->_epfd);
 }
 
-/*---------------------------------OPERATORS----------------------------------*/
-
-Server &Server::operator=(const Server &assign)
-{
-	this->_sfd = assign._sfd;
-	this->fd_map = assign.fd_map;
-	return (*this);
-}
 
 /*------------------------------MEMBER FUNCTIONS------------------------------*/
 

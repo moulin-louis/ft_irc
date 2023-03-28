@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/27 17:01:58 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/28 11:57:31 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ class Server
 		vector<Channel>					chan_map;
 
 		Server(const char *port, const string &password);
-		Server(const Server &copy);
 		~Server();
-		Server &operator=(const Server &assign);
 
 		//request from client
 		string	received_data_from_client( Socket );
