@@ -36,6 +36,7 @@ int	sendMessage(Client &client, const std::string& message) {
 Server::Server(const char *port, const string &password)
 	: _password(password), _port(strtoul(port, NULL, 10)), fd_map()
 {
+	cout << endl << CYAN << "🅵 🆃" << O_BLINK_CYAN << " ->" << CYAN << "🅸 🆁 🅲" << RESET << endl;
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
 	if (this->_epfd == -1) {
@@ -196,7 +197,7 @@ void	Server::process_input(Socket fd ) {
 	}
 	temp.resize(byte_count);
 	cout << YELLOW << byte_count << " bytes received" << RESET << endl;
-	cout << CYAN << "cmd = " << temp << RESET << endl;
+	cout << "cmd called ⤵️" << endl << CYAN  << temp << RESET << endl;
 	while (true) {
 		if (temp.find(endmsg) == string::npos)
 			break;
