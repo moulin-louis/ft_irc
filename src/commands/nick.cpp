@@ -24,7 +24,7 @@ void Server::is_valid_nickname(string &nickname, Client& client)
 			throw invalid_argument("nick: invalid character in nickname");
 		}
 	}
-	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
+	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getNickname() == nickname) {
 			add_rply_from_server(" :Nickname is already in use", client, "NICK", ERR_NICKNAMEINUSE);
 			throw invalid_argument("nick: nickname already taken");

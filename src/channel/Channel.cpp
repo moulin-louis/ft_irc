@@ -65,7 +65,7 @@ void    Channel::setName(string &name)
 
 bool	Channel::user_in_chan(Client& client)
 {
-	for (vector<Client>::iterator it = this->clients.begin(); it != this->clients.end(); it++) {
+	for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
 		if (it->getNickname() == client.getNickname())
 			return (true);
 	}
@@ -80,7 +80,7 @@ void    Channel::addClient(Client &client)
 
 void    Channel::removeClient(Client &client)
 {
-    for (vector<Client>::iterator it = this->clients.begin(); it != this->clients.end(); it++)
+    for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++)
     {
         if (it->getNickname() == client.getNickname())
         {
@@ -99,7 +99,7 @@ void	Channel::add_cmd_client(string& content, Client& client, Client& author, st
 
 void	Channel::add_cmd_channel(string& content, Client& author, string cmd)
 {
-	for (vector<Client>::iterator it = this->clients.begin(); it != this->clients.end(); it++) {
+	for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
 		this->add_cmd_client(content, *it, author, cmd);
 	}
 	return ;

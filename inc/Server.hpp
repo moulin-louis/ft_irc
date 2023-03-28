@@ -31,8 +31,10 @@ typedef void (*command_function)( vector<string>, Client& );
 
 class Server
 {
-	typedef void (Server::*command_function)( vector<string>, Client& );
-
+	typedef	void (Server::*command_function)( vector<string>, Client& );
+	typedef std::map<Socket, Client>::iterator	client_iter;
+	typedef	std::map<string, command_function>::iterator fn_iter;
+	typedef vector<Channel>::iterator chan_iter;
 
 	private:
 		const string 	_password;
@@ -44,10 +46,9 @@ class Server
 		void			_accept_client();
 		void			_disconect_client( Socket );
 	public:
-		map<int, Client>				fd_map;
+		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
 		vector<Channel>					chan_map;
-		typedef std::map<int, Client>::iterator	map_iter;
 
 		Server(const char *port, const string &password);
 		Server(const Server &copy);

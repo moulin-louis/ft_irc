@@ -40,7 +40,7 @@ void	Server::join(vector<string> params, Client& client)
 		cout << RED << e.what() << RESET << endl;
 		return ;
 	}
-	for (vector<Channel>::iterator it = this->chan_map.begin(); it != this->chan_map.end(); it++) {
+	for ( chan_iter it = this->chan_map.begin(); it != this->chan_map.end(); it++) {
 		if (it->getName() == params[0]) {
 			it->addClient(client);
 			it->add_cmd_channel(params[0], client, "JOIN");

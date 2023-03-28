@@ -23,6 +23,7 @@ class Server;
 
 class Channel
 {
+	typedef vector<Client>::iterator cl_iter;
     private:
         string _name;
         string _topic;
