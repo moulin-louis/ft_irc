@@ -6,6 +6,9 @@
 
 string int_to_string(int i)
 {
+	if (i == -1) {
+		return "";
+	}
 	stringstream ss;
 	if (i < 100)
 	{

@@ -48,6 +48,12 @@ void	Server::nick(vector<string> params, Client& client)
 		cout << RED << e.what() << RESET << endl;
 		return ;
 	}
+	string old_nickname = client.getNickname();
 	client.setNickname(params[0]);
+	if (client.isRegistered) {
+		string msg = string(":") + old_nickname + " !" + old_nickname + "@127.0.0.1 NICK :";
+		msg += client.getNickname() + endmsg;
+		client.setBuff(client.getBuff() + msg);
+	}
 	return ;
 }

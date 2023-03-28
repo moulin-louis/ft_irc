@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/28 15:01:54 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/28 16:20:09 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,10 +141,9 @@ void	Server::run() {
 					}
 				}
 			}
-			if (ev.events & (EPOLLHUP | EPOLLRDHUP))
-			{
-//				this->_disconect_client(ev.data.fd);
+			if (ev.events & (EPOLLHUP | EPOLLRDHUP)) {
 
+//				this->_disconect_client(ev.data.fd);
 			}
 		}
 	}
@@ -184,13 +183,13 @@ void	Server::_disconect_client( Socket fd ) {
 }
 
 void	Server::process_input(Socket fd ) {
-	client_iter 	it = this->fd_map.find(fd);
-	Client			&client = it->second;
-	ssize_t 		byte_count;
-	string			temp;
+	client_iter it = this->fd_map.find(fd);
+	Client &client = it->second;
+	ssize_t byte_count;
+	string temp;
 
 	temp.resize(512);
-	byte_count = recv(fd, (void *)temp.c_str(), temp.length(), 0);
+	byte_count = recv(fd, (void *) temp.c_str(), temp.length(), 0);
 	if (byte_count == -1) {
 		throw runtime_error(string("recv: ") + strerror(errno));
 	}
@@ -199,19 +198,19 @@ void	Server::process_input(Socket fd ) {
 	cout << CYAN << "cmd = " << temp << RESET << endl;
 	while (true) {
 		if (temp.find(endmsg) == string::npos)
-			break ;
+			break;
 		string tok = temp.substr(0, temp.find(endmsg));
 		parse_command(tok, this->fd_map[fd]);
 		temp.erase(0, temp.find(endmsg) + 2);
 	}
-	parse_command((const string)client.getBuff(), client);
+	parse_command((const string) client.getBuff(), client);
 	byte_count = sendMessage(client, client.getBuff());
 	if (byte_count == -1) {
 		throw runtime_error(string("send: ") + strerror(errno));
 	}
+	cout << PURPLE << "buffer = " << client.getBuff() << RESET << endl;
 	cout << YELLOW << byte_count << " bytes sent" << RESET << endl;
 	client.clearBuff();
-	cout << "buff is now cleared" << client.getBuff() << endl;
 }
 
 void	Server::parse_command(basic_string<char> input, Client& client ) {
