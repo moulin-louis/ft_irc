@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 14:22:28 by armendi           #+#    #+#             */
-/*   Updated: 2023/03/27 17:36:23 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/28 17:24:24 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,17 @@ const string    &Channel::getName() const
     return (this->_name);
 }
 
+const string    &Channel::getTopic() const
+{
+    return (this->_topic);
+}
+
+void    Channel::setTopic(string &topic)
+{
+    this->_topic = topic;
+    return ;
+}
+
 void    Channel::setName(string &name)
 {
     this->_name = name;
@@ -90,17 +101,27 @@ void    Channel::removeClient(Client &client)
     }
 }
 
-void	Channel::add_cmd_client(string& content, Client& client, Client& author, string cmd)
+void	Channel::add_cmd_client(const string& content, Client& client, Client& author, string cmd)
 {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	return ;
 }
 
-void	Channel::add_cmd_channel(string& content, Client& author, string cmd)
+void	Channel::add_cmd_channel(const string& content, Client& author, string cmd)
 {
 	for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
 		this->add_cmd_client(content, *it, author, cmd);
 	}
+	return ;
+}
+
+void	Channel::add_rply_from_server(string msg, Client& dest, string cmd, int code) {
+	string dest_nick = dest.getNickname();
+	if (dest_nick.empty())
+		dest_nick = "*";
+	dest_nick = " " + dest_nick;
+	string result = ":localhost " + int_to_string(code) + dest_nick + " " + cmd + msg + endmsg;
+	dest.setBuff(dest.getBuff() + result);
 	return ;
 }

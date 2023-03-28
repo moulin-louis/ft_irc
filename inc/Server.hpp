@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/28 17:04:35 by tnoulens         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:35:42 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ class Server
 		void	oper( vector<string> params, Client& client);
 		void	quit( vector<string> params, Client& client);
 		void	mode( vector<string> params, Client& client );
+		void	topic( vector<string> params, Client& client );
 
 		//server run functions
 		void 	run();

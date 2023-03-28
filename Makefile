@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+         #
+#    By: armendi <armendi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/13 13:30:11 by loumouli          #+#    #+#              #
-#    Updated: 2023/03/24 16:40:26 by mpignet          ###   ########.fr        #
+#    Updated: 2023/03/28 17:34:48 by armendi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SRC			=	$(addprefix src/,		\
 						private_msg.cpp	\
 						quit.cpp		\
 						user.cpp		\
+						topic.cpp 		\
 					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\
