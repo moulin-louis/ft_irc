@@ -14,14 +14,12 @@
 
 bool stop = false;
 
-void handler(int)
-{
+void handler(int) {
 	cout << YELLOW << "Signal received" << RESET << endl;
 	stop = true;
 }
 
-static int epoll_ctl_add(int epfd, int fd, uint32_t events)
-{
+static int epoll_ctl_add(int epfd, int fd, uint32_t events) {
 	struct epoll_event ev = {};
 	bzero(&ev.data, sizeof(ev.data));
 	ev.events = events;
@@ -29,8 +27,7 @@ static int epoll_ctl_add(int epfd, int fd, uint32_t events)
 	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
 }
 
-void	sendMessage(Client &client, const std::string& message)
-{
+void	sendMessage(Client &client, const std::string& message) {
 	send(client.getFd(), message.c_str(), message.length(), 0);
 }
 
@@ -41,8 +38,7 @@ Server::Server(const char *port, const string &password)
 {
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
-	if (this->_epfd == -1)
-	{
+	if (this->_epfd == -1) {
 		close (this->_sfd);
 		throw runtime_error(string("epoll_create1: ") + strerror(errno));
 	}
@@ -57,8 +53,7 @@ Server::Server(const char *port, const string &password)
 
 /*---------------------------------DESTRUCTOR---------------------------------*/
 
-Server::~Server()
-{
+Server::~Server() {
 	if (this->_sfd >= 0)
 		close(this->_sfd);
 	if (this->_epfd >= 0)
@@ -68,10 +63,8 @@ Server::~Server()
 
 /*------------------------------MEMBER FUNCTIONS------------------------------*/
 
-Client&	Server::find_user(string nick, Client client)
-{
-	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
-	{
+Client&	Server::find_user(string nick, Client client) {
+	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getNickname() == nick)
 			return it->second;
 	}
@@ -79,10 +72,8 @@ Client&	Server::find_user(string nick, Client client)
 	throw runtime_error("User not found");
 }
 
-Channel&	Server::find_channel(string name, Client client)
-{
-	for (vector<Channel>::iterator it = this->chan_map.begin(); it != this->chan_map.end(); it++)
-	{
+Channel&	Server::find_channel(string name, Client client) {
+	for (vector<Channel>::iterator it = this->chan_map.begin(); it != this->chan_map.end(); it++) {
 		if (it->getName() == name)
 			return *it;
 	}
@@ -90,8 +81,7 @@ Channel&	Server::find_channel(string name, Client client)
 	throw runtime_error("User not found");
 }
 
-Socket	Server::_initiateSocket() const
-{
+Socket	Server::_initiateSocket() const {
 	sockaddr_in	sin = {};
 	int			opt = 1;
 	Socket 		sfd;
@@ -120,32 +110,26 @@ Socket	Server::_initiateSocket() const
 	return (sfd);
 }
 
-void	Server::run()
-{
+void	Server::run() {
 	epoll_event ev = {};
 	int nfds;
 
 	if (epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN) == -1)
 		throw runtime_error(string("epoll_ctl: ") + strerror(errno));
 	signal(SIGINT, handler);
-	while (!stop)
-	{
+	while (!stop) {
 		nfds = epoll_wait(this->_epfd, this->_events, 10, -1);
-		if (nfds == -1)
-		{
+		if (nfds == -1) {
 			if (errno == EINTR)
 				continue;
 			throw runtime_error(string("epoll_wait: ") + strerror(errno));
 		}
-		for (int n = 0; n < nfds; ++n)
-		{
+		for (int n = 0; n < nfds; ++n) {
 			ev = this->_events[n];
-			if (ev.events & EPOLLIN)
-			{
+			if (ev.events & EPOLLIN) {
 				if (ev.data.fd == this->_sfd)
 					this->_accept_client();
-				else
-				{
+				else {
 					this->process_input(ev.data.fd);
 				}
 			}
@@ -163,9 +147,7 @@ void	Server::_accept_client( void ) {
 
 	Socket csock = accept(this->_sfd, (struct sockaddr *)&csin, &crecsize);
 	if (csock < 0)
-	{
 		throw runtime_error(string("accept: ") + strerror(errno));
-	}
 	cout << GREEN << "New connection" << RESET << endl;
 	this->fd_map.insert(make_pair(csock, Client()) );
 	char hostname[NI_MAXHOST];
@@ -178,38 +160,31 @@ void	Server::_accept_client( void ) {
 	epoll_ctl_add(this->_epfd, this->fd_map[csock].getFd(), EPOLLIN | EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
 }
 
-void	Server::_disconect_client( Socket fd )
-{
+void	Server::_disconect_client( Socket fd ) {
 	client_iter it = this->fd_map.find(fd);
 	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
 	if ( this->fd_map.erase(fd) == 0 )
-	{
 		cout << RED << "problem deleting client from database" << RESET << endl;
-	}
 	if (!it->second.getNickname().empty())
 		std::cout << GREEN << it->second.getNickname() << " closed the connection" << RESET << std::endl;
 	else
 		std::cout << GREEN << it->second.getHostname() << " closed the connection" << RESET << std::endl;
 }
 
-string	Server::received_data_from_client(Socket fd)
-{
+string	Server::received_data_from_client(Socket fd) {
 	string result;
 	result.resize(512);
-	
-	int ret_val = recv(fd, (void *)result.c_str(), 512, 0);
-	if (ret_val == -1 )
-	{
-		if ( errno == ECONNRESET )
-		{
+
+	ssize_t ret_val = recv(fd, (void *)result.c_str(), 512, 0);
+	if (ret_val == -1 ) {
+		if ( errno == ECONNRESET ) {
 			this->_disconect_client(fd);
 			return (result.clear(), result);
 		}
 		throw invalid_argument(string("Recv: ") + strerror(errno));
 	}
-	if (ret_val == 0)
-	{
+	if (ret_val == 0) {
 		cout << YELLOW << "nothing received" << endl;
 		return (result.clear(), result);
 	}
@@ -220,8 +195,7 @@ string	Server::received_data_from_client(Socket fd)
 
 #define MSG ":" + client.getHostname() + " 001 " + client.getNickname() + " Welcome to the Internet Relay Network TNO " + endmsg
 
-void	Server::process_input(Socket fd )
-{
+void	Server::process_input(Socket fd ) {
 	//string temp = this->received_data_from_client(fd);
 	//if (temp.empty())
 	//{
@@ -240,15 +214,14 @@ void	Server::process_input(Socket fd )
 
 	client_iter 	it = this->fd_map.find(fd);
 	Client			&client = it->second;
-	int 			byte_count;
+	ssize_t 			byte_count;
 	char			buf[2048];
 
 	byte_count = recv(fd, buf, sizeof(buf), 0);
 	buf[byte_count] = '\0';
 	cout << client.getHostname() << " : " << buf << endl;
 	client.getBuff().append(buf);
-	if (client.getBuff()[client.getBuff().length() - 1] == '\n')
-	{
+	if (client.getBuff()[client.getBuff().length() - 1] == '\n') {
 		std::cout << "Command received from : " << client.getHostname() << std::endl;
 		std::cout << CYAN << client.getBuff() << RESET;
 	}
@@ -256,8 +229,7 @@ void	Server::process_input(Socket fd )
 	parse_command((const string)client.getBuff(), client);
 }
 
-void	Server::parse_command(basic_string<char> input, Client& client )
-{
+void	Server::parse_command(basic_string<char> input, Client& client ) {
 	vector<string>	result;
 	size_t			pos;
 	string delimiter = " ";
@@ -275,15 +247,13 @@ void	Server::parse_command(basic_string<char> input, Client& client )
 	(this->*(it->second))(result, client);
 }
 
-void	Server::add_cmd_client(string& content, Client& client, Client& author, string cmd)
-{
+void	Server::add_cmd_client(string& content, Client& client, Client& author, string cmd) {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	return ;
 }
 
-void	Server::add_rply_from_server(string msg, Client& dest, string cmd, int code)
-{
+void	Server::add_rply_from_server(string msg, Client& dest, string cmd, int code) {
 	string dest_nick = dest.getNickname();
 	if (dest_nick.empty())
 		dest_nick = "*";
@@ -303,18 +273,13 @@ void Server::flush_buff( Socket fd ) {
 	string buff;
 	buff = this->fd_map[fd].getBuff();
 	if (buff.empty())
-	{
 		return ;
-	}
-	int ret_val = send(fd, buff.c_str(), buff.length(), 0);
-	if ( ret_val == -1 )
-	{
-		if (errno == EAGAIN)
-		{
+	ssize_t ret_val = send(fd, buff.c_str(), buff.length(), 0);
+	if ( ret_val == -1 ) {
+		if (errno == EAGAIN) {
 			return ;
 		}
-		if ( errno == ECONNRESET )
-		{
+		if ( errno == ECONNRESET ) {
 			this->_disconect_client(fd);
 			return ;
 		}
