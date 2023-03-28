@@ -15,7 +15,7 @@
 bool stop = false;
 
 void handler(int) {
-	cout << YELLOW << "Signal received" << RESET << endl;
+	cout << endl << YELLOW << "Signal received" << RESET << endl;
 	stop = true;
 }
 
@@ -36,7 +36,7 @@ int	sendMessage(Client &client, const std::string& message) {
 Server::Server(const char *port, const string &password)
 	: _password(password), _port(strtoul(port, NULL, 10)), fd_map()
 {
-	cout << endl << CYAN << "🅵 🆃" << O_BLINK_CYAN << " ->" << CYAN << "🅸 🆁 🅲" << RESET << endl;
+	cout << endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << " ->" << YELLOW << "🅸 🆁 🅲" << RESET << endl;
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
 	if (this->_epfd == -1) {
