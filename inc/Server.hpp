@@ -27,6 +27,8 @@
 
 class Channel;
 
+int	sendMessage(Client &client, const std::string& message);
+
 typedef void (*command_function)( vector<string>, Client& );
 
 class Server

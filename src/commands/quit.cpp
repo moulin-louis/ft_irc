@@ -20,7 +20,8 @@ void Server::quit(vector<string> params, Client &client) {
 	string msg = "ERROR :Closing link: (" + client.getUsername() + "@" + client.getHostname();
 	msg += ") [" + params[0] + "]" + endmsg;
 	client.setBuff(client.getBuff() + msg);
-	this->flush_buff(client.getFd());
+	sendMessage(client, client.getBuff());
+//	this->flush_buff(client.getFd());
 	this->_disconect_client(client.getFd());
 	throw runtime_error("client lost connection");
 }
