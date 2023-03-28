@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/28 16:20:09 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:34:04 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("QUIT", &Server::quit));
 	this->cmd_map.insert(make_pair("MODE", &Server::mode));
 	this->cmd_map.insert(make_pair("PING", &Server::ping));
+	this->cmd_map.insert(make_pair("TOPIC", &Server::topic));
 }
 
 /*---------------------------------DESTRUCTOR---------------------------------*/
