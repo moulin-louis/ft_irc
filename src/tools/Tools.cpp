@@ -7,6 +7,17 @@
 string int_to_string(int i)
 {
 	stringstream ss;
+	if (i < 100)
+	{
+		if (i < 10)
+		{
+			ss << "00";
+		}
+		else
+		{
+			ss << "0";
+		}
+	}
 	ss << i;
 	return ss.str();
 }

@@ -164,12 +164,12 @@ void	Server::_disconect_client( Socket fd ) {
 	client_iter it = this->fd_map.find(fd);
 	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
-	if ( this->fd_map.erase(fd) == 0 )
-		cout << RED << "problem deleting client from database" << RESET << endl;
 	if (!it->second.getNickname().empty())
 		std::cout << GREEN << it->second.getNickname() << " closed the connection" << RESET << std::endl;
 	else
 		std::cout << GREEN << it->second.getHostname() << " closed the connection" << RESET << std::endl;
+	if ( this->fd_map.erase(fd) == 0 )
+		cout << RED << "problem deleting client from database" << RESET << endl;
 }
 
 string	Server::received_data_from_client(Socket fd) {
@@ -200,37 +200,43 @@ string	Server::received_data_from_client(Socket fd) {
 #define RPL_WELCOME 				        ":" + client.getHostname() + " 001 " + client.getNickname() + " : Welcome to the ft_IRC Internet Relay Network TNO " + PREFIX + CRLF
 
 void	Server::process_input(Socket fd ) {
-	//string temp = this->received_data_from_client(fd);
-	//if (temp.empty())
-	//{
-	//	return ;
-	//}
-	//while (1)
-	//{
-	//	if (temp.find(endmsg) == string::npos)
-	//	{
-	//		break ;
-	//	}
-	//	string tok = temp.substr(0, temp.find(endmsg));
-	//	parse_command(tok, this->fd_map[fd]);
-	//	temp.erase(0, temp.find(endmsg) + 2);
-	//}
-
 	client_iter 	it = this->fd_map.find(fd);
 	Client			&client = it->second;
-	ssize_t 			byte_count;
-	char			buf[2048];
+	ssize_t 		byte_count;
+	string			temp;
 
-	byte_count = recv(fd, buf, sizeof(buf), 0);
-	buf[byte_count] = '\0';
-	cout << client.getHostname() << " : " << buf << endl;
-	client.getBuff().append(buf);
-	if (client.getBuff()[client.getBuff().length() - 1] == '\n') {
-		std::cout << "Command received from : " << client.getHostname() << std::endl;
-		std::cout << CYAN << client.getBuff() << RESET;
+	temp.resize(512);
+	byte_count = recv(fd, (void *)temp.c_str(), temp.length(), 0);
+	temp.resize(byte_count);
+	while (1)
+	{
+		if (temp.find(endmsg) == string::npos)
+		{
+			break ;
+		}
+		string tok = temp.substr(0, temp.find(endmsg));
+		parse_command(tok, this->fd_map[fd]);
+		temp.erase(0, temp.find(endmsg) + 2);
 	}
-	sendMessage(client, RPL_WELCOME);
+	cout << client.getHostname() << " : " << temp << endl;
 	parse_command((const string)client.getBuff(), client);
+	cout << client.getBuff() << endl;
+
+	send(client.getFd(), client.getBuff().c_str(), client.getBuff().length(), 0);
+
+//	flush_buff(fd);
+
+//	client.getBuff().append(buf);
+//	if (client.getBuff()[client.getBuff().length() - 1] == '\n') {
+//		std::cout << "Command received from : " << client.getHostname() << std::endl;
+//		std::cout << CYAN << client.getBuff() << RESET;
+//	}
+
+//	if (client.isRegistered)
+//	{
+//		user((const vector <basic_string <char> >&) client.getNickname(), client);
+//	}
+//		sendMessage(client, RPL_WELCOME);
 }
 
 void	Server::parse_command(basic_string<char> input, Client& client ) {
@@ -262,7 +268,7 @@ void	Server::add_rply_from_server(string msg, Client& dest, string cmd, int code
 	if (dest_nick.empty())
 		dest_nick = "*";
 	dest_nick = " " + dest_nick;
-	string result = ":localhost" + int_to_string(code) + dest_nick + cmd + msg + endmsg;
+	string result = ":localhost " + int_to_string(code) + dest_nick + " " + cmd + msg + endmsg;
 	dest.setBuff(dest.getBuff() + result);
 	return ;
 }
@@ -276,8 +282,8 @@ void	Server::flush_all_buffer() {
 void Server::flush_buff( Socket fd ) {
 	string buff;
 	buff = this->fd_map[fd].getBuff();
-	if (buff.empty())
-		return ;
+//	if (buff.empty())
+//		return ;
 	ssize_t ret_val = send(fd, buff.c_str(), buff.length(), 0);
 	if ( ret_val == -1 ) {
 		if (errno == EAGAIN) {
