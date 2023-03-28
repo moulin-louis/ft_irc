@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/28 11:57:24 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/28 15:01:54 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("PASS", &Server::pass));
 	this->cmd_map.insert(make_pair("OPER", &Server::oper));
 	this->cmd_map.insert(make_pair("QUIT", &Server::quit));
+	this->cmd_map.insert(make_pair("MODE", &Server::mode));
+	this->cmd_map.insert(make_pair("PING", &Server::ping));
 }
 
 /*---------------------------------DESTRUCTOR---------------------------------*/
@@ -130,7 +132,7 @@ void	Server::run() {
 				if (ev.data.fd == this->_sfd)
 					this->_accept_client();
 				else {
-					this->process_input(ev.data.fd);
+						this->process_input(ev.data.fd);
 				}
 			}
 			if (ev.events & (EPOLLHUP | EPOLLRDHUP))
@@ -172,33 +174,6 @@ void	Server::_disconect_client( Socket fd ) {
 		cout << RED << "problem deleting client from database" << RESET << endl;
 }
 
-string	Server::received_data_from_client(Socket fd) {
-	string result;
-	result.resize(512);
-
-	ssize_t ret_val = recv(fd, (void *)result.c_str(), 512, 0);
-	if (ret_val == -1 ) {
-		if ( errno == ECONNRESET ) {
-			this->_disconect_client(fd);
-			return (result.clear(), result);
-		}
-		throw invalid_argument(string("Recv: ") + strerror(errno));
-	}
-	if (ret_val == 0) {
-		cout << YELLOW << "nothing received" << endl;
-		return (result.clear(), result);
-	}
-	cout << YELLOW << ret_val << " bytes received" << RESET << endl;
-	result.resize(ret_val + 1);
-	return (result);
-}
-
-#define MSG ":" + client.getHostname() + " 001 " + client.getNickname() + " Welcome to the Internet Relay Network TNO " + endmsg
-
-#define PREFIX 						        client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname()
-#define CRLF 						        "\r\n"
-#define RPL_WELCOME 				        ":" + client.getHostname() + " 001 " + client.getNickname() + " : Welcome to the ft_IRC Internet Relay Network TNO " + PREFIX + CRLF
-
 void	Server::process_input(Socket fd ) {
 	client_iter 	it = this->fd_map.find(fd);
 	Client			&client = it->second;
@@ -207,13 +182,15 @@ void	Server::process_input(Socket fd ) {
 
 	temp.resize(512);
 	byte_count = recv(fd, (void *)temp.c_str(), temp.length(), 0);
+	if (byte_count == -1) {
+		throw runtime_error(string("recv: ") + strerror(errno));
+	}
 	temp.resize(byte_count);
-	while (1)
-	{
+	cout << YELLOW << byte_count << " bytes received" << RESET << endl;
+	cout << PURPLE << "cmd = " << temp << RESET << endl;
+	while (1) {
 		if (temp.find(endmsg) == string::npos)
-		{
 			break ;
-		}
 		string tok = temp.substr(0, temp.find(endmsg));
 		parse_command(tok, this->fd_map[fd]);
 		temp.erase(0, temp.find(endmsg) + 2);
@@ -222,21 +199,13 @@ void	Server::process_input(Socket fd ) {
 	parse_command((const string)client.getBuff(), client);
 	cout << client.getBuff() << endl;
 
-	send(client.getFd(), client.getBuff().c_str(), client.getBuff().length(), 0);
-
-//	flush_buff(fd);
-
-//	client.getBuff().append(buf);
-//	if (client.getBuff()[client.getBuff().length() - 1] == '\n') {
-//		std::cout << "Command received from : " << client.getHostname() << std::endl;
-//		std::cout << CYAN << client.getBuff() << RESET;
-//	}
-
-//	if (client.isRegistered)
-//	{
-//		user((const vector <basic_string <char> >&) client.getNickname(), client);
-//	}
-//		sendMessage(client, RPL_WELCOME);
+	byte_count = send(client.getFd(), client.getBuff().c_str(), client.getBuff().length(), 0);
+	if (byte_count == -1) {
+		throw runtime_error(string("send: ") + strerror(errno));
+	}
+	cout << YELLOW << byte_count << " bytes sent" << RESET << endl;
+	client.clearBuff();
+	cout << "buff is now" << client.getBuff() << endl;
 }
 
 void	Server::parse_command(basic_string<char> input, Client& client ) {
