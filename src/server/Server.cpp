@@ -195,6 +195,10 @@ string	Server::received_data_from_client(Socket fd) {
 
 #define MSG ":" + client.getHostname() + " 001 " + client.getNickname() + " Welcome to the Internet Relay Network TNO " + endmsg
 
+#define PREFIX 						        client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname()
+#define CRLF 						        "\r\n"
+#define RPL_WELCOME 				        ":" + client.getHostname() + " 001 " + client.getNickname() + " : Welcome to the ft_IRC Internet Relay Network TNO " + PREFIX + CRLF
+
 void	Server::process_input(Socket fd ) {
 	//string temp = this->received_data_from_client(fd);
 	//if (temp.empty())
@@ -225,7 +229,7 @@ void	Server::process_input(Socket fd ) {
 		std::cout << "Command received from : " << client.getHostname() << std::endl;
 		std::cout << CYAN << client.getBuff() << RESET;
 	}
-	sendMessage(client, MSG);
+	sendMessage(client, RPL_WELCOME);
 	parse_command((const string)client.getBuff(), client);
 }
 
