@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 14:22:28 by armendi           #+#    #+#             */
-/*   Updated: 2023/03/28 17:24:24 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/28 19:27:49 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void    Channel::removeClient(Client &client)
 
 void	Channel::add_cmd_client(const string& content, Client& client, Client& author, string cmd)
 {
-	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
+	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " " + this->getName() + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	return ;
 }
