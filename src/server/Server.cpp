@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/28 20:03:17 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/28 20:04:50 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool stop = false;
 
 void handler(int) {
-	cout << YELLOW << "Signal received" << RESET << endl;
+	cout << endl << YELLOW << "Signal received" << RESET << endl;
 	stop = true;
 }
 
@@ -63,6 +63,3 @@ void	Server::run() {
 	}
 	cout << RED << "Server stopped" << RESET << endl;
 }
-
-
-
