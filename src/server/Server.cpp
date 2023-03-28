@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/28 20:04:50 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/28 20:18:35 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ void	Server::run() {
 				}
 			}
 			if (ev.events & (EPOLLHUP | EPOLLRDHUP)) {
-
-//				this->_disconect_client(ev.data.fd);
+				this->_disconect_client(ev.data.fd);
 			}
 		}
 	}

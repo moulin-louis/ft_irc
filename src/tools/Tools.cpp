@@ -10,14 +10,11 @@ string int_to_string(int i)
 		return "";
 	}
 	stringstream ss;
-	if (i < 100)
-	{
-		if (i < 10)
-		{
+	if (i < 100) {
+		if (i < 10) {
 			ss << "00";
 		}
-		else
-		{
+		else {
 			ss << "0";
 		}
 	}
@@ -29,10 +26,8 @@ void	check_port(const char *port)
 {
 	unsigned long int port_nb;
 
-	for (size_t i = 0; port[i]; i++)
-	{
-		if (!isdigit(port[i]))
-		{
+	for (size_t i = 0; port[i]; i++) {
+		if (!isdigit(port[i])) {
 			throw std::invalid_argument("Port must be between 1024 and 65535");
 		}
 	}

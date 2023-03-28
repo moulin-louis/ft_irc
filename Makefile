@@ -6,7 +6,7 @@
 #    By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/13 13:30:11 by loumouli          #+#    #+#              #
-#    Updated: 2023/03/28 20:03:38 by loumouli         ###   ########.fr        #
+#    Updated: 2023/03/28 22:02:43 by loumouli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,8 @@ SRC			=	$(addprefix src/,		\
 					)					\
 					$(addprefix client/,\
 						Client.cpp		\
+						getter.cpp		\
+						setter.cpp		\
 					)					\
 					$(addprefix channel/,\
 						Channel.cpp		\
