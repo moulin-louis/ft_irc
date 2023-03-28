@@ -6,7 +6,7 @@
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:52:07 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/28 15:01:54 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/28 16:20:09 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static int epoll_ctl_add(int epfd, int fd, uint32_t events) {
 	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
 }
 
-void	sendMessage(Client &client, const std::string& message) {
-	send(client.getFd(), message.c_str(), message.length(), 0);
+int	sendMessage(Client &client, const std::string& message) {
+	return (send(client.getFd(), message.c_str(), message.length(), 0));
 }
 
 /*-------------------------------CONSTRUCTORS---------------------------------*/
@@ -195,8 +195,8 @@ void	Server::process_input(Socket fd ) {
 	}
 	temp.resize(byte_count);
 	cout << YELLOW << byte_count << " bytes received" << RESET << endl;
-	cout << PURPLE << "cmd = " << temp << RESET << endl;
-	while (1) {
+	cout << CYAN << "cmd = " << temp << RESET << endl;
+	while (true) {
 		if (temp.find(endmsg) == string::npos)
 			break ;
 		string tok = temp.substr(0, temp.find(endmsg));
@@ -204,14 +204,13 @@ void	Server::process_input(Socket fd ) {
 		temp.erase(0, temp.find(endmsg) + 2);
 	}
 	parse_command((const string)client.getBuff(), client);
-	byte_count = send(client.getFd(), client.getBuff().c_str(), client.getBuff().length(), 0);
+	byte_count = sendMessage(client, client.getBuff());
 	if (byte_count == -1) {
 		throw runtime_error(string("send: ") + strerror(errno));
 	}
 	cout << PURPLE << "buffer = " << client.getBuff() << RESET << endl;
 	cout << YELLOW << byte_count << " bytes sent" << RESET << endl;
 	client.clearBuff();
-}
 
 void	Server::parse_command(basic_string<char> input, Client& client ) {
 	vector<string>	result;
