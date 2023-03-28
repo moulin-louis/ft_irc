@@ -12,8 +12,7 @@
 
 #include "Server.hpp"
 
-void Server::is_valid_nickname(string &nickname, Client& client)
-{
+void Server::is_valid_nickname(string &nickname, Client& client) {
 	if (nickname.size() > 9) {
 		add_rply_from_server(":Nickname is too long", client, "NICK", ERR_ERRONEUSNICKNAME);
 		throw invalid_argument("nick: nickname too long");

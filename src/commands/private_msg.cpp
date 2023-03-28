@@ -14,8 +14,7 @@
 #include "Server.hpp"
 
 
-void	Server::private_msg(vector<string> params, Client& author)
-{
+void	Server::private_msg(vector<string> params, Client& author) {
 	if (params.size() == 0 || params[0].empty()) {
 		add_rply_from_server(":No recipient given", author, "PRIVMSG", ERR_NORECIPIENT);
 		return ;

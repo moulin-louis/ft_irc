@@ -13,8 +13,7 @@
 #include "irc.hpp"
 #include "Server.hpp"
 
-void Server::is_valid_username(string &username, Client& client)
-{
+void Server::is_valid_username(string &username, Client& client) {
 	if (username.size() > 9) {
 		string msg = ":localhost" + int_to_string(ERR_NICKNAMEINUSE) + " * "  + username + " :Username has invalid characters" + endmsg;
 		client.setBuff(client.getBuff() + msg);
@@ -29,8 +28,7 @@ void Server::is_valid_username(string &username, Client& client)
 	}
 }
 
-void	Server::user(vector<string> params, Client& client)
-{
+void	Server::user(vector<string> params, Client& client) {
 	if ( !client.passwd_provided ) {
 		return ;
 	}
