@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: armendi <armendi@student.42.fr>            +#+  +:+       +#+         #
+#    By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/13 13:30:11 by loumouli          #+#    #+#              #
-#    Updated: 2023/03/28 17:34:48 by armendi          ###   ########.fr        #
+#    Updated: 2023/03/28 20:03:38 by loumouli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,10 @@ SRCS_DIR	=	$(sort $(dir $(wildcard src/*/)))
 SRC			=	$(addprefix src/,		\
 						main.cpp		\
 					$(addprefix server/,\
+						connection.cpp	\
+						init_server.cpp	\
+						handle_input.cpp\
+						server_tools.cpp\
 						Server.cpp		\
 					)					\
 					$(addprefix client/,\

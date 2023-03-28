@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/28 17:35:42 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/28 19:56:26 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ class Server
 		//server run functions
 		void 	run();
 };
+
+int epoll_ctl_add(int epfd, int fd, uint32_t events);
+int	sendMessage(Client &client, const std::string& message);
 
 //string	msg_welcome(Client& client);
 
