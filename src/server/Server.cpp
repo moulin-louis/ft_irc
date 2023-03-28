@@ -205,6 +205,10 @@ void	Server::process_input(Socket fd ) {
 		temp.erase(0, temp.find(endmsg) + 2);
 	}
 	parse_command((const string)client.getBuff(), client);
+	//	if (client.getBuff()[client.getBuff().length() - 1] == '\n') {
+//		std::cout << "Command received from : " << client.getHostname() << std::endl;
+//		std::cout << CYAN << client.getBuff() << RESET;
+//	}
 	byte_count = send(client.getFd(), client.getBuff().c_str(), client.getBuff().length(), 0);
 	if (byte_count == -1) {
 		throw runtime_error(string("send: ") + strerror(errno));

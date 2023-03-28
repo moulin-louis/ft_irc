@@ -21,7 +21,7 @@ void Server::is_valid_username(string &username, Client& client) {
 	}
 	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getUsername() == username) {
-			string msg = ":localhost" + int_to_string(ERR_NICKNAMEINUSE) + " * " + username + " :Username is already in use" + endmsg;
+			string msg = ":localhost " + int_to_string(ERR_NICKNAMEINUSE) + " * " + username + " :Username is already in use" + endmsg;
 			client.setBuff(client.getBuff() + msg);
 			throw invalid_argument("user: username already taken");
 		}
