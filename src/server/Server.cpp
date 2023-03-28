@@ -141,10 +141,9 @@ void	Server::run() {
 					}
 				}
 			}
-			if (ev.events & (EPOLLHUP | EPOLLRDHUP))
-			{
-//				this->_disconect_client(ev.data.fd);
+			if (ev.events & (EPOLLHUP | EPOLLRDHUP)) {
 
+//				this->_disconect_client(ev.data.fd);
 			}
 		}
 	}
@@ -209,9 +208,9 @@ void	Server::process_input(Socket fd ) {
 	if (byte_count == -1) {
 		throw runtime_error(string("send: ") + strerror(errno));
 	}
+	cout << PURPLE << "buffer = " << client.getBuff() << RESET << endl;
 	cout << YELLOW << byte_count << " bytes sent" << RESET << endl;
 	client.clearBuff();
-	cout << "buff is now" << client.getBuff() << endl;
 }
 
 void	Server::parse_command(basic_string<char> input, Client& client ) {
