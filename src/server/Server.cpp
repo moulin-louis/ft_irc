@@ -195,15 +195,15 @@ void	Server::_disconect_client( Socket fd )
 {
 	map_iter it = this->fd_map.find(fd);
 	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, NULL);
+	close(fd);
 	if ( this->fd_map.erase(fd) == 0 )
 	{
 		cout << RED << "problem deleting client from database" << RESET << endl;
 	}
+	if (!it->second.getNickname().empty())
+		std::cout << GREEN << it->second.getNickname() << " closed the connection" << RESET << std::endl;
 	else
-	{
-		cout << GREEN << "client disconnected: " + it->second.getNickname() << RESET << endl;
-	}
-	close (fd);
+		std::cout << GREEN << it->second.getHostname() << " closed the connection" << RESET << std::endl;
 }
 
 string	Server::received_data_from_client(Socket fd)
