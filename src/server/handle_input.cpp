@@ -25,6 +25,7 @@ void	Server::process_input(Socket fd ) {
 	}
 	temp.resize(byte_count);
 	cout << YELLOW << byte_count << " bytes RECEIVED" << RESET << endl;
+	cout << "Command called:" << endl << CYAN << temp << RESET << endl;
 	while (true) {
 		if (temp.find(endmsg) == string::npos)
 			break;
@@ -33,10 +34,11 @@ void	Server::process_input(Socket fd ) {
 		temp.erase(0, temp.find(endmsg) + 2);
 	}
 	byte_count = sendMessage(client, client.getBuff());
-	if (byte_count == -1) {
+	if (byte_count == -1)
+	{
 		throw runtime_error(string("send: ") + strerror(errno));
 	}
-	cout << endl << YELLOW << byte_count << " bytes SENT" << RESET << endl << endl;
+	cout << YELLOW << byte_count << " bytes SENT" << RESET << endl << endl;
 	client.clearBuff();
 }
 

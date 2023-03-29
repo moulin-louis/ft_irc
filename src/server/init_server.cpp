@@ -17,7 +17,7 @@
 Server::Server(const char *port, const string &password)
 	: _password(password), _port(strtoul(port, NULL, 10)), fd_map()
 {
-	std::cout << std::endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << "->" << YELLOW << "🅸 🆁 🅲" << RESET << std::endl;
+	std::cout << std::endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << "- >" << YELLOW << "🅸 🆁 🅲" << RESET << std::endl;
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
 	if (this->_epfd == -1) {
