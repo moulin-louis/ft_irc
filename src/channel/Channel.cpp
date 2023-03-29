@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 14:22:28 by armendi           #+#    #+#             */
-/*   Updated: 2023/03/28 22:04:33 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/29 15:33:49 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,15 @@ bool	Channel::user_in_chan(Client& client) {
 
 void    Channel::addClient(Client &client) {
     this->clients.push_back(client.getFd());
+    return ;
+}
+
+void    Channel::removeClient(Client &client) {
+    for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
+        if (*it == client.getFd()) {
+            this->clients.erase(it);
+            return ;
+        }
+    }
     return ;
 }

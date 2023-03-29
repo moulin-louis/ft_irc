@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/29 14:01:02 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 15:33:41 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class Channel
 
     //actions
         void    addClient(Client &client);
+        void    removeClient(Client &client);
 };
 
 #endif

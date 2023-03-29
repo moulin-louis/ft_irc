@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 13:57:42 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 15:46:28 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,19 @@ class Server
 		void		is_valid_chan_name(vector<string> , Client& );
 
 		//commands
-		void	parse_command(basic_string<char> , Client&  );
-		void	nick(vector<string> , Client& );
-		void	pass(vector<string> , Client& );
-		void	ping(vector<string> , Client& );
-		void	user(vector<string> , Client& );
-		void	join(vector<string> , Client& );
-		void	private_msg(vector<string> , Client&);
-		void	oper( vector<string> , Client& );
-		void	quit( vector<string> , Client& );
-		void	mode( vector<string> , Client& );
-		void	topic( vector<string> , Client& );
+		void	parse_command(basic_string<char> input, Client& client );
+		void	nick(vector<string> params, Client& client);
+		void	pass(vector<string> params, Client& client);
+		void	ping(vector<string> params, Client& client);
+		void	user(vector<string> params, Client& client);
+		void	join(vector<string> params, Client& client);
+		void	private_msg(vector<string> params, Client&);
+		void	oper( vector<string> params, Client& client);
+		void	quit( vector<string> params, Client& client);
+		void	mode( vector<string> params, Client& client );
+		void	topic( vector<string> params, Client& client );
 		void	kill( vector<string> , Client& );
+		void	part(vector<string> params, Client& client);
 
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
 

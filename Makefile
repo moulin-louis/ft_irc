@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+         #
+#    By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/13 13:30:11 by loumouli          #+#    #+#              #
-#    Updated: 2023/03/28 22:02:43 by loumouli         ###   ########.fr        #
+#    Updated: 2023/03/29 15:44:38 by mpignet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRC			=	$(addprefix src/,		\
 						quit.cpp		\
 						user.cpp		\
 						topic.cpp 		\
+						part.cpp		\
 					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\
