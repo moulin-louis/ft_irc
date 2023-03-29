@@ -26,8 +26,8 @@ void	Server::private_msg(vector<string> params, Client& author) {
 	try	{
 		if (params[0][0] == '#') {
 			Channel& dest = find_channel(params[0], author);
-			if (dest.user_in_chan(author) == true)
-				dest.notify_chan(params[1], "PRIVMSG", author, this);
+			if (dest.user_in_chan(author))
+				this->notify_chan(params[1], "PRIVMSG", author);
 			else
 				add_rply_from_server(":" + dest.getName() + " :Cannot send to channel", author, "PRIVMSG", ERR_CANNOTSENDTOCHAN);
 		}

@@ -29,6 +29,7 @@ SRCS_DIR	=	$(sort $(dir $(wildcard src/*/)))
 SRC			=	$(addprefix src/,		\
 						main.cpp		\
 					$(addprefix server/,\
+						chan_management.cpp\
 						connection.cpp	\
 						init_server.cpp	\
 						handle_input.cpp\

@@ -23,7 +23,6 @@ class Server;
 
 class Channel
 {
-	typedef vector<Socket>::iterator cl_iter;
     private:
         string _name;
         string _topic;
@@ -44,18 +43,9 @@ class Channel
 
     //checks
         bool	user_in_chan(Client& client);
-       
-    //send messages
-		void	notify_chan(const string& content, const string& cmd, Client &client, Server *server);
-		void	add_cmd_client(const string& content, Client& client, Client& author, string cmd);
-
-		void    add_rply_from_server(string msg, Client& dest, string cmd, int code);
 
     //actions
         void    addClient(Client &client);
-        void    removeClient(Client &client);
-        void    removeClient(string &nick);
-        void	notify_clients(Channel& channel, Client& client, string cmd);
         void    process_topic_cmd(vector <string> params, Client& client, Server* server);
 };
 

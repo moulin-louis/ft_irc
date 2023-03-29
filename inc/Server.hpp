@@ -31,6 +31,7 @@ typedef void (*command_function)( vector<string>, Client& );
 ssize_t 	sendMessage(Client &client, const std::string& message);
 typedef std::map<Socket, Client>::iterator	client_iter;
 typedef vector<Channel>::iterator chan_iter;
+typedef vector<Socket>::iterator cl_iter;
 
 class Server
 {
@@ -57,8 +58,6 @@ class Server
 		void	process_input( Socket );
 
 		//respond from server
-		void	add_cmd_client(string& content, Client& client, Client& author, const string&  cmd);
-		void	add_cmd_channel(string& content, Channel& chan, Client& author, const string&  cmd);
 		void	add_rply_from_server(const string&  msg, Client& dest, const string&  cmd, int code);
 
 		//checks
@@ -67,7 +66,6 @@ class Server
 		void		is_valid_nickname(string &nickname, Client& client);
 		void		is_valid_username(string &username, Client& client);
 		void		is_valid_chan_name(vector<string> params, Client& client);
-		void		channel_exists(string &channel_name, Client& client);
 
 		//commands
 		void	parse_command(basic_string<char> input, Client& client );
@@ -84,6 +82,11 @@ class Server
 
 		//server run functions
 		void 	run();
+
+	//send messages
+	void	notify_chan(const string& content, const string& cmd, Client &client);
+	void	add_cmd_client(string& content, Client& client, Client& author, const string&  cmd);
+
 };
 
 //string	msg_welcome(Client& client);
