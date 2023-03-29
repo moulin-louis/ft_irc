@@ -43,9 +43,10 @@ class Server
 		Socket			_sfd;
 		Epollfd			_epfd;
 		epoll_event		_events[MAX_EVENTS];
-		Socket			_initiateSocket() const;
+		Socket			_initiateSocket() ;
 		void			_accept_client();
 		void			_disconect_client( Socket );
+		string 							admin_pass;
 	public:
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
