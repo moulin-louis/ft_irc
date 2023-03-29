@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.cpp                                          :+:      :+:    :+:   */
+/*   handle_input.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 20:03:18 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/28 20:03:24 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/29 14:08:23 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	Server::process_input(Socket fd ) {
 	}
 	cout << "trying to send the buff" << endl;
 	cout << "size of buff is " << client.getBuff().size() << endl;
+	cout << "buff is " << client.getBuff() << endl;
 	byte_count = sendMessage(client, client.getBuff());
 	if (byte_count == -1) {
 		throw runtime_error(string("send: ") + strerror(errno));

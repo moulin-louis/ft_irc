@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/28 17:28:49 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/29 14:01:02 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class Channel
         ~Channel();
         Channel &operator=(const Channel &rhs);
 
-		//vector of client's nickname
+		//vector of client's fd
         vector<Socket> clients;
 
         const string    &getName() const;
@@ -46,7 +46,6 @@ class Channel
 
     //actions
         void    addClient(Client &client);
-        void    process_topic_cmd(vector <string> params, Client& client, Server* server);
 };
 
 #endif

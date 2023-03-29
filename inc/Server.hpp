@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/28 19:56:26 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/29 13:57:42 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class Server
 	public:
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
-		vector<Channel>					chan_map;
+		vector<Channel>					chan_vec;
 
 		Server(const char *port, const string &password);
 		~Server();
@@ -74,18 +74,21 @@ class Server
 		void	ping(vector<string> params, Client& client);
 		void	user(vector<string> params, Client& client);
 		void	join(vector<string> params, Client& client);
-		void	private_msg(vector<string> params, Client& author);
+		void	private_msg(vector<string> params, Client&);
 		void	oper( vector<string> params, Client& client);
 		void	quit( vector<string> params, Client& client);
 		void	mode( vector<string> params, Client& client );
 		void	topic( vector<string> params, Client& client );
 
+		void    process_topic_cmd(vector <string> params, Client& client, Channel& chan);
+
 		//server run functions
 		void 	run();
 
 	//send messages
-	void	notify_chan(const string& content, const string& cmd, Client &client);
-	void	add_cmd_client(string& content, Client& client, Client& author, const string&  cmd);
+	void	notify_chan(const string& chan, const string& content, const string& cmd, Client &client);
+	void	add_cmd_client(const string& content, Client& client, Client&, const string&  cmd);
+	void	add_cmd_client(const string&, Client&, Client&, const string&  cmd, Channel& chan);
 
 };
 

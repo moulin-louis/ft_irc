@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:45:46 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 17:06:41 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 14:06:26 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ void	Server::join(vector<string> params, Client& client)
 		cout << RED << e.what() << RESET << endl;
 		return ;
 	}
-//	for ( chan_iter it = this->chan_map.begin(); it != this->chan_map.end(); it++) {
-//		if (it->getName() == params[0]) {
-//			it->addClient(client);
-//			it->add_cmd_channel(params[0], client, "JOIN");
-//			return ;
-//		}
-//	}
+	for ( chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); it++) {
+		if (it->getName() == params[0]) {
+			it->addClient(client);
+			this->notify_chan(it->getName(), params[0], "JOIN", client);
+			return ;
+		}
+	}
 	Channel new_channel(params[0], client);
-	notify_chan(params[0], "JOIN", client, this);
-	this->chan_map.push_back(new_channel);
+	this->chan_vec.push_back(new_channel);
+	notify_chan(new_channel.getName(), params[0], "JOIN", client);
 	cout << "join finished" << endl;
 	return ;
 }

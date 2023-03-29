@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:46:02 by armendi           #+#    #+#             */
-/*   Updated: 2023/03/28 19:26:53 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/29 14:01:47 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 #include "Server.hpp"
 
-void    Channel::process_topic_cmd(vector <string> params, Client& client, Server* server)
+void    Server::process_topic_cmd(vector <string> params, Client& client, Channel& chan)
 {
     if (params.size() == 2)
     {
-        this->setTopic(params[1]);
-        this->notify_chan(params[1], "TOPIC", client, server);
+        chan.setTopic(params[1]);
+        this->notify_chan(chan.getName(), params[1], "TOPIC", client);
 	}
     else
     {
-        if (this->getTopic().empty())
-            this->add_rply_from_server(this->getName() + ":No topic is set", client, "TOPIC", RPL_NOTOPIC);
+        if (chan.getTopic().empty())
+            this->add_rply_from_server(chan.getName() + ":No topic is set", client, "TOPIC", RPL_NOTOPIC);
         else
-            this->add_rply_from_server(this->getName() + " :" + this->getTopic(), client, "TOPIC", RPL_TOPIC);
+            this->add_rply_from_server(chan.getName() + " :" + chan.getTopic(), client, "TOPIC", RPL_TOPIC);
     }
     return ;
 }
@@ -33,23 +33,20 @@ void    Channel::process_topic_cmd(vector <string> params, Client& client, Serve
 void	Server::topic( vector<string> params, Client& client )
 {
     try {
-        if (params.size() != 1)
-        {
+        if (params.size() != 1) {
             add_rply_from_server(":Not enough parameters", client, "TOPIC", ERR_NEEDMOREPARAMS);
             throw invalid_argument("join: invalid number of parameters");
         }
-        if (params[0][0] != '#')
-        {
+        if (params[0][0] != '#') {
             add_rply_from_server(params[0] + " :Invalid channel name", client, "TOPIC", ERR_NOSUCHCHANNEL);
             throw invalid_argument("join: invalid channel name");
         }
-        for (chan_iter it = chan_map.begin(); it != chan_map.end(); it++)
-        {
+        for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); it++) {
             if (it->getName() == params[0])
             {
                 if (it->user_in_chan(client))
                 {
-                    it->process_topic_cmd(params, client, this);
+                    this->process_topic_cmd(params, client, *it);
                     return ;
                 }
                 else
@@ -59,6 +56,8 @@ void	Server::topic( vector<string> params, Client& client )
                 }
             }
         }
+        add_rply_from_server(params[0] + " :No such channel", client, "TOPIC", ERR_NOSUCHCHANNEL);
+        throw invalid_argument("join: no such channel");
     }
     catch (const exception& e) {
         cout << e.what() << endl;

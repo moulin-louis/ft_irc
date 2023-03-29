@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   connection.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 20:02:16 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/28 20:02:29 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/29 14:22:30 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	Server::_accept_client( void ) {
 	Socket csock = accept(this->_sfd, (struct sockaddr *)&csin, &crecsize);
 	if (csock < 0)
 		throw runtime_error(string("accept: ") + strerror(errno));
-	this->fd_map.insert(make_pair(csock, Client()) );
+	this->fd_map.insert(make_pair(csock, temp ));
 	char hostname[NI_MAXHOST];
 	if (getnameinfo(&csin, sizeof(csin), hostname, sizeof(hostname), NULL, 0, 0) != 0)
 		this->fd_map[csock].setHostname("unknown");

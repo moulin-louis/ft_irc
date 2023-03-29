@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_tools.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 19:52:41 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/28 19:59:13 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/29 14:06:18 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ Client&	Server::find_user(const string& nick, Client client) {
 }
 
 Channel&	Server::find_channel(const string& name, Client client) {
-	for (vector<Channel>::iterator it = this->chan_map.begin(); it != this->chan_map.end(); it++) {
+	for (vector<Channel>::iterator it = this->chan_vec.begin(); it != this->chan_vec.end(); it++) {
 		if (it->getName() == name)
 			return *it;
 	}
 	add_rply_from_server(name + " :No such nick/channel", client, "JOIN", ERR_NOSUCHCHANNEL);
-	throw runtime_error("User not found");
+	throw runtime_error("Channel not found");
 }
 
-void	Server::add_cmd_client(string& content, Client& client, Client& author, const string&  cmd) {
+void	Server::add_cmd_client(const string& content, Client& client, Client& author, const string&  cmd) {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	return ;
