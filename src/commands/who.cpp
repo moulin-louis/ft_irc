@@ -32,6 +32,8 @@ void	Server::handle_without_mask(vector<string> params, Client& client ) {
 	return ;
 }
 
+
+//WIP, STILL MISSING A LOT OF THINGS
 void Server::who(vector<string> params, Client &client) {
 	try {
 		if (params.empty() ) {
