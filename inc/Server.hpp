@@ -46,7 +46,8 @@ class Server
 		Socket			_initiateSocket() ;
 		void			_accept_client();
 		void			_disconect_client( Socket );
-		string 							admin_pass;
+		string 			admin_pass;
+		int				_epoll_ctl_add(int epfd, int fd, uint32_t events);
 	public:
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;

@@ -17,7 +17,7 @@
 Server::Server(const char *port, const string &password)
 	: _password(password), _port(strtoul(port, NULL, 10)), fd_map()
 {
-	std::cout << std::endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << "- >" << YELLOW << "🅸 🆁 🅲" << RESET << std::endl;
+	std::cout << std::endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << " ->" << YELLOW << "🅸 🆁 🅲" << RESET << std::endl;
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
 	if (this->_epfd == -1) {
@@ -36,6 +36,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("TOPIC", &Server::topic));
 	this->cmd_map.insert(make_pair("PART", &Server::part));
 	this->cmd_map.insert(make_pair("kill", &Server::kill));
+	this->cmd_map.insert (make_pair("LIST", &Server::list));
 }
 
 Socket	Server::_initiateSocket() {
@@ -55,17 +56,13 @@ Socket	Server::_initiateSocket() {
 	if (sfd < 0)
 		throw runtime_error(string("socket: ") + strerror(errno));
 	cout << GREEN << "Socket created" << RESET << endl;
-
 	if (setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
 		throw runtime_error(string("setsockopt: ") + strerror(errno));
-
 	if (fcntl(sfd, F_SETFL, O_NONBLOCK) == -1)
 		throw runtime_error(string("fcntl: ") + strerror(errno));
-
 	if (bind(sfd, (sockaddr *)&sin, sizeof(sin)) == -1 )
 		throw runtime_error(string("bind: ") + strerror(errno));
 	cout << GREEN << "Bind done" << RESET << endl;
-
 	if (listen(sfd, SOMAXCONN) < 0)
 		throw runtime_error(string("listen: ") + strerror(errno));
 	cout << GREEN << "Socket is listening.." << RESET << endl;

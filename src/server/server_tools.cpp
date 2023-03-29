@@ -12,7 +12,8 @@
 
 #include "Server.hpp"
 
-int epoll_ctl_add(int epfd, int fd, uint32_t events) {
+int Server::_epoll_ctl_add(int epfd, int fd, uint32_t events)
+{
 	struct epoll_event ev = {};
 	bzero(&ev.data, sizeof(ev.data));
 	ev.events = events;
