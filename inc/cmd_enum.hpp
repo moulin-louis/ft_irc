@@ -14,7 +14,7 @@
 #define CMD_ENUM_HPP
 
 enum	cmd {
-	RPL_WELCOME = 001,
+	RPL_WELCOME = 1,
 	RPL_YOURHOST = 2,
 	RPL_CREATED = 3,
 	RPL_MYINFO = 4,
