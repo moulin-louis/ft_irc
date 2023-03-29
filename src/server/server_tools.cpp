@@ -12,6 +12,23 @@
 
 #include "Server.hpp"
 
+ssize_t 	sendMessage(Client &client, const std::string& message)
+{
+	return (send(client.getFd(), message.c_str(), message.length(), 0));
+}
+
+string	displayTimestamp(void)
+{
+	struct tm*timestruct;
+	time_t timet;
+	char buf[24];
+
+	time(&timet);
+	timestruct = localtime(&timet);
+	strftime(buf, 24, "%d-%m-%Y at %H:%M:%S", timestruct);
+	return (buf);
+}
+
 int Server::_epoll_ctl_add(int epfd, int fd, uint32_t events)
 {
 	struct epoll_event ev = {};
@@ -19,10 +36,6 @@ int Server::_epoll_ctl_add(int epfd, int fd, uint32_t events)
 	ev.events = events;
 	ev.data.fd = fd;
 	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
-}
-
-ssize_t 	sendMessage(Client &client, const std::string& message) {
-	return (send(client.getFd(), message.c_str(), message.length(), 0));
 }
 
 Client&	Server::find_user(const string& nick, Client client) {

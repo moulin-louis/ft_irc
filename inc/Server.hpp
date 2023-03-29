@@ -32,6 +32,7 @@ ssize_t 	sendMessage(Client &, const string& );
 typedef std::map<Socket, Client>::iterator	client_iter;
 typedef vector<Channel>::iterator chan_iter;
 typedef vector<Socket>::iterator cl_iter;
+string	displayTimestamp(void);
 
 class Server
 {
@@ -48,6 +49,9 @@ class Server
 		void			_disconect_client( Socket );
 		string 			admin_pass;
 		int				_epoll_ctl_add(int epfd, int fd, uint32_t events);
+		const string	_server_name;
+		const string	_server_version;
+		const string	_server_up_date;
 	public:
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
