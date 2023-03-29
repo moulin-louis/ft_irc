@@ -30,7 +30,6 @@ Client::Client(string &nick, string &user) {
 Client::Client(const Client &copy) {
 	//cout << "new client created" << endl;
 	cout << "copy constructor called" << endl;
-	memset((void*)this, 0, sizeof(Client));
 	*this = copy;
 	return ;
 }
