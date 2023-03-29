@@ -35,7 +35,7 @@ int main( int ac, char **av )
 		buf.resize(len_recv);
 		cout << buf << endl;
 
-		buf = "QUIT TEST";
+		buf = "QUIT TEST\r\n";
 		cout << "sending data..." << endl;
 		send(sock, (void *)buf.c_str(), buf.size(), 0);
 		buf.clear();

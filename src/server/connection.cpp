@@ -20,14 +20,13 @@ void	Server::_accept_client( void ) {
 	Socket csock = accept(this->_sfd, (struct sockaddr *)&csin, &crecsize);
 	if (csock < 0)
 		throw runtime_error(string("accept: ") + strerror(errno));
-	cout << GREEN << "New connection" << RESET << endl;
 	this->fd_map.insert(make_pair(csock, Client()) );
 	char hostname[NI_MAXHOST];
 	if (getnameinfo(&csin, sizeof(csin), hostname, sizeof(hostname), NULL, 0, 0) != 0)
 		this->fd_map[csock].setHostname("unknown");
 	else
 		this->fd_map[csock].setHostname(hostname);
-	std::cout << "Server: got connection from " << this->fd_map[csock].getHostname() << std::endl;
+	cout << BLUE << "Server: new connection from " << this->fd_map[csock].getHostname() << RESET << endl;
 	this->fd_map[csock].setFd(csock);
 	epoll_ctl_add(this->_epfd, this->fd_map[csock].getFd(), EPOLLIN | EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
 }
@@ -37,9 +36,8 @@ void	Server::_disconect_client( Socket fd ) {
 	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
 	if (!it->second.getNickname().empty())
-		std::cout << GREEN << it->second.getNickname() << " closed the connection" << RESET << std::endl;
+		cout << BLUE << it->second.getNickname() << " closed the connection" << RESET << endl;
 	else
-		std::cout << GREEN << it->second.getHostname() << " closed the connection" << RESET << std::endl;
-	if ( this->fd_map.erase(fd) == 0 )
-		cout << RED << "problem deleting client from database" << RESET << endl;
+		cout << BLUE << it->second.getHostname() << " closed the connection" << RESET << endl;
+	this->fd_map.erase(fd);
 }

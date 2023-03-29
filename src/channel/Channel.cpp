@@ -67,20 +67,20 @@ void    Channel::setName(string &name) {
 
 bool	Channel::user_in_chan(Client& client) {
 	for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
-		if (it->getNickname() == client.getNickname())
+		if (*it == client.getFd())
 			return (true);
 	}
 	return (false);
 }
 
 void    Channel::addClient(Client &client) {
-    this->clients.push_back(client);
+    this->clients.push_back(client.getFd());
     return ;
 }
 
 void    Channel::removeClient(Client &client) {
     for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
-        if (it->getNickname() == client.getNickname()) {
+        if (*it == client.getFd()) {
             this->clients.erase(it);
             return ;
         }
@@ -93,11 +93,10 @@ void	Channel::add_cmd_client(const string& content, Client& client, Client& auth
 	return ;
 }
 
-void	Channel::add_cmd_channel(const string& content, Client& author, string cmd) {
-	for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
-		this->add_cmd_client(content, *it, author, cmd);
+void	Channel::notify_chan(const string& content, const string& cmd, Client &client, Server *server) {
+	for ( cl_iter it = this->clients.begin(); it != this->clients.end(); it++ ) {
+		this->add_cmd_client(content, (server->fd_map[*it]), client, cmd);
 	}
-	return ;
 }
 
 void	Channel::add_rply_from_server(string msg, Client& dest, string cmd, int code) {

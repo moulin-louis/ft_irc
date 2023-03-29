@@ -13,13 +13,13 @@
 #include "irc.hpp"
 #include "Server.hpp"
 
-void    Channel::process_topic_cmd(vector <string> params, Client& client)
+void    Channel::process_topic_cmd(vector <string> params, Client& client, Server* server)
 {
     if (params.size() == 2)
     {
         this->setTopic(params[1]);
-        this->add_cmd_channel(params[1], client, "TOPIC");
-    }
+        this->notify_chan(params[1], "TOPIC", client, server);
+	}
     else
     {
         if (this->getTopic().empty())
@@ -49,7 +49,7 @@ void	Server::topic( vector<string> params, Client& client )
             {
                 if (it->user_in_chan(client))
                 {
-                    it->process_topic_cmd(params, client);
+                    it->process_topic_cmd(params, client, this);
                     return ;
                 }
                 else

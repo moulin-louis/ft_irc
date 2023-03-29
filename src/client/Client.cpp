@@ -14,11 +14,13 @@
 #include <cstdlib>
 
 Client::Client(void) {
+	cout << "new client created" << endl;
 	memset((void*)this, 0, sizeof(Client));
 	return ;
 }
 
 Client::Client(string &nick, string &user) {
+	cout << "new client created" << endl;
 	memset((void*)this, 0, sizeof(Client));
 	this->nickname = nick;
 	this->username = user;
@@ -26,6 +28,7 @@ Client::Client(string &nick, string &user) {
 }
 
 Client::Client(const Client &copy) {
+	cout << "new client created" << endl;
 	memset((void*)this, 0, sizeof(Client));
 	*this = copy;
 	return ;

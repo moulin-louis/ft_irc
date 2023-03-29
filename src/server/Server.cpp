@@ -51,13 +51,13 @@ void	Server::run() {
 						this->process_input(ev.data.fd);
 					}
 					catch (exception& e) {
-						cout << RED << e.what() << RESET << endl;
+//						cout << RED << e.what() << RESET << endl;
 					}
 				}
 			}
-//			if (ev.events & (EPOLLHUP | EPOLLRDHUP)) {
-//				this->_disconect_client(ev.data.fd);
-//			}
+			if (ev.events & (EPOLLHUP | EPOLLRDHUP)) {
+				this->_disconect_client(ev.data.fd);
+			}
 		}
 	}
 	cout << RED << "Stoping the server..." << RESET << endl;

@@ -13,7 +13,6 @@
 #include "Server.hpp"
 
 void Server::quit(vector<string> params, Client &client) {
-	cout << "quit called" << endl;
 	if ( params.size() != 1 ) {
 		return ;
 	}
@@ -21,7 +20,6 @@ void Server::quit(vector<string> params, Client &client) {
 	msg += ") [" + params[0] + "]" + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	sendMessage(client, client.getBuff());
-//	this->flush_buff(client.getFd());
 	this->_disconect_client(client.getFd());
 	throw runtime_error("client lost connection");
 }

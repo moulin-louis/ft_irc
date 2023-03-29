@@ -13,6 +13,7 @@
 #include "Server.hpp"
 
 void	Server::process_input(Socket fd ) {
+	cout << "processing input..." << endl;
 	client_iter it = this->fd_map.find(fd);
 	Client &client = it->second;
 	ssize_t byte_count;
@@ -24,25 +25,28 @@ void	Server::process_input(Socket fd ) {
 		throw runtime_error(string("recv: ") + strerror(errno));
 	}
 	temp.resize(byte_count);
-	cout << YELLOW << byte_count << " bytes received" << RESET << endl;
-	cout << CYAN << "string received = " << temp << RESET << endl;
+	cout << YELLOW << byte_count << " bytes received" << endl;
+	cout << "string received = " << temp << RESET << endl;
 	while (true) {
+		cout << "in while input" << endl;
 		if (temp.find(endmsg) == string::npos)
 			break;
 		string tok = temp.substr(0, temp.find(endmsg));
 		parse_command(tok, this->fd_map[fd]);
 		temp.erase(0, temp.find(endmsg) + 2);
 	}
-	parse_command((const string) client.getBuff(), client);
+	cout << "trying to send the buff" << endl;
+	cout << "size of buff is " << client.getBuff().size() << endl;
 	byte_count = sendMessage(client, client.getBuff());
 	if (byte_count == -1) {
 		throw runtime_error(string("send: ") + strerror(errno));
 	}
-	cout << YELLOW << byte_count << " bytes sent" << RESET << endl;
+	cout << endl << YELLOW << byte_count << " bytes sent" << RESET << endl << endl;
 	client.clearBuff();
 }
 
 void	Server::parse_command(basic_string<char> input, Client& client ) {
+	cout << "Parsing one command" << endl;
 	vector<string>	result;
 	size_t			pos;
 	string delimiter = " ";
