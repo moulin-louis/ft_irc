@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 13:57:42 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 15:17:19 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ class Server
 		void	quit( vector<string> params, Client& client);
 		void	mode( vector<string> params, Client& client );
 		void	topic( vector<string> params, Client& client );
+		void	part(vector<string> params, Client& client);
 
 		void    process_topic_cmd(vector <string> params, Client& client, Channel& chan);
 
