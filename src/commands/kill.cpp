@@ -14,13 +14,18 @@
 
 void	Server::kill(vector<string> params, Client &client) {
 	cout << "kill" << endl;
-	if ( params.size() != 2 ) {
-		cout << params.size() << " params" << endl;
-		add_rply_from_server(" :Not enough parameters", client, "KILL", ERR_NEEDMOREPARAMS);
-		return ;
+	try {
+		if ( params.size() != 2 ) {
+			add_rply_from_server(" :Not enough parameters", client, "KILL", ERR_NEEDMOREPARAMS);
+			throw invalid_argument("kill: Not enough parameters");
+		}
+		if (!client.isOperator) {
+			add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "KILL", ERR_NOPRIVILEGES);
+			throw invalid_argument("kill: Permission Denied- You're not an IRC operator");
+		}
 	}
-	if (!client.isOperator) {
-		add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "KILL", ERR_NOPRIVILEGES);
+	catch (exception& x) {
+		cout << RED << x.what() << RESET << endl;
 		return ;
 	}
 	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
@@ -31,6 +36,5 @@ void	Server::kill(vector<string> params, Client &client) {
 			throw runtime_error("client lost connection");
 		}
 	}
-	add_rply_from_server(string("KILL") + ":Not enough parameters", client, "TOPIC", ERR_NOSUCHCHANNEL);
-	return ;
+	add_rply_from_server(string(params[0]) + ":No such channel", client, "TOPIC", ERR_NOSUCHCHANNEL);
 }

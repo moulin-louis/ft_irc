@@ -15,15 +15,15 @@
 
 
 void	Server::private_msg(vector<string> params, Client& author) {
-	if (params.size() == 0 || params[0].empty()) {
-		add_rply_from_server(":No recipient given", author, "PRIVMSG", ERR_NORECIPIENT);
-		return ;
-	}
-	if (params.size() == 1) {
-		add_rply_from_server(":No text to send", author, "PRIVMSG", ERR_NOTEXTTOSEND);
-		return ;
-	}
 	try	{
+		if (params.size() == 0 || params[0].empty()) {
+			add_rply_from_server(":No recipient given", author, "PRIVMSG", ERR_NORECIPIENT);
+			throw invalid_argument("private_msg: No recipient given");
+		}
+		if (params.size() == 1) {
+			add_rply_from_server(":No text to send", author, "PRIVMSG", ERR_NOTEXTTOSEND);
+			throw invalid_argument("private_msg: No text to sen");
+		}
 		if (params[0][0] == '#') {
 			Channel& dest = find_channel(params[0], author);
 			if (dest.user_in_chan(author))
@@ -45,7 +45,5 @@ void	Server::private_msg(vector<string> params, Client& author) {
 	}
 	catch (exception& e) {
 		cout << RED << e.what() << RESET << endl;
-		return ;
 	}
-	return ;
 }

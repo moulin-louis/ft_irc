@@ -58,6 +58,7 @@ SRC			=	$(addprefix src/,		\
 						topic.cpp 		\
 						part.cpp		\
 						list.cpp		\
+						who.cpp			\
 					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\

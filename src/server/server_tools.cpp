@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   server_tools.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 19:52:41 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 14:06:18 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 21:03:26 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-ssize_t 	sendMessage(Client &client, const std::string& message)
-{
-	return (send(client.getFd(), message.c_str(), message.length(), 0));
-}
 
 string	displayTimestamp(void)
 {
@@ -36,6 +32,10 @@ int Server::_epoll_ctl_add(int epfd, int fd, uint32_t events)
 	ev.events = events;
 	ev.data.fd = fd;
 	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
+}
+
+ssize_t 	sendMessage(Client &client, const string& message) {
+	return (send(client.getFd(), message.c_str(), message.length(), 0));
 }
 
 Client&	Server::find_user(const string& nick, Client client) {

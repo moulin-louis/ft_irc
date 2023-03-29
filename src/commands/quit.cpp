@@ -13,13 +13,21 @@
 #include "Server.hpp"
 
 void Server::quit(vector<string> params, Client &client) {
-	if ( params.size() != 1 ) {
-		return ;
+	try {
+		if ( params.size() != 1 ) {
+			throw invalid_argument("quit: Not enough parameters");
+		}
+		string msg = "ERROR :Closing link: (" + client.getUsername() + "@" + client.getHostname();
+		msg += ") [" + params[0] + "]" + endmsg;
+		client.setBuff(client.getBuff() + msg);
+		sendMessage(client, client.getBuff());
+		this->_disconect_client(client.getFd());
+		throw runtime_error("client lost connection");
 	}
-	string msg = "ERROR :Closing link: (" + client.getUsername() + "@" + client.getHostname();
-	msg += ") [" + params[0] + "]" + endmsg;
-	client.setBuff(client.getBuff() + msg);
-	sendMessage(client, client.getBuff());
-	this->_disconect_client(client.getFd());
-	throw runtime_error("client lost connection");
+	catch ( runtime_error& x ) {
+		throw runtime_error("client lost connection");
+	}
+	catch ( exception& x ) {
+		cout << RED << x.what() << RESET << endl;
+	}
 }
