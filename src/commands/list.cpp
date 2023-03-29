@@ -16,4 +16,5 @@ void	Server::list(vector<string> params, Client &client)
 {
 	(void)params;
 	(void)client;
+	cout << this->chan_vec[0].getName() << endl;
 }
