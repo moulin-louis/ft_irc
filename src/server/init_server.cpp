@@ -34,6 +34,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("MODE", &Server::mode));
 	this->cmd_map.insert(make_pair("PING", &Server::ping));
 	this->cmd_map.insert(make_pair("TOPIC", &Server::topic));
+	this->cmd_map.insert(make_pair("kill", &Server::kill));
 }
 
 Socket	Server::_initiateSocket() {
