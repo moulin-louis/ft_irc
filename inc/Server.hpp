@@ -29,7 +29,7 @@ class Channel;
 
 typedef void (*command_function)( vector<string>, Client& );
 ssize_t 	sendMessage(Client &, const string& );
-typedef std::map<Socket, Client>::iterator	client_iter;
+typedef map<Socket, Client>::iterator	client_iter;
 typedef vector<Channel>::iterator chan_iter;
 typedef vector<Socket>::iterator cl_iter;
 
@@ -83,6 +83,7 @@ class Server
 		void	kill( vector<string> , Client& );
 		void	part( vector<string>, Client& );
 		void    list(vector<string> , Client & );
+		void    who(vector<string> , Client & );
 
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
 
@@ -94,7 +95,10 @@ class Server
 	void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
 	void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
-};
+
+	//who fn
+	void	handle_without_mask(vector<string> params, Client& client );
+	};
 
 //string	msg_welcome(Client& client);
 

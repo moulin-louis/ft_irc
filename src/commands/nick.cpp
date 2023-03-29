@@ -33,27 +33,26 @@ void Server::is_valid_nickname(string &nickname, Client& client) {
 
 void	Server::nick(vector<string> params, Client& client)
 {
-	if (!client.passwd_provided) {
-		add_rply_from_server(":You did not provide the password", client, "NICK", ERR_PASSWDMISMATCH);
-		return ;
-	}
-	if (params.empty() || params[0].empty()) {
-		add_rply_from_server(":No nickname given", client, "NICK", ERR_NONICKNAMEGIVEN);
-		return ;
-	}
 	try {
+		if (!client.passwd_provided) {
+			add_rply_from_server(":You did not provide the password", client, "NICK", ERR_PASSWDMISMATCH);
+			throw invalid_argument("nick: You did not provide the password");
+		}
+		if (params.empty() || params[0].empty()) {
+			add_rply_from_server(":No nickname given", client, "NICK", ERR_NONICKNAMEGIVEN);
+			throw invalid_argument("nick: No nickname given");
+		}
 		is_valid_nickname(params[0], client);
+		string old_nickname = client.getNickname();
+		client.setNickname(params[0]);
+		if (client.isRegistered) {
+			string msg = string(":") + old_nickname + " !" + old_nickname + "@127.0.0.1 NICK :";
+			msg += client.getNickname() + endmsg;
+			client.setBuff(client.getBuff() + msg);
+		}
 	}
 	catch(exception& e) {
 		cout << RED << e.what() << RESET << endl;
 		return ;
 	}
-	string old_nickname = client.getNickname();
-	client.setNickname(params[0]);
-	if (client.isRegistered) {
-		string msg = string(":") + old_nickname + " !" + old_nickname + "@127.0.0.1 NICK :";
-		msg += client.getNickname() + endmsg;
-		client.setBuff(client.getBuff() + msg);
-	}
-	return ;
 }

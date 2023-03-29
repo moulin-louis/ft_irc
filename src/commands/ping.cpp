@@ -13,13 +13,18 @@
 #include "Server.hpp"
 
 void Server::ping(vector<string> params, Client &client) {
-	if ( params.empty() ) {
-		add_rply_from_server(":No origin specified", client, "PING", ERR_NOORIGIN);
-		return ;
+	try {
+		if ( params.empty() ) {
+			add_rply_from_server(":No origin specified", client, "PING", ERR_NOORIGIN);
+			throw invalid_argument("ping: No origin specified");
+		}
+		if ( params[0] != "localhost" && params[0] != "127.0.0.1" ) {
+			add_rply_from_server(params[0] + " :No such server", client, "PING", ERR_NOSUCHSERVER);
+			throw invalid_argument("ping: No such server");
+		}
+		add_rply_from_server(string(" ") + params[0] + " :Pong", client, "PING", 0);
 	}
-	if ( params[0] != "localhost" && params[0] != "127.0.0.1" ) {
-		add_rply_from_server(params[0] + " :No such server", client, "PING", ERR_NOSUCHSERVER);
-		return ;
+	catch ( exception& x ) {
+		cout << RED << x.what() << RESET << endl;
 	}
-	add_rply_from_server(string(" ") + params[0] + " :Pong", client, "PING", 0);
 }

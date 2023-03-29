@@ -15,13 +15,11 @@
 
 void    Server::process_topic_cmd(vector <string> params, Client& client, Channel& chan)
 {
-    if (params.size() == 2)
-    {
+    if (params.size() == 2) {
         chan.setTopic(params[1]);
         this->notify_chan(chan.getName(), params[1], "TOPIC", client);
 	}
-    else
-    {
+    else {
         if (chan.getTopic().empty())
             this->add_rply_from_server(chan.getName() + ":No topic is set", client, "TOPIC", RPL_NOTOPIC);
         else

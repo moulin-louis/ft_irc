@@ -21,62 +21,46 @@ string mode_to_str( const Mode (&arr)[4]) {
 	return result;
 }
 
-void	handle_chan( Server* server, vector<string>& params, Client& client) {
-	(void)server;
-	(void)params;
-	(void)client;
-}
-
 void	handle_user( Server* server, vector<string>& params, Client& client) {
-	(void)server;
-	string input = params[1];
 	if ( params.size() == 1 ) {
-		string msg = ":localhost " + int_to_string(RPL_UMODEIS) + " " + client.getNickname() + ":";
-		msg += mode_to_str(client.mode);
-		client.setBuff(client.getBuff() + msg);
+		server->add_rply_from_server(mode_to_str(client.mode), client , "MODE", RPL_UMODEIS);
 		return ;
 	}
+	string input = params[1];
 	if (input[0] != '+' && input[0] != '-') {
-		return ;
+		server->add_rply_from_server(":Please use + or - with mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+		throw invalid_argument("mode: Please use + or - with mode");
 	}
 	for (string::iterator it = input.begin(); it != input.end(); it++ ) {
 		if (*it == 'a') {
-			string msg = ":localhost " + int_to_string(ERR_UMODEUNKNOWNFLAG) + " ";
-			msg += client.getNickname() + " :Please use AWAY to set your mode to away" + endmsg;
-			client.setBuff(client.getBuff() + msg);
-			return ;
+			server->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+			throw invalid_argument("mode: Please use AWAY to set your mode to away");
 		}
 		if (*it == 'o') {
-			string msg = ":localhost " + int_to_string(ERR_NOPRIVILEGES) + " ";
-			msg += client.getNickname() + " :Please use AWAY to set your mode to away" + endmsg;
-			client.setBuff(client.getBuff() + msg);
-			return ;
+			server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
+			throw invalid_argument("mode: Permission Denied- You're not an IRC operator");
 		}
 		if (*it == 'i') { client.mode[1] = 1; }
 		if (*it == 'w') { client.mode[2] = 1; }
 	}
-	string msg = ":localhost " + int_to_string(RPL_UMODEIS) + " " + client.getNickname() + ":";
-	msg += mode_to_str(client.mode);
-	client.setBuff(client.getBuff() + msg);
-	return ;
+	server->add_rply_from_server(mode_to_str(client.mode), client , "MODE", RPL_UMODEIS);
 }
 
 void	Server::mode(vector<string> params, Client &client) {
-	if (params.empty() ) {
-		string msg = ":localhost " + int_to_string(ERR_ALREADYREGISTRED) + " ";
-		msg += client.getNickname() + " :Not enough parameters" + endmsg;
-		client.setBuff(client.getBuff() + msg);
-		return ;
-	}
-	if ( client.getNickname() != params[0] ) {
-		string msg = ":localhost " + int_to_string(ERR_USERSDONTMATCH) + " ";
-		msg += client.getNickname() + " :Cannot change mode for other users" + endmsg;
-		client.setBuff(client.getBuff() + msg);
-		return ;
-	}
-	if ( this->cmd_map.find(params[0]) != this->cmd_map.end() )
-		handle_chan(this, params, client);
-	else if (params[0] == client.getNickname())
+
+	try {
+		if (params.empty() ) {
+			add_rply_from_server(":Not enough parameters", client , "MODE", ERR_NEEDMOREPARAMS);
+			throw invalid_argument("mode: Not enough parameters");
+		}
+		if ( client.getNickname() != params[0] ) {
+			add_rply_from_server(":Cannot change mode for other users", client , "MODE", ERR_USERSDONTMATCH);
+			throw invalid_argument("mode: Cannot change mode for other users");
+		}
 		handle_user(this, params, client);
-	return ;
+	}
+	catch ( exception& x) {
+		cout << RED << x.what() << RESET << endl;
+		return ;
+	}
 }

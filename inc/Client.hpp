@@ -40,7 +40,13 @@ class Client
 
 		epoll_event	ev;
 		string 	channel;
+
+		//mode[0] == a
+		//mode[1] == i
+		//mode[2] == w
+		//mode[3] == o
 		Mode	mode[4];
+
 		bool 	passwd_provided;
 		bool	 isRegistered;
 		bool 	isAway;

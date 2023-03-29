@@ -20,7 +20,7 @@ int epoll_ctl_add(int epfd, int fd, uint32_t events) {
 	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
 }
 
-ssize_t 	sendMessage(Client &client, const std::string& message) {
+ssize_t 	sendMessage(Client &client, const string& message) {
 	return (send(client.getFd(), message.c_str(), message.length(), 0));
 }
 

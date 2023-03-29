@@ -17,7 +17,7 @@
 Server::Server(const char *port, const string &password)
 	: _password(password), _port(strtoul(port, NULL, 10)), fd_map()
 {
-	std::cout << std::endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << "- >" << YELLOW << "🅸 🆁 🅲" << RESET << std::endl;
+	cout << endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << "- >" << YELLOW << "🅸 🆁 🅲" << RESET << endl;
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
 	if (this->_epfd == -1) {
@@ -36,6 +36,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("TOPIC", &Server::topic));
 	this->cmd_map.insert(make_pair("PART", &Server::part));
 	this->cmd_map.insert(make_pair("kill", &Server::kill));
+	this->cmd_map.insert(make_pair("WHO", &Server::who));
 }
 
 Socket	Server::_initiateSocket() {

@@ -14,18 +14,15 @@
 
 void	Server::is_valid_chan_name(vector<string> params, Client& client)
 {
-	if (params.size() != 1)
-	{
+	if (params.size() != 1) {
 		add_rply_from_server(":Not enough parameters", client, "JOIN", ERR_NEEDMOREPARAMS);
 		throw invalid_argument("join: invalid number of parameters");
 	}
-	if (params[0][0] != '#')
-	{
+	if (params[0][0] != '#') {
 		add_rply_from_server(":Channel name must begin with '#'", client, "JOIN", ERR_INVALIDCHANNAME);
 		throw invalid_argument("join: channel name must start with #");
 	}
-	if (params[0].size() > 50)
-	{
+	if (params[0].size() > 50) {
 		add_rply_from_server(":Channel name is too long", client, "JOIN", ERR_NAMETOOLONG);
 		throw invalid_argument("join: channel name too long");
 	}

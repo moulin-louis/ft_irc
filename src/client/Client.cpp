@@ -13,7 +13,7 @@
 #include "Client.hpp"
 
 Client::Client( void ) {
-	memset(this, 0, sizeof(Client));
+	memset((void *)this, 0, sizeof(Client));
 	return ;
 }
 
@@ -26,7 +26,7 @@ Client::Client( void ) {
 
 Client::Client(const Client &copy) {
 	//cout << "new client created" << endl;
-	memset(this, 0, sizeof(Client));
+	memset((void *)this, 0, sizeof(Client));
 	*this = copy;
 	return ;
 }
