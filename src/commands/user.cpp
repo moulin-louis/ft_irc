@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:08:23 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/27 17:20:29 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 17:12:55 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void Server::is_valid_username(string &username, Client& client) {
 		client.setBuff(client.getBuff() + msg);
 		throw invalid_argument("user: invalid username");
 	}
-	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
-		if (it->second.getUsername() == username) {
-			string msg = ":localhost " + int_to_string(ERR_NICKNAMEINUSE) + " * " + username + " :Username is already in use" + endmsg;
-			client.setBuff(client.getBuff() + msg);
-			throw invalid_argument("user: username already taken");
-		}
-	}
+	// for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
+	// 	if (it->second.getUsername() == username) {
+	// 		string msg = ":localhost " + int_to_string(ERR_NICKNAMEINUSE) + " * " + username + " :Username is already in use" + endmsg;
+	// 		client.setBuff(client.getBuff() + msg);
+	// 		throw invalid_argument("user: username already taken");
+	// 	}
+	// }
 }
 
 void	Server::user(vector<string> params, Client& client) {

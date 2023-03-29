@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 16:34:31 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/29 17:19:00 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,10 @@ class Server
 		void	kill( vector<string> , Client& );
 		void	part( vector<string>, Client& );
 		void    list(vector<string> , Client & );
+		void	kick(vector<string>, Client&);
 
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
+		void	process_part_cmd(Channel&, Client&, string&);
 
 		//server run functions
 		void 	run();
