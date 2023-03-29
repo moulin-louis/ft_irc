@@ -88,9 +88,4 @@ class Server
 
 //string	msg_welcome(Client& client);
 
-enun Option {
-	None,
-	Some(x),
-};;
-
 #endif
