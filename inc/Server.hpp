@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 15:46:28 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 16:28:37 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ class Server
 
 	//send messages
 	void	notify_chan(const string& , const string& , const string& , Client &);
-	void	add_cmd_client(const string& , Client& , Client&, const string&  );
+	void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
 	void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
 };
