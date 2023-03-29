@@ -26,7 +26,7 @@ void	Server::process_input(Socket fd ) {
 	}
 	temp.resize(byte_count);
 	cout << YELLOW << byte_count << " bytes received" << endl;
-	cout << "string received = " << temp << RESET << endl;
+	cout << RESET << "string received ⬇️ " << endl << CYAN << temp << RESET << endl;
 	while (true) {
 		cout << "in while input" << endl;
 		if (temp.find(endmsg) == string::npos)
