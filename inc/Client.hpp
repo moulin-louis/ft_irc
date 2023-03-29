@@ -34,10 +34,9 @@ class Client
 		sockaddr_in	sin;
 	public:
 		Client( void );
-		Client(string &nick, string &user);
-		Client(const Client &copy);
+		Client(const Client &);
 		~Client();
-		Client &operator=(const Client &assign);
+		Client &operator=(const Client &);
 
 		epoll_event	ev;
 		string 	channel;
@@ -56,13 +55,13 @@ class Client
 		string		getBuff() const;
 		Mode				getMode(int );
 
-		void 	setNickname(const string &nickname);
-		void 	setUsername(const string &username);
-		void 	setRealname(const string &realname);
-		void 	setHostname(const string &hostname);
-		void 	setFd(const Socket &fd);
-		void 	setSin(const sockaddr_in &sin);
-		void 	setBuff( const string& buffer );
+		void 	setNickname(const string &);
+		void 	setUsername(const string &);
+		void 	setRealname(const string &);
+		void 	setHostname(const string &);
+		void 	setFd(const Socket &);
+		void 	setSin(const sockaddr_in &);
+		void 	setBuff( const string&  );
 		void 	clearBuff();
 		void 	setMode( int , Mode );
 };

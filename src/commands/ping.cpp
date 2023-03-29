@@ -21,6 +21,5 @@ void Server::ping(vector<string> params, Client &client) {
 		add_rply_from_server(params[0] + " :No such server", client, "PING", ERR_NOSUCHSERVER);
 		return ;
 	}
-	add_rply_from_server(params[0] + " :Pong", client, "PING", 0);
-	return ;
+	add_rply_from_server(string(" ") + params[0] + " :Pong", client, "PING", 0);
 }

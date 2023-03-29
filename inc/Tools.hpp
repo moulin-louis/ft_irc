@@ -16,7 +16,7 @@
 
 using namespace std;
 
-void	check_port(const char *port);
-string	int_to_string(int i);
-int		epoll_ctl_add(int epfd, int fd, uint32_t events);
+void	check_port(const char *);
+string	int_to_string(int );
+int		epoll_ctl_add(int , int fd, uint32_t );
 #endif
