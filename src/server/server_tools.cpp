@@ -20,11 +20,11 @@ int epoll_ctl_add(int epfd, int fd, uint32_t events) {
 	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
 }
 
-int	sendMessage(Client &client, const std::string& message) {
+ssize_t 	sendMessage(Client &client, const std::string& message) {
 	return (send(client.getFd(), message.c_str(), message.length(), 0));
 }
 
-Client&	Server::find_user(string nick, Client client) {
+Client&	Server::find_user(const string& nick, Client client) {
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getNickname() == nick)
 			return it->second;
@@ -33,7 +33,7 @@ Client&	Server::find_user(string nick, Client client) {
 	throw runtime_error("User not found");
 }
 
-Channel&	Server::find_channel(string name, Client client) {
+Channel&	Server::find_channel(const string& name, Client client) {
 	for (vector<Channel>::iterator it = this->chan_map.begin(); it != this->chan_map.end(); it++) {
 		if (it->getName() == name)
 			return *it;
@@ -42,13 +42,13 @@ Channel&	Server::find_channel(string name, Client client) {
 	throw runtime_error("User not found");
 }
 
-void	Server::add_cmd_client(string& content, Client& client, Client& author, string cmd) {
+void	Server::add_cmd_client(string& content, Client& client, Client& author, const string&  cmd) {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 	return ;
 }
 
-void	Server::add_rply_from_server(string msg, Client& dest, string cmd, int code) {
+void	Server::add_rply_from_server(const string&  msg, Client& dest, const string&  cmd, int code) {
 	string dest_nick = dest.getNickname();
 	if (dest_nick.empty())
 		dest_nick = "*";

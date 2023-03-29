@@ -27,16 +27,14 @@
 
 class Channel;
 
-int	sendMessage(Client &client, const std::string& message);
-
 typedef void (*command_function)( vector<string>, Client& );
+ssize_t 	sendMessage(Client &client, const std::string& message);
+typedef std::map<Socket, Client>::iterator	client_iter;
+typedef vector<Channel>::iterator chan_iter;
 
 class Server
 {
 	typedef	void (Server::*command_function)( vector<string>, Client& );
-	typedef std::map<Socket, Client>::iterator	client_iter;
-	typedef	std::map<string, command_function>::iterator fn_iter;
-	typedef vector<Channel>::iterator chan_iter;
 
 	private:
 		const string 	_password;
@@ -56,19 +54,16 @@ class Server
 		~Server();
 
 		//request from client
-		string	received_data_from_client( Socket );
 		void	process_input( Socket );
 
 		//respond from server
-		void	flush_buff( Socket );
-		void 	flush_all_buffer( void );
-		void	add_cmd_client(string& content, Client& client, Client& author, string cmd);
-		void	add_cmd_channel(string& content, Channel& chan, Client& author, string cmd);
-		void	add_rply_from_server(string msg, Client& dest, string cmd, int code);
+		void	add_cmd_client(string& content, Client& client, Client& author, const string&  cmd);
+		void	add_cmd_channel(string& content, Channel& chan, Client& author, const string&  cmd);
+		void	add_rply_from_server(const string&  msg, Client& dest, const string&  cmd, int code);
 
 		//checks
-		Client&		find_user(string nick, Client client);
-		Channel&	find_channel(string name, Client client);
+		Client&		find_user(const string&  nick, Client client);
+		Channel&	find_channel(const string&  name, Client client);
 		void		is_valid_nickname(string &nickname, Client& client);
 		void		is_valid_username(string &username, Client& client);
 		void		is_valid_chan_name(vector<string> params, Client& client);
@@ -90,9 +85,6 @@ class Server
 		//server run functions
 		void 	run();
 };
-
-int epoll_ctl_add(int epfd, int fd, uint32_t events);
-int	sendMessage(Client &client, const std::string& message);
 
 //string	msg_welcome(Client& client);
 

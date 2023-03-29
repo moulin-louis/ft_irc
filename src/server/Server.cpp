@@ -27,7 +27,7 @@ Server::~Server() {
 }
 
 void	Server::run() {
-	epoll_event ev = {};
+	epoll_event ev;
 	int			nfds;
 
 	if (epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN) == -1)
@@ -55,10 +55,10 @@ void	Server::run() {
 					}
 				}
 			}
-			if (ev.events & (EPOLLHUP | EPOLLRDHUP)) {
-				this->_disconect_client(ev.data.fd);
-			}
+//			if (ev.events & (EPOLLHUP | EPOLLRDHUP)) {
+//				this->_disconect_client(ev.data.fd);
+//			}
 		}
 	}
-	cout << RED << "Server stopped" << RESET << endl;
+	cout << RED << "Stoping the server..." << RESET << endl;
 }
