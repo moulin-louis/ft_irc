@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 17:19:00 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 21:00:49 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Channel;
 
 typedef void (*command_function)( vector<string>, Client& );
 ssize_t 	sendMessage(Client &, const string& );
-typedef std::map<Socket, Client>::iterator	client_iter;
+typedef map<Socket, Client>::iterator	client_iter;
 typedef vector<Channel>::iterator chan_iter;
 typedef vector<Socket>::iterator cl_iter;
 string	displayTimestamp(void);
@@ -89,6 +89,7 @@ class Server
 		void	part( vector<string>, Client& );
 		void    list(vector<string> , Client & );
 		void	kick(vector<string>, Client&);
+		void    who(vector<string> , Client & );
 
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
 		void	process_part_cmd(Channel&, Client&, string&);
@@ -101,7 +102,10 @@ class Server
 	void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
 	void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
-};
+
+	//who fn
+	void	handle_without_mask(vector<string> params, Client& client );
+	};
 
 //string	msg_welcome(Client& client);
 

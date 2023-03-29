@@ -21,6 +21,8 @@
 
 class Server;
 
+typedef vector<Socket>::iterator vec_sock_iter;
+
 class Channel
 {
     private:

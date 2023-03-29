@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_server.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 19:59:56 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 16:22:31 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 21:02:12 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 Server::Server(const char *port, const string &password)
 	: _password(password), _port(strtoul(port, NULL, 10)), _server_name("ft_irc.net"), _server_version("v1.0"), _server_up_date(displayTimestamp()), fd_map()
 {
-	std::cout << std::endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << " ->" << YELLOW << "🅸 🆁 🅲" << RESET << std::endl;
+	cout << endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << " ->" << YELLOW << "🅸 🆁 🅲" << RESET << endl;
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
 	if (this->_epfd == -1) {
@@ -37,6 +37,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("PART", &Server::part));
 	this->cmd_map.insert(make_pair("kill", &Server::kill));
 	this->cmd_map.insert (make_pair("LIST", &Server::list));
+	this->cmd_map.insert(make_pair("WHO", &Server::who));
 }
 
 Socket	Server::_initiateSocket() {
