@@ -33,7 +33,7 @@ class Client
 		Socket		fd;
 		sockaddr_in	sin;
 	public:
-		Client();
+		Client( void );
 		Client(string &nick, string &user);
 		Client(const Client &copy);
 		~Client();

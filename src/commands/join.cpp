@@ -50,6 +50,5 @@ void	Server::join(vector<string> params, Client& client)
 	Channel new_channel(params[0], client);
 	this->chan_vec.push_back(new_channel);
 	notify_chan(new_channel.getName(), params[0], "JOIN", client);
-	cout << "join finished" << endl;
 	return ;
 }

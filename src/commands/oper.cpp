@@ -17,6 +17,14 @@ void Server::oper(vector<string> params, Client &client) {
 		add_rply_from_server(":Not enough parameters", client, "OPER", ERR_NEEDMOREPARAMS);
 		return ;
 	}
+	if (params[0] != client.getUsername()) {
+		add_rply_from_server(":Username incorrect", client, "OPER", ERR_PASSWDMISMATCH);
+		return ;
+	}
+	if (params[1] != this->admin_pass) {
+		add_rply_from_server(":Password incorrect", client, "OPER", ERR_PASSWDMISMATCH);
+		return ;
+	}
 	client.isOperator = true;
 	add_rply_from_server(":You are now an IRC operator", client, "OPER", RPL_YOUREOPER);
 	return ;

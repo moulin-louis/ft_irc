@@ -11,25 +11,22 @@
 /* ************************************************************************** */
 
 #include "Client.hpp"
-#include <cstdlib>
 
-Client::Client(void) {
-	cout << "new client created" << endl;
-	memset((void*)this, 0, sizeof(Client));
+Client::Client( void ) {
+	memset(this, 0, sizeof(Client));
 	return ;
 }
 
-Client::Client(string &nick, string &user) {
-	cout << "new client created" << endl;
-	memset((void*)this, 0, sizeof(Client));
-	this->nickname = nick;
-	this->username = user;
-	return ;
-}
+//Client::Client(string &nick, string &user) {
+//	cout << "new client created" << endl;
+//	this->nickname = nick;
+//	this->username = user;
+//	return ;
+//}
 
 Client::Client(const Client &copy) {
 	//cout << "new client created" << endl;
-	cout << "copy constructor called" << endl;
+	memset(this, 0, sizeof(Client));
 	*this = copy;
 	return ;
 }
@@ -40,7 +37,6 @@ Client::~Client() {
 }
 
 Client &Client::operator=(const Client &assign) {
-	memset((void*)this, 0, sizeof(Client));
 	(void)assign;
 	return (*this);
 }

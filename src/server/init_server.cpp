@@ -36,11 +36,16 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("TOPIC", &Server::topic));
 }
 
-Socket	Server::_initiateSocket() const {
+Socket	Server::_initiateSocket() {
 	sockaddr_in	sin = {};
 	int			opt = 1;
 	Socket 		sfd;
 
+	string temp;
+	cout << PURPLE << "Please input your admin password" << RESET << endl;
+	cin >> temp;
+	cout << PURPLE << "your password is [" << temp << "]" << RESET << endl;
+	this->admin_pass = temp;
 	sin.sin_addr.s_addr = INADDR_ANY;
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(this->_port);
