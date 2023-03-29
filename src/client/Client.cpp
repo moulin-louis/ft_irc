@@ -16,8 +16,6 @@
 Client::Client(void) {
 	cout << "new client created" << endl;
 	memset((void*)this, 0, sizeof(Client));
-	this->nickname = "";
-	this->username = "";
 	return ;
 }
 
@@ -32,7 +30,6 @@ Client::Client(string &nick, string &user) {
 Client::Client(const Client &copy) {
 	//cout << "new client created" << endl;
 	cout << "copy constructor called" << endl;
-	memset((void*)this, 0, sizeof(Client));
 	*this = copy;
 	return ;
 }
@@ -44,13 +41,7 @@ Client::~Client() {
 
 Client &Client::operator=(const Client &assign) {
 	memset((void*)this, 0, sizeof(Client));
-	this->nickname = assign.nickname;
-	this->username = assign.username;
-	this->hostname = assign.hostname;
-	this->realname = assign.realname;
-	this->fd = assign.fd;
-	this->buffer = assign.buffer;
-	this->sin = assign.sin;
+	(void)assign;
 	return (*this);
 }
 
