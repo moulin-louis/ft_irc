@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 15:46:28 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/29 16:46:40 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,10 @@ class Server
 		void	topic( vector<string> params, Client& client );
 		void	kill( vector<string> , Client& );
 		void	part(vector<string> params, Client& client);
+		void	kick(vector<string> params, Client& client);
 
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
+		void	process_part_cmd(Channel&, Client&, string&);
 
 		//server run functions
 		void 	run();
