@@ -10,4 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Server.hpp"
 
+void	Server::list(vector<string> params, Client &client)
+{
+	;
+}

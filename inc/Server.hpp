@@ -82,6 +82,7 @@ class Server
 		void	topic( vector<string> params, Client& client );
 		void	kill( vector<string> , Client& );
 		void	part(vector<string> params, Client& client);
+		void	list(vector<string> params, Client &client);
 
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
 
