@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_server.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 19:59:56 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 21:02:12 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/30 15:01:40 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("PING", &Server::ping));
 	this->cmd_map.insert(make_pair("TOPIC", &Server::topic));
 	this->cmd_map.insert(make_pair("PART", &Server::part));
+	this->cmd_map.insert(make_pair("KICK", &Server::kick));
 	this->cmd_map.insert(make_pair("kill", &Server::kill));
 	this->cmd_map.insert (make_pair("LIST", &Server::list));
 	this->cmd_map.insert(make_pair("WHO", &Server::who));

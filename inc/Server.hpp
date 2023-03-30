@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 21:00:49 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/30 16:19:05 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ ssize_t 	sendMessage(Client &, const string& );
 typedef map<Socket, Client>::iterator	client_iter;
 typedef vector<Channel>::iterator chan_iter;
 typedef vector<Socket>::iterator cl_iter;
+typedef vector<string>::iterator str_iter;
 string	displayTimestamp(void);
 
 class Server
@@ -67,8 +68,8 @@ class Server
 		void	add_rply_from_server(const string& , Client& , const string& , int );
 
 		//checks
-		Client&		find_user(const string& , Client );
-		Channel&	find_channel(const string& , Client );
+		Client&		find_user(const string& , Client&, const string&);
+		Channel&	find_channel(const string& , Client& );
 		void		is_valid_nickname(string &, Client& );
 		void		is_valid_username(string &, Client& );
 		void		is_valid_chan_name(vector<string> , Client& );
@@ -91,8 +92,10 @@ class Server
 		void	kick(vector<string>, Client&);
 		void    who(vector<string> , Client & );
 
+		//command utils
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
 		void	process_part_cmd(Channel&, Client&, string&);
+		void	process_kick_cmd(Channel&, string&, Client&, string&);
 
 		//server run functions
 		void 	run();

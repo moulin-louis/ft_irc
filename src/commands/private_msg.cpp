@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   private_msg.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:57:21 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/29 15:07:16 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/30 15:56:44 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	Server::private_msg(vector<string> params, Client& author) {
 				add_rply_from_server(":" + dest.getName() + " :Cannot send to channel", author, "PRIVMSG", ERR_CANNOTSENDTOCHAN);
 		}
 		else {
-			Client& dest = find_user(params[0], author);
+			Client& dest = find_user(params[0], author, "PRIVMSG");
 			this->add_cmd_client(params[1], dest, author, "PRIVMSG");
 		}
 	}

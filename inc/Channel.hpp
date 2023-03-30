@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/29 16:34:15 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/30 15:51:37 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ class Channel
         void            setName(string &);
 
     //checks
-        bool	user_in_chan(Client& );
+        bool	user_in_chan(Client&);
 
     //actions
         void    addClient(Client &);

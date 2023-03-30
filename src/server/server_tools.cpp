@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_tools.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 19:52:41 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 21:03:26 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/30 16:31:46 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,16 @@ ssize_t 	sendMessage(Client &client, const string& message) {
 	return (send(client.getFd(), message.c_str(), message.length(), 0));
 }
 
-Client&	Server::find_user(const string& nick, Client client) {
+Client&	Server::find_user(const string& nick, Client& client, const string& cmd) {
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getNickname() == nick)
 			return it->second;
 	}
-	add_rply_from_server(nick + " :No such nick/channel", client, "NICK", ERR_NOSUCHNICK);
+	add_rply_from_server(nick + " :No such nick/channel", client, cmd, ERR_NOSUCHNICK);
 	throw runtime_error("User not found");
 }
 
-Channel&	Server::find_channel(const string& name, Client client) {
+Channel&	Server::find_channel(const string& name, Client& client) {
 	for (vector<Channel>::iterator it = this->chan_vec.begin(); it != this->chan_vec.end(); it++) {
 		if (it->getName() == name)
 			return *it;
