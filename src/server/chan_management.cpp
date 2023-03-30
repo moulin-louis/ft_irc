@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chan_management.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 13:37:37 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/29 15:09:32 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/30 17:56:29 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	Server::notify_chan(const string& chan, const string& content, const string
 		Channel& channel = this->find_channel(chan, author);
 		for ( cl_iter it = channel.clients.begin(); it != channel.clients.end(); it++ ) {
 			if (*it == author.getFd()) {
-				if (cmd == "JOIN")
+				if (cmd == "JOIN" || cmd == "PART" || cmd == "QUIT" || cmd == "KICK")
 					this->add_cmd_client(content, (this->fd_map[*it]), author, cmd, channel);
 			}
 			else

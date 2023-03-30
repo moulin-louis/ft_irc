@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:16:43 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/29 21:03:41 by loumouli         ###   ########.fr       */
+/*   Updated: 2023/03/30 17:56:50 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 {
 	if (chan.user_in_chan(client) == true)
 	{
-		chan.removeClient(client);
+		cout << "removing client from channel" << chan.getName() << endl;
 		if (!reason.empty())
 			this->notify_chan(chan.getName(), reason, "PART", client);
 		else
 			this->notify_chan(chan.getName(), "has left", "PART", client);
+		chan.removeClient(client);
 		return;
 	}
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
