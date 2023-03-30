@@ -108,7 +108,11 @@ class Server
 
 	//who fn
 	void	handle_without_mask(vector<string> params, Client& client );
-	};
+
+		void displayChannels();
+
+		void getSpecifiedChannels(const vector<string> &params, Client &client);
+};
 
 //string	msg_welcome(Client& client);
 

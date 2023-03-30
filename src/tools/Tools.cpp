@@ -12,6 +12,13 @@
 
 # include "Tools.hpp"
 
+string itostr(int i)
+{
+	stringstream ss;
+	ss << i;
+	return ss.str();
+}
+
 string int_to_string(int i)
 {
 	if (i == -1) {
