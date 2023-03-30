@@ -15,7 +15,7 @@
 /*-------------------------------CONSTRUCTORS---------------------------------*/
 
 Server::Server(const char *port, const string &password)
-	: _password(password), _port(strtoul(port, NULL, 10)), _server_name("ft_irc.net"), _server_version("v1.0"), _server_up_date(displayTimestamp()), fd_map()
+	: _password(password), _port(strtoul(port, NULL, 10)), _server_version("v1.0"), _server_up_date(displayTimestamp()), fd_map()
 {
 	cout << endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << " ->" << YELLOW << "🅸 🆁 🅲" << RESET << endl;
 	this->_sfd = _initiateSocket();
@@ -44,6 +44,7 @@ Socket	Server::_initiateSocket() {
 	sockaddr_in	sin = {};
 	int			opt = 1;
 	Socket 		sfd;
+	char		hostname[NI_MAXHOST];
 
 	string temp;
 	cout << PURPLE << "Please input your admin password" << RESET << endl;
@@ -66,6 +67,14 @@ Socket	Server::_initiateSocket() {
 	cout << GREEN << "Bind done" << RESET << endl;
 	if (listen(sfd, SOMAXCONN) < 0)
 		throw runtime_error(string("listen: ") + strerror(errno));
-	cout << GREEN << "Socket is listening.." << RESET << endl;
+	if (getnameinfo(reinterpret_cast<const sockaddr *>(&sin), sizeof(sin), hostname, sizeof(hostname), NULL, 0, 0) != 0)
+	{
+		this->_server_name = "unknown";
+	}
+	else
+	{
+		this->_server_name = hostname;
+	}
+	cout << GREEN << "Socket is listening, server address is: " << this->_server_name << RESET << endl;
 	return (sfd);
 }

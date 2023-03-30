@@ -43,6 +43,9 @@ void	Server::user(vector<string> params, Client& client) {
 		client.setUsername(params[0]);
 		client.isRegistered = true;
 		add_rply_from_server(":Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname(), client, "USER", RPL_WELCOME);
+		add_rply_from_server(":Your host is " + this->_server_name + ", running version " + this->_server_version, client, "USER", RPL_YOURHOST);
+		add_rply_from_server(":This server was created " + this->_server_up_date, client, "USER", RPL_CREATED);
+		add_rply_from_server(":" + this->_server_name + " " + this->_server_version + " aoiw", client, "USER", RPL_MYINFO);
 	}
 	catch(exception& e) {
 		cout << RED << e.what() << RESET << endl;

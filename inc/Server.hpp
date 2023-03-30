@@ -49,7 +49,7 @@ class Server
 		void			_disconect_client( Socket );
 		string 			admin_pass;
 		int				_epoll_ctl_add(int epfd, int fd, uint32_t events);
-		const string	_server_name;
+		string			_server_name;
 		const string	_server_version;
 		const string	_server_up_date;
 	public:
