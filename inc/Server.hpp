@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/30 16:19:05 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:27:48 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ class Server
 		//command utils
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
 		void	process_part_cmd(Channel&, Client&, string&);
+		void	process_part_cmd(Channel&, Client&);		
 		void	process_kick_cmd(Channel&, string&, Client&, string&);
 
 		//server run functions
@@ -114,6 +115,6 @@ class Server
 		void getSpecifiedChannels(const vector<string> &params, Client &client);
 };
 
-//string	msg_welcome(Client& client);
+void	little_split(vector<string> &list, string &str, string delimiter);
 
 #endif

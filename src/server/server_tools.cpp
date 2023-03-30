@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 19:52:41 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/30 16:31:46 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:08:48 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,16 @@ void	Server::add_rply_from_server(const string&  msg, Client& dest, const string
 	string result = ":localhost " + int_to_string(code) + dest_nick + " " + cmd + msg + endmsg;
 	dest.setBuff(dest.getBuff() + result);
 	return ;
+}
+
+void	little_split(vector<string> &list, string &str, string delimiter)
+{
+	string	buff;
+	size_t	pos;
+	while ((pos = str.find(delimiter)) != string::npos) {
+		buff = str.substr(0, pos);
+		list.push_back(buff);
+		str.erase(0, pos + delimiter.length());
+	}
+	list.push_back(str);
 }
