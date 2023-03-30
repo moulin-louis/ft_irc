@@ -23,6 +23,7 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 {
 	std::istringstream	ss(params[0]);
 	std::string 		chan_name;
+	std::map<std::string, Channel> chan_map;
 
 	while (std::getline(ss, chan_name, ','))
 	{
@@ -30,8 +31,16 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 			continue;
 		else
 			for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); it++)
+			{
 				if (it->getName() == chan_name)
-					server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "LIST", RPL_LIST);
+				{
+					if (chan_map.find(chan_name) == chan_map.end())
+					{
+						chan_map.insert(std::make_pair(chan_name, *it));
+						server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "LIST", RPL_LIST);
+					}
+				}
+			}
 	}
 	server.add_rply_from_server(":End of LIST", client, "LIST", RPL_LISTEND);
 }

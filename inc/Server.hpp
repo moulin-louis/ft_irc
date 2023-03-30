@@ -17,6 +17,7 @@
 # include <string>
 # include <iostream>
 # include <map>
+# include <list>
 # include <cstdlib>
 # include <sys/epoll.h>
 # include "irc.hpp"
