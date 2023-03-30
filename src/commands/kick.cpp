@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:24:40 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/30 16:46:45 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:21:09 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,6 @@ void	Server::process_kick_cmd(Channel& chan, string& nick_user, Client& client, 
 	return ;
 }
 
-void	little_split(vector<string> &list, string &str, string delimiter)
-{
-	string	buff;
-	size_t	pos;
-	while ((pos = str.find(delimiter)) != string::npos) {
-		buff = str.substr(0, pos);
-		list.push_back(buff);
-		str.erase(0, pos + delimiter.length());
-	}
-	list.push_back(str);
-}
-
 void	Server::kick(vector<string> params, Client& client)
 {
 	try {
@@ -91,8 +79,9 @@ void	Server::kick(vector<string> params, Client& client)
 					for (str_iter it2 = user_list.begin(); it2 != user_list.end(); it2++)
 						process_kick_cmd(*it, *it2, client, params[2]);
 				}
-				if (found == false)
-					this->add_rply_from_server(" :" + chan_list[0] + " :No such channel", client, "KICK", ERR_NOSUCHCHANNEL);
+				if (found == true)
+					continue ;
+				this->add_rply_from_server(" :" + chan_list[0] + " :No such channel", client, "KICK", ERR_NOSUCHCHANNEL);
 			}
 		}
 		else {			

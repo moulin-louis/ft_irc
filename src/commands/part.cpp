@@ -6,21 +6,28 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:16:43 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/30 17:56:50 by armendi          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:38:22 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
+void	Server::process_part_cmd(Channel& chan, Client& client)
+{
+	if (chan.user_in_chan(client) == true)
+	{
+		this->notify_chan(chan.getName(), "has left", "PART", client);
+		chan.removeClient(client);
+		return;
+	}
+	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
+}
+
 void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 {
 	if (chan.user_in_chan(client) == true)
 	{
-		cout << "removing client from channel" << chan.getName() << endl;
-		if (!reason.empty())
-			this->notify_chan(chan.getName(), reason, "PART", client);
-		else
-			this->notify_chan(chan.getName(), "has left", "PART", client);
+		this->notify_chan(chan.getName(), reason, "PART", client);
 		chan.removeClient(client);
 		return;
 	}
@@ -44,14 +51,20 @@ void	Server::part(vector<string> params, Client& client)
 		}
 		chans_to_part.push_back(params[0]);
 		for (vector<string>::iterator it = chans_to_part.begin(); it != chans_to_part.end(); it++) {
+			bool chan_exists = false;
 			for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++) {
 				if (it2->getName() == *it) {
-					process_part_cmd(*it2, client, params[1]);
+					if (params.size() > 1)
+						process_part_cmd(*it2, client, params[1]);
+					else
+						process_part_cmd(*it2, client);
+					chan_exists = true;
 					break ;
 				}
+			}
+			if (chan_exists == false)
 				this->add_rply_from_server(" :" + *it + " :No such channel", client, "PART", ERR_NOSUCHCHANNEL);
 		}
-	}
 	}
 	catch ( exception& x ) {
 		cout << RED << x.what() << RESET << endl;

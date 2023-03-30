@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_enum.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/27 16:49:08 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:11:30 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,7 @@ enum	cmd {
 	ERR_NOOPERHOST = 491,
 	ERR_UMODEUNKNOWNFLAG = 501,
 	ERR_USERSDONTMATCH = 502,
-	ERR_INVALIDCHANNAME = 42,
-	ERR_NAMETOOLONG = 41,
+	ERR_NAMETOOLONG = 42,
 };
 
 #endif //CMD_ENUM_HPP
