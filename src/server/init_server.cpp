@@ -39,6 +39,83 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("kill", &Server::kill));
 	this->cmd_map.insert (make_pair("LIST", &Server::list));
 	this->cmd_map.insert(make_pair("WHO", &Server::who));
+    this->read_conf_file();
+}
+
+void    Server::read_conf_file() {
+    fstream conf_file;
+    string  file_read;
+    conf_file.open("./conf_ircserv.cnf", ios::in);
+    if (!conf_file.is_open()) {
+        throw runtime_error(string("open conf file:") + strerror(errno));
+    }
+    while (true) {
+		string temp;
+		conf_file >> temp;
+		file_read += temp;
+        if (conf_file.eof()) {
+            break ;
+        }
+		file_read += "\n";
+    }
+//	cout << "contenf of file is [" << file_read << "]" << endl;
+	conf_admin_pass( file_read );
+	conf_banword_file( file_read );
+    conf_file.close();
+}
+
+void Server::conf_admin_pass( std::string &file ) {
+	unsigned long tok_pos = file.find("admin_password");
+	if (tok_pos == string::npos ) {
+		throw runtime_error("open conf file: cant find admin_password key");
+	}
+	tok_pos += strlen("admin_password=");
+	unsigned long nl_pos = file.find('\n', tok_pos);
+	if ( nl_pos == string::npos ) {
+		throw runtime_error("open conf file: cant find newline");
+	}
+	string temp = file.substr(tok_pos, nl_pos - tok_pos);
+	this->admin_pass = temp;
+	cout << BOLD_GREEN <<  "admin pass is [" << this->admin_pass << "]" << RESET << endl;
+}
+
+void	Server::conf_banword_file( string &input ) {
+	//finding and extracting value of token
+	unsigned long tok_pos = input.find("banword_file");
+	if (tok_pos == string::npos ) {
+		throw runtime_error("open conf file: cant find banword_file key");
+	}
+	tok_pos += strlen("banword_file=");
+	unsigned long nl_pos = input.find('\n', tok_pos);
+	if ( nl_pos == string::npos ) {
+		throw runtime_error("open conf file: cant find newline");
+	}
+	string temp = input.substr(tok_pos, nl_pos - tok_pos);
+
+	//opening the file and reading it into a string
+	fstream file;
+	file.open(temp.c_str(), ios::in);
+	if (!file.is_open()) {
+		throw runtime_error(string("open banword_file:") + strerror(errno));
+	}
+	string result;
+	while(true) {
+		string temp_str;
+		file >> temp_str;
+		result += temp_str;
+		if (file.eof()) {
+			break ;
+		}
+		result += ",";
+	}
+
+	//parsing the file into a vector of banword string
+	little_split(this->ban_word, result, ",");
+	cout << BOLD_GREEN << "banword list is [";
+	for ( vector<string>::iterator it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
+		cout << *it << ",";
+	}
+	cout << "]" << RESET << endl;
 }
 
 Socket	Server::_initiateSocket() {
@@ -47,11 +124,6 @@ Socket	Server::_initiateSocket() {
 	Socket 		sfd;
 	char		hostname[NI_MAXHOST];
 
-	string temp;
-	cout << PURPLE << "Please input your admin password" << RESET << endl;
-	cin >> temp;
-	cout << PURPLE << "your password is [" << temp << "]" << RESET << endl;
-	this->admin_pass = temp;
 	sin.sin_addr.s_addr = INADDR_ANY;
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(this->_port);

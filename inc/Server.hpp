@@ -42,6 +42,7 @@ class Server
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
 		vector<Channel>					chan_vec;
+		vector<string>					ban_word;
 
         //constructor/destructor
 		Server(const char *, const string &);
@@ -81,7 +82,7 @@ class Server
 		//command utils
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
 		void	process_part_cmd(Channel&, Client&, string&);
-		void	process_part_cmd(Channel&, Client&);		
+		void	process_part_cmd(Channel&, Client&);
 		void	process_kick_cmd(Channel&, string&, Client&, string&);
         void	handle_without_mask(vector<string> params, Client& client );
 
@@ -93,8 +94,13 @@ class Server
         void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
         void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
-		void displayChannels();
-		void getSpecifiedChannels(const vector<string> &params, Client &client);
+        void displayChannels();
+        void getSpecifiedChannels(const vector<string> &params, Client &client);
+
+        //read and setup conf file
+        void	read_conf_file();
+        void	conf_admin_pass( string& file );
+		void	conf_banword_file( string &file );
 };
 
 
