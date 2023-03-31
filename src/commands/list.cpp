@@ -40,7 +40,7 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 	server.add_rply_from_server(":End of LIST", client, "LIST", RPL_LISTEND);
 }
 
-void	Server::list(vector<string> params, Client &client)
+void	Server::list(vector<string>& params, Client &client)
 {
 	if (params.empty())
 		throw invalid_argument("list: invalid number of parameters");

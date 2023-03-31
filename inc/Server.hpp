@@ -65,28 +65,29 @@ class Server
 
 		//commands
 		void	parse_command(string , Client&  );
-		void	nick( vector<string>, Client& );
-		void	pass( vector<string>, Client& );
-		void	ping( vector<string>, Client& );
-		void	user( vector<string>, Client& );
-		void	join( vector<string>, Client& );
-		void	private_msg( vector<string>, Client& );
-		void	oper( vector<string>, Client& );
-		void	quit( vector<string>, Client& );
-		void	mode( vector<string>, Client& );
-		void	topic( vector<string>, Client& );
-		void	kill( vector<string>, Client& );
-		void	part( vector<string>, Client& );
-		void    list( vector<string>, Client & );
-		void	kick( vector<string>, Client& );
-		void    who( vector<string>, Client & );
+		void	nick( vector<string>&, Client& );
+		void	pass( vector<string>&, Client& );
+		void	ping( vector<string>&, Client& );
+		void	user( vector<string>&, Client& );
+		void	join( vector<string>&, Client& );
+		void	private_msg( vector<string>&, Client& );
+		void	oper( vector<string>&, Client& );
+		void	quit( vector<string>&, Client& );
+		void	mode( vector<string>&, Client& );
+		void	topic( vector<string>&, Client& );
+		void	kill( vector<string>&, Client& );
+		void	part( vector<string>&, Client& );
+		void    list( vector<string>&, Client & );
+		void	kick( vector<string>&, Client& );
+		void    who( vector<string>&, Client & );
 
 		//command utils
-		void    process_topic_cmd(vector <string> , Client& , Channel& );
-		void	process_part_cmd(Channel&, Client&, string&);
-		void	process_part_cmd(Channel&, Client&);
-		void	process_kick_cmd(Channel&, string&, Client&, string&);
-        void	handle_without_mask(vector<string> params, Client& client );
+		void    process_topic_cmd( vector <string>& , Client& , Channel& );
+		void	process_part_cmd( Channel&, Client&, string& );
+		void	process_part_cmd( Channel&, Client& );
+		void	process_kick_cmd( Channel&, string&, Client&, string& );
+        void	handle_without_mask( vector<string>&, Client& );
+		void	check_content( vector<string>& );
 
 		//server run functions
 		void 	run();

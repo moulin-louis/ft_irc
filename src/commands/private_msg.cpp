@@ -10,13 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
 #include "Server.hpp"
+#include <stdexcept>
+#include <vector>
+
+void	Server::check_content( vector<string>& params ) {
+	for ( str_iter it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
+		if (params[1].find(*it) != string::npos ) {
+			throw runtime_error("user using banword");
+		}
+	}
+}
 
 
-void	Server::private_msg(vector<string> params, Client& author) {
+void	Server::private_msg(vector<string>& params, Client& author) {
 	try	{
-		if (params.size() == 0 || params[0].empty()) {
+		if (params.empty() || params[0].empty()) {
 			add_rply_from_server(":No recipient given", author, "PRIVMSG", ERR_NORECIPIENT);
 			throw invalid_argument("private_msg: No recipient given");
 		}
@@ -24,6 +33,7 @@ void	Server::private_msg(vector<string> params, Client& author) {
 			add_rply_from_server(":No text to send", author, "PRIVMSG", ERR_NOTEXTTOSEND);
 			throw invalid_argument("private_msg: No text to sen");
 		}
+		check_content(params);
 		if (params[0][0] == '#') {
 			Channel& dest = find_channel(params[0], author);
 			if (dest.user_in_chan(author))
@@ -42,6 +52,13 @@ void	Server::private_msg(vector<string> params, Client& author) {
 			Client& dest = find_user(params[0], author, "PRIVMSG");
 			this->add_cmd_client(params[1], dest, author, "PRIVMSG");
 		}
+	}
+	catch ( runtime_error& x) {
+		cout << RED << x.what() << RESET << endl;
+		add_rply_from_server(":Unauthorized word in your message", author, "PRIVMSG", ERR_CANNOTSENDTOCHAN);
+		vector<string> temp;
+		temp.push_back("kick for using banword");
+		this->quit(temp, author);
 	}
 	catch (exception& e) {
 		cout << RED << e.what() << RESET << endl;

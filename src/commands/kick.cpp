@@ -34,12 +34,12 @@
 
 void	Server::process_kick_cmd(Channel& chan, string& nick_user, Client& client, string& reason)
 {
-	if (chan.user_in_chan(client) == false) {
+	if (!chan.user_in_chan(client)) {
 		this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "KICK", ERR_NOTONCHANNEL);
 		return ;
 	}
 	Client& target = find_user(nick_user, client, "KICK");
-	if (chan.user_in_chan(target) == true)
+	if (chan.user_in_chan(target))
 	{
 		chan.removeClient(target);
 		if (!reason.empty())
@@ -49,21 +49,18 @@ void	Server::process_kick_cmd(Channel& chan, string& nick_user, Client& client, 
 		return;
 	}
 	this->add_rply_from_server(" :"  + target.getNickname() + chan.getName() + " :They aren't on that channel", client, "KICK", ERR_USERNOTINCHANNEL);
-	return ;
 }
 
-void	Server::kick(vector<string> params, Client& client)
+void	Server::kick(vector<string>& params, Client& client)
 {
 	try {
 		if (params.size() < 2) {
 			this->add_rply_from_server(":Not enough parameters", client, "KICK", ERR_NEEDMOREPARAMS);
 			throw invalid_argument("kick: Not enough parameters");
-			return ;
 		}
 		if (!client.isOperator) {
 			add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "KICK", ERR_NOPRIVILEGES);
 			throw invalid_argument("kick: Permission Denied- You're not an IRC operator");
-			return ;
 		}
 		// map <string, string>	chan_user;
 		// prep_map(chan_user, params[0], params[1], ",");
@@ -79,7 +76,7 @@ void	Server::kick(vector<string> params, Client& client)
 					for (str_iter it2 = user_list.begin(); it2 != user_list.end(); it2++)
 						process_kick_cmd(*it, *it2, client, params[2]);
 				}
-				if (found == true)
+				if (found)
 					continue ;
 				this->add_rply_from_server(" :" + chan_list[0] + " :No such channel", client, "KICK", ERR_NOSUCHCHANNEL);
 			}
@@ -99,7 +96,7 @@ void	Server::kick(vector<string> params, Client& client)
 						break ;
 					}
 				}
-				if (found == false)
+				if (found )
 					this->add_rply_from_server(" :" + *it + " :No such channel", client, "KICK", ERR_NOSUCHCHANNEL);
 				i++;
 			}

@@ -65,7 +65,7 @@ void	handle_user( Server* server, vector<string>& params, Client& client) {
 	server->add_rply_from_server(mode_to_str(client.mode), client , "MODE", RPL_UMODEIS);
 }
 
-void	Server::mode(vector<string> params, Client &client) {
+void	Server::mode(vector<string>& params, Client &client) {
 
 	try {
 		if (params.empty() ) {

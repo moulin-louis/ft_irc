@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <stdexcept>
 
-void	Server::handle_without_mask(vector<string> params, Client& client ) {
+void	Server::handle_without_mask(vector<string>& params, Client& client ) {
 	Channel temp;
 	for ( chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); it ++ ) {
 		if (it->getName() == params[0]) {
@@ -29,16 +30,15 @@ void	Server::handle_without_mask(vector<string> params, Client& client ) {
 		}
 	}
 	add_rply_from_server(":End of WHO /list", client, "WHO", RPL_ENDOFWHO);
-	return ;
 }
 
 
 //WIP, STILL MISSING A LOT OF THINGS
-void Server::who(vector<string> params, Client &client) {
+void Server::who(vector<string>& params, Client &client) {
 	try {
 		if (params.empty() ) {
 			add_rply_from_server(":Not enough parameters", client, "WHO", ERR_NEEDMOREPARAMS);
-			throw ("who: Not enough parameters");
+			throw invalid_argument("who: Not enough parameters");
 		}
 		if (params.size() == 1) {
 			cout << "params size = 1" << endl;

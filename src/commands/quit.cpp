@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void Server::quit(vector<string> params, Client &client) {
+void Server::quit(vector<string>& params, Client &client) {
 	try {
 		if ( params.size() != 1 ) {
 			throw invalid_argument("quit: Not enough parameters");

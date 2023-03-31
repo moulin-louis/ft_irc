@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
 #include "Server.hpp"
 
 void Server::is_valid_username(string &username, Client& client) {
@@ -26,7 +25,7 @@ void Server::is_valid_username(string &username, Client& client) {
 	}
 }
 
-void	Server::user(vector<string> params, Client& client) {
+void	Server::user(vector<string>& params, Client& client) {
 	try {
 		if ( !client.passwd_provided ) {
 			throw invalid_argument("user: no password given");

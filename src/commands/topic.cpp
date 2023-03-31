@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
 #include "Server.hpp"
 
-void    Server::process_topic_cmd(vector <string> params, Client& client, Channel& chan)
+void    Server::process_topic_cmd(vector <string>& params, Client& client, Channel& chan)
 {
     if (params.size() == 2) {
         chan.setTopic(params[1]);
@@ -25,10 +24,9 @@ void    Server::process_topic_cmd(vector <string> params, Client& client, Channe
         else
             this->add_rply_from_server(chan.getName() + " :" + chan.getTopic(), client, "TOPIC", RPL_TOPIC);
     }
-    return ;
 }
 
-void	Server::topic( vector<string> params, Client& client )
+void	Server::topic( vector<string>& params, Client& client )
 {
     try {
         if (params.size() != 1) {
@@ -60,5 +58,4 @@ void	Server::topic( vector<string> params, Client& client )
     catch (const exception& e) {
         cout << e.what() << endl;
     }
-    return ;
 }
