@@ -97,9 +97,6 @@ class Server
         void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
         void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
-        void displayChannels();
-        void getSpecifiedChannels(const vector<string> &params, Client &client);
-
         //read and setup conf file
         void	read_conf_file();
         void	conf_admin_pass( string& file );
