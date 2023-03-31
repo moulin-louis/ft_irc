@@ -93,6 +93,7 @@ class Server
 		void    list( vector<string>, Client & );
 		void	kick( vector<string>, Client& );
 		void    who( vector<string>, Client & );
+		void	ban(vector<string>, Client & );
 
 		//command utils
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
