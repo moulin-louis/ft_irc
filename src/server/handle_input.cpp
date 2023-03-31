@@ -36,7 +36,7 @@ void	Server::process_input(Socket fd ) {
 			parse_command(tok, this->fd_map[fd]);
 			temp.erase(0, temp.find(endmsg) + 2);
 		}
-		catch (exception& e)
+		catch (NicknameInUse& e)
 		{
 			cout << RED << "Error: " << e.what() << RESET << endl;
 			break ;
