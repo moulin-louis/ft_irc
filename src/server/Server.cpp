@@ -26,10 +26,9 @@ Server::~Server() {
 		close(this->_epfd);
 }
 
-void	Server::run()
-{
+void Server::run() {
 	epoll_event ev = {};
-	int			nfds;
+	int nfds;
 
 	if (this->_epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN) == -1)
 		throw runtime_error(string("epoll_ctl: ") + strerror(errno));
@@ -37,34 +36,26 @@ void	Server::run()
 	while (!stop)
 	{
 		nfds = epoll_wait(this->_epfd, this->_events, 10, -1);
-		if (nfds == -1)
-		{
+		if (nfds == -1) {
 			if (errno == EINTR)
 				continue;
 			throw runtime_error(string("epoll_wait: ") + strerror(errno));
 		}
-		for (int n = 0; n < nfds; ++n)
-		{
+		for (int n = 0; n < nfds; ++n) {
 			ev = this->_events[n];
-			if (ev.events & EPOLLIN)
-			{
+			if (ev.events & EPOLLIN) {
 				if (ev.data.fd == this->_sfd)
 					this->_accept_client();
-				else
-				{
-					try
-					{
+				else {
+					try {
 						this->process_input(ev.data.fd);
 					}
-					catch (exception& e)
-					{
-//						cout << RED << e.what() << RESET << endl;
+					catch (exception& e) {
+						cout << RED << e.what() << RESET << endl;
 					}
 				}
 			}
-			if (ev.events & (EPOLLHUP | EPOLLRDHUP))
-				this->_disconect_client(ev.data.fd);
 		}
 	}
-	cout << RED << "Stoping the server..." << RESET << endl;
+	cout << RED << "Stoping	 the server..." << RESET << endl;
 }

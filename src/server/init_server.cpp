@@ -11,12 +11,14 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <exception>
+#include <stdexcept>
 
 /*-------------------------------CONSTRUCTORS---------------------------------*/
 
 Server::Server(const char *port, const string &password)
-	: _password(password), _port(strtoul(port, NULL, 10)), _server_version("v1.0"), _server_up_date(displayTimestamp()), fd_map()
-{
+		: _password(password), _port(strtoul(port, NULL, 10)), _server_version("v1.0"),
+		  _server_up_date(displayTimestamp()), fd_map() {
 	cout << endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << " ->" << YELLOW << "🅸 🆁 🅲" << RESET << endl;
 	this->_sfd = _initiateSocket();
 	this->_epfd = epoll_create1(EPOLL_CLOEXEC);
