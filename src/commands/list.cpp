@@ -21,9 +21,9 @@ static void displayAllChannels(Server &server, Client &client, vector<Channel> &
 
 static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel> &chan_vec, vector<std::string> &params)
 {
-	std::istringstream	ss(params[0]);
-	std::string 		chan_name;
-	std::map<std::string, Channel> chan_map;
+	std::istringstream			ss(params[0]);
+	std::string 				chan_name;
+	std::vector<std::string>	chan_names;
 
 	while (std::getline(ss, chan_name, ','))
 	{
@@ -31,12 +31,11 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 			continue;
 		else
 			for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); it++)
-				if (it->getName() == chan_name)
-					if (chan_map.find(chan_name) == chan_map.end())
-					{
-						chan_map.insert(std::make_pair(chan_name, *it));
-						server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "LIST", RPL_LIST);
-					}
+				if (it->getName() == chan_name && std::find(chan_names.begin(), chan_names.end(), chan_name) == chan_names.end())
+				{
+					chan_names.push_back(chan_name);
+					server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "LIST", RPL_LIST);
+				}
 	}
 	server.add_rply_from_server(":End of LIST", client, "LIST", RPL_LISTEND);
 }
