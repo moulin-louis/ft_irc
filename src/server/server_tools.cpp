@@ -13,7 +13,7 @@
 #include "Server.hpp"
 
 
-string	displayTimestamp(void)
+string	displayTimestamp( )
 {
 	struct tm*timestruct;
 	time_t timet;

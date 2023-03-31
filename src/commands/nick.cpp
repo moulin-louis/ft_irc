@@ -31,7 +31,7 @@ void Server::is_valid_nickname(string &nickname, Client& client) {
 	}
 }
 
-void	Server::nick(vector<string> params, Client& client)
+void	Server::nick(vector<string>& params, Client& client)
 {
 	try {
 		if (!client.passwd_provided) {

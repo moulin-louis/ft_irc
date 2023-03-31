@@ -34,7 +34,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
 }
 
-void	Server::part(vector<string> params, Client& client)
+void	Server::part(vector<string>& params, Client& client)
 {
 	try {
 		if (params.empty())

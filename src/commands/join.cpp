@@ -24,7 +24,7 @@ void	Server::is_valid_chan_name(vector<string> params, Client& client)
 	}
 }
 
-void	Server::join(vector<string> params, Client& client)
+void	Server::join(vector<string>& params, Client& client)
 {
 	try {
 		is_valid_chan_name(params, client);
@@ -40,7 +40,7 @@ void	Server::join(vector<string> params, Client& client)
 					break ;
 				}
 			}
-			if (chan_exists == true)
+			if (chan_exists)
 				continue ;
 			Channel new_channel(*it, client);
 			this->chan_vec.push_back(new_channel);
@@ -49,7 +49,5 @@ void	Server::join(vector<string> params, Client& client)
 	}
 	catch(exception& e) {
 		cout << RED << e.what() << RESET << endl;
-		return ;
 	}
-	return ;
 }

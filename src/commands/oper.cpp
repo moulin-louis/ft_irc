@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void Server::oper(vector<string> params, Client &client) {
+void Server::oper(vector<string>& params, Client &client) {
 	try {
 		if (params.empty()) {
 			add_rply_from_server(":Not enough parameters", client, "OPER", ERR_NEEDMOREPARAMS);

@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void	Server::_accept_client( void ) {
+void	Server::_accept_client( ) {
 	sockaddr csin = {};
 	socklen_t crecsize = sizeof(csin);
 	Client	temp;
