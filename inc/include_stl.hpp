@@ -10,20 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
-#ifndef IRC_HPP
-#define IRC_HPP
+#ifndef FT_IRC_INCLUDE_STL_HPP
+#define FT_IRC_INCLUDE_STL_HPP
 
-# include "include_stl.hpp"
 
-# include "define.hpp"
+//include standard library
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <poll.h>
+#include <sys/epoll.h>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <cerrno>
+#include <csignal>
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+# include <sstream>
 
-# include "typedef.hpp"
+//using namespace std after including standard library
+using namespace std;
 
-# include "cmd_enum.hpp"
-
-#include "Tools.hpp"
-
-# include "include_project.hpp"
-
-#endif
+#endif //FT_IRC_INCLUDE_STL_HPP

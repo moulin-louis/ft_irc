@@ -37,10 +37,6 @@ const Socket &Client::getFd() const
 	return (this->fd);
 }
 
-const sockaddr_in &Client::getSin() const
-{
-	return (this->sin);
-}
 
 string Client::getBuff() const {
 	return this->buffer;

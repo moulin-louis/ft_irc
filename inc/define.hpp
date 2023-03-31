@@ -10,20 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
-#ifndef IRC_HPP
-#define IRC_HPP
+#ifndef FT_IRC_DEFINE_HPP
+#define FT_IRC_DEFINE_HPP
 
-# include "include_stl.hpp"
+# define MAX_EVENTS 64
+# define endmsg string("\r\n")
+# include "colors.h"
 
-# include "define.hpp"
-
-# include "typedef.hpp"
-
-# include "cmd_enum.hpp"
-
-#include "Tools.hpp"
-
-# include "include_project.hpp"
-
-#endif
+#endif //FT_IRC_DEFINE_HPP
