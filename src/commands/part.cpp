@@ -50,7 +50,7 @@ void	Server::part(vector<string> params, Client& client)
 			params[0].erase(0, pos + delimiter.length());
 		}
 		chans_to_part.push_back(params[0]);
-		for (vector<string>::iterator it = chans_to_part.begin(); it != chans_to_part.end(); it++) {
+		for ( str_iter it = chans_to_part.begin(); it != chans_to_part.end(); it++) {
 			bool chan_exists = false;
 			for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++) {
 				if (it2->getName() == *it) {

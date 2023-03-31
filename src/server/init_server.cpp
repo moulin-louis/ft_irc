@@ -112,7 +112,7 @@ void	Server::conf_banword_file( string &input ) {
 	//parsing the file into a vector of banword string
 	little_split(this->ban_word, result, ",");
 	cout << BOLD_GREEN << "banword list is [";
-	for ( vector<string>::iterator it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
+	for ( str_iter it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
 		cout << *it << ",";
 	}
 	cout << "]" << RESET << endl;
