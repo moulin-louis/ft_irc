@@ -14,7 +14,7 @@
 
 void	Server::process_part_cmd(Channel& chan, Client& client)
 {
-	if (chan.user_in_chan(client) == true)
+	if (chan.user_in_chan(client))
 	{
 		this->notify_chan(chan.getName(), "has left", "PART", client);
 		chan.removeClient(client);
@@ -25,7 +25,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client)
 
 void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 {
-	if (chan.user_in_chan(client) == true)
+	if (chan.user_in_chan(client))
 	{
 		this->notify_chan(chan.getName(), reason, "PART", client);
 		chan.removeClient(client);
@@ -37,7 +37,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 void	Server::part(vector<string> params, Client& client)
 {
 	try {
-		if (params.size() < 1)
+		if (params.empty())
 		{
 			this->add_rply_from_server(":Not enough parameters", client, "PART", ERR_NEEDMOREPARAMS);
 			throw  invalid_argument("part: Not enough parameters");
@@ -62,7 +62,7 @@ void	Server::part(vector<string> params, Client& client)
 					break ;
 				}
 			}
-			if (chan_exists == false)
+			if (!chan_exists)
 				this->add_rply_from_server(" :" + *it + " :No such channel", client, "PART", ERR_NOSUCHCHANNEL);
 		}
 	}
