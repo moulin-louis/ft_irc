@@ -31,18 +31,37 @@ void	handle_user( Server* server, vector<string>& params, Client& client) {
 		server->add_rply_from_server(":Please use + or - with mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 		throw invalid_argument("mode: Please use + or - with mode");
 	}
-	for (string::iterator it = input.begin(); it != input.end(); it++ ) {
-		if (*it == 'a') {
-			server->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
-			throw invalid_argument("mode: Please use AWAY to set your mode to away");
-		}
-		if (*it == 'o') {
-			server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
-			throw invalid_argument("mode: Permission Denied- You're not an IRC operator");
-		}
-		if (*it == 'i') { client.mode[1] = 1; }
-		if (*it == 'w') { client.mode[2] = 1; }
-	}
+    if (input[0] == '+') {
+        for (string::iterator it = input.begin(); it != input.end(); it++ ) {
+            if (*it == 'a') {
+                server->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+                throw invalid_argument("mode: Please use AWAY to set your mode to away");
+            }
+            if (*it == 'o' && !client.isOperator) {
+                server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
+                throw invalid_argument("mode: Permission Denied- You're not an IRC operator");
+            }
+            if (*it == 'i') { client.mode[1] = 1; }
+            if (*it == 'w') { client.mode[2] = 1; }
+        }
+    }
+    else {
+        for (string::iterator it = input.begin(); it != input.end(); it++ ) {
+            if (*it == 'a') {
+                server->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+                throw invalid_argument("mode: Please use AWAY to set your mode to away");
+            }
+            if (*it == 'o' && client.isOperator) {
+                client.isOperator = false;
+                client.mode[3] = 0;
+            }
+            else {
+                throw invalid_argument("mode: Permission Denied- You're not an IRC operator");
+            }
+            if (*it == 'i') { client.mode[1] = 0; }
+            if (*it == 'w') { client.mode[2] = 0; }
+        }
+    }
 	server->add_rply_from_server(mode_to_str(client.mode), client , "MODE", RPL_UMODEIS);
 }
 
@@ -53,7 +72,7 @@ void	Server::mode(vector<string> params, Client &client) {
 			add_rply_from_server(":Not enough parameters", client , "MODE", ERR_NEEDMOREPARAMS);
 			throw invalid_argument("mode: Not enough parameters");
 		}
-		if ( client.getNickname() != params[0] ) {
+		if ( client.getNickname() != params[0] && !client.isOperator) {
 			add_rply_from_server(":Cannot change mode for other users", client , "MODE", ERR_USERSDONTMATCH);
 			throw invalid_argument("mode: Cannot change mode for other users");
 		}

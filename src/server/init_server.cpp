@@ -59,21 +59,27 @@ Socket	Server::_initiateSocket() {
 	if (sfd < 0)
 		throw runtime_error(string("socket: ") + strerror(errno));
 	cout << GREEN << "Socket created" << RESET << endl;
-	if (setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
-		throw runtime_error(string("setsockopt: ") + strerror(errno));
-	if (fcntl(sfd, F_SETFL, O_NONBLOCK) == -1)
-		throw runtime_error(string("fcntl: ") + strerror(errno));
-	if (bind(sfd, (sockaddr *)&sin, sizeof(sin)) == -1 )
+	if (setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
+        close(sfd);
+        throw runtime_error(string("setsockopt: ") + strerror(errno));
+    }
+	if (fcntl(sfd, F_SETFL, O_NONBLOCK) == -1) {
+        close(sfd);
+        throw runtime_error(string("fcntl: ") + strerror(errno));
+    }
+	if (bind(sfd, (sockaddr *)&sin, sizeof(sin)) == -1 ) {
+        close(sfd);
 		throw runtime_error(string("bind: ") + strerror(errno));
+    }
 	cout << GREEN << "Bind done" << RESET << endl;
-	if (listen(sfd, SOMAXCONN) < 0)
+	if (listen(sfd, SOMAXCONN) < 0){
+        close(sfd);
 		throw runtime_error(string("listen: ") + strerror(errno));
-	if (getnameinfo(reinterpret_cast<const sockaddr *>(&sin), sizeof(sin), hostname, sizeof(hostname), NULL, 0, 0) != 0)
-	{
+    }
+	if (getnameinfo(reinterpret_cast<const sockaddr *>(&sin), sizeof(sin), hostname, sizeof(hostname), NULL, 0, 0) != 0) {
 		this->_server_name = "unknown";
 	}
-	else
-	{
+	else {
 		this->_server_name = hostname;
 	}
 	cout << GREEN << "Socket is listening, server address is: " << this->_server_name << RESET << endl;

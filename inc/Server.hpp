@@ -28,13 +28,14 @@
 
 class Channel;
 
-typedef void (*command_function)( vector<string>, Client& );
 ssize_t 	sendMessage(Client &, const string& );
+void        little_split(vector<string> &list, string &str, const string& delimiter);
+string      displayTimestamp();
+
 typedef map<Socket, Client>::iterator	client_iter;
 typedef vector<Channel>::iterator chan_iter;
 typedef vector<Socket>::iterator cl_iter;
 typedef vector<string>::iterator str_iter;
-string	displayTimestamp(void);
 
 class Server
 {
@@ -76,22 +77,22 @@ class Server
 		void		is_valid_chan_name(vector<string> , Client& );
 
 		//commands
-		void	parse_command(basic_string<char> , Client&  );
-		void	nick(vector<string> , Client& );
-		void	pass(vector<string> , Client& );
-		void	ping(vector<string> , Client& );
-		void	user(vector<string> , Client& );
-		void	join(vector<string> , Client& );
-		void	private_msg(vector<string> , Client&);
-		void	oper( vector<string> , Client& );
-		void	quit( vector<string> , Client& );
-		void	mode( vector<string> , Client& );
-		void	topic( vector<string> , Client& );
-		void	kill( vector<string> , Client& );
+		void	parse_command(string , Client&  );
+		void	nick(vector<string>, Client& );
+		void	pass(vector<string>, Client& );
+		void	ping(vector<string>, Client& );
+		void	user(vector<string>, Client& );
+		void	join(vector<string>, Client& );
+		void	private_msg(vector<string>, Client& );
+		void	oper( vector<string>, Client& );
+		void	quit( vector<string>, Client& );
+		void	mode( vector<string>, Client& );
+		void	topic( vector<string>, Client& );
+		void	kill( vector<string>, Client& );
 		void	part( vector<string>, Client& );
-		void    list(vector<string> , Client & );
-		void	kick(vector<string>, Client&);
-		void    who(vector<string> , Client & );
+		void    list( vector<string>, Client & );
+		void	kick( vector<string>, Client& );
+		void    who( vector<string>, Client & );
 
 		//command utils
 		void    process_topic_cmd(vector <string> , Client& , Channel& );
@@ -116,6 +117,5 @@ class Server
 		void getSpecifiedChannels(const vector<string> &params, Client &client);
 };
 
-void	little_split(vector<string> &list, string &str, string delimiter);
 
 #endif

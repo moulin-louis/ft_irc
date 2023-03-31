@@ -15,25 +15,21 @@
 /*-------------------------------CONSTRUCTORS---------------------------------*/
 
 Channel::Channel() {
-    return ;
 }
 
 Channel::Channel(string &name, Client& client) {
     cout << "Creating new channel " << name << endl;
     this->_name = name;
     this->addClient(client);
-    return ;
 }
 
 Channel::Channel(const Channel &src) {
     *this = src;
-    return ;
 }
 
 /*---------------------------------DESTRUCTOR---------------------------------*/
 
 Channel::~Channel() {
-    return ;
 }
 
 /*---------------------------------OPERATORS----------------------------------*/
@@ -57,12 +53,10 @@ const string    &Channel::getTopic() const {
 
 void    Channel::setTopic(string &topic) {
     this->_topic = topic;
-    return ;
 }
 
 void    Channel::setName(string &name) {
     this->_name = name;
-    return ;
 }
 
 bool	Channel::user_in_chan(Client& client) {
@@ -75,7 +69,6 @@ bool	Channel::user_in_chan(Client& client) {
 
 void    Channel::addClient(Client &client) {
     this->clients.push_back(client.getFd());
-    return ;
 }
 
 void    Channel::removeClient(Client &client) {
@@ -85,5 +78,4 @@ void    Channel::removeClient(Client &client) {
             return ;
         }
     }
-    return ;
 }

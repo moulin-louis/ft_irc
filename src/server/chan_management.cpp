@@ -16,7 +16,6 @@ void	Server::add_cmd_client(const string& content, Client& client, Client& autho
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname();
 	msg += " " + cmd + " " + chan.getName() + " " + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
-	return ;
 }
 
 void	Server::notify_chan(const string& chan, const string& content, const string& cmd, Client &author) {

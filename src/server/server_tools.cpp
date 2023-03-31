@@ -28,7 +28,7 @@ string	displayTimestamp(void)
 int Server::_epoll_ctl_add(int epfd, int fd, uint32_t events)
 {
 	struct epoll_event ev = {};
-	bzero(&ev.data, sizeof(ev.data));
+	memset(&ev.data, 0, sizeof(ev.data));
 	ev.events = events;
 	ev.data.fd = fd;
 	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
@@ -59,7 +59,6 @@ Channel&	Server::find_channel(const string& name, Client& client) {
 void	Server::add_cmd_client(const string& content, Client& client, Client& author, const string&  cmd) {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
-	return ;
 }
 
 void	Server::add_rply_from_server(const string&  msg, Client& dest, const string&  cmd, int code) {
@@ -69,10 +68,9 @@ void	Server::add_rply_from_server(const string&  msg, Client& dest, const string
 	dest_nick = " " + dest_nick;
 	string result = ":localhost " + int_to_string(code) + dest_nick + " " + cmd + msg + endmsg;
 	dest.setBuff(dest.getBuff() + result);
-	return ;
 }
 
-void	little_split(vector<string> &list, string &str, string delimiter)
+void	little_split(vector<string> &list, string &str, const string& delimiter)
 {
 	string	buff;
 	size_t	pos;

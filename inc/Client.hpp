@@ -33,12 +33,11 @@ class Client
 		Socket		fd;
 		sockaddr_in	sin;
 	public:
-		Client( void );
+		Client(  );
 		Client(const Client &);
 		~Client();
 		Client &operator=(const Client &);
 
-		epoll_event	ev;
 		string 	channel;
 
 		//mode[0] == a

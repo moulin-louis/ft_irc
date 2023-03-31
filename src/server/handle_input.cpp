@@ -44,7 +44,7 @@ void	Server::process_input(Socket fd ) {
 	client.clearBuff();
 }
 
-void	Server::parse_command(basic_string<char> input, Client& client ) {
+void	Server::parse_command( string input, Client& client ) {
 	vector<string>	result;
 	size_t			pos;
 	string delimiter = " ";

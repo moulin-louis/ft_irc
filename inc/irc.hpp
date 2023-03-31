@@ -38,8 +38,8 @@
 typedef int Socket;
 typedef int Epollfd;
 
-#define INVALID_SOCKET -1
-#define SOCKET_ERROR -1
+#define INVALID_SOCKET (-1)
+#define SOCKET_ERROR (-1)
 #define endmsg string("\r\n")
 
 using namespace std;
