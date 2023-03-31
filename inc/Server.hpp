@@ -62,12 +62,12 @@ class Server
 
 		//commands
 		void	parse_command(string , Client&  );
-		void	nick(vector<string>, Client& );
-		void	pass(vector<string>, Client& );
-		void	ping(vector<string>, Client& );
-		void	user(vector<string>, Client& );
-		void	join(vector<string>, Client& );
-		void	private_msg(vector<string>, Client& );
+		void	nick( vector<string>, Client& );
+		void	pass( vector<string>, Client& );
+		void	ping( vector<string>, Client& );
+		void	user( vector<string>, Client& );
+		void	join( vector<string>, Client& );
+		void	private_msg( vector<string>, Client& );
 		void	oper( vector<string>, Client& );
 		void	quit( vector<string>, Client& );
 		void	mode( vector<string>, Client& );
@@ -93,7 +93,6 @@ class Server
         void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
         void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
-	    //who fn
 		void displayChannels();
 		void getSpecifiedChannels(const vector<string> &params, Client &client);
 };
