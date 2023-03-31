@@ -14,14 +14,7 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-# include <string>
-# include <iostream>
 # include "irc.hpp"
-# include "Server.hpp"
-
-class Server;
-
-typedef vector<Socket>::iterator vec_sock_iter;
 
 class Channel
 {
@@ -29,27 +22,28 @@ class Channel
         string _name;
         string _topic;
     public:
+        //vector of client's fd
+        vector<Socket> clients;
+
+        //canonical form
         Channel();
         Channel(string &, Client& );
         Channel(const Channel &);
         ~Channel();
         Channel &operator=(const Channel &);
 
-		//vector of client's fd
-        vector<Socket> clients;
-
+		//getter/setter
         const string    &getName() const;
         const string    &getTopic() const;
         void            setTopic(string &);
         void            setName(string &);
 
-    //checks
+        //checks
         bool	user_in_chan(Client&);
 
-    //actions
+        //actions
         void    addClient(Client &);
         void    removeClient(Client &client);
-
 };
 
 #endif

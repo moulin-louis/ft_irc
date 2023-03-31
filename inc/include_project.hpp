@@ -10,20 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
-#ifndef IRC_HPP
-#define IRC_HPP
+#ifndef FT_IRC_INCLUDE_PROJECT_HPP
+#define FT_IRC_INCLUDE_PROJECT_HPP
 
-# include "include_stl.hpp"
+//include our header
+# include "Server.hpp"
+# include "Channel.hpp"
+# include "Client.hpp"
 
-# include "define.hpp"
-
-# include "typedef.hpp"
-
-# include "cmd_enum.hpp"
-
-#include "Tools.hpp"
-
-# include "include_project.hpp"
-
-#endif
+#endif //FT_IRC_INCLUDE_PROJECT_HPP

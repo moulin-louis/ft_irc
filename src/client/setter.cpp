@@ -37,11 +37,6 @@ void Client::setFd(const Socket &fd_input)
 	this->fd = fd_input;
 }
 
-void Client::setSin(const sockaddr_in &sin_input)
-{
-	this->sin = sin_input;
-}
-
 void Client::setBuff(const string &buffer_input) {
 	this->buffer = buffer_input;
 }

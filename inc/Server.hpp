@@ -14,44 +14,27 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include <string>
-# include <iostream>
-# include <map>
-# include <list>
-# include <cstdlib>
-# include <sys/epoll.h>
 # include "irc.hpp"
-# include "Client.hpp"
-# include "Channel.hpp"
-
-# define MAX_EVENTS 64
-
-class Channel;
 
 ssize_t 	sendMessage(Client &, const string& );
 void        little_split(vector<string> &list, string &str, const string& delimiter);
 string      displayTimestamp();
 
-typedef map<Socket, Client>::iterator	client_iter;
-typedef vector<Channel>::iterator chan_iter;
-typedef vector<Socket>::iterator cl_iter;
-typedef vector<string>::iterator str_iter;
-
 class Server
 {
-	typedef	void (Server::*command_function)( vector<string>, Client& );
-
 	private:
+        //private function
+        Socket			_initiateSocket() ;
+        void			_accept_client();
+        void			_disconect_client( Socket );
+        int				_epoll_ctl_add(int epfd, int fd, uint32_t events);
+        //private variable
 		const string 	_password;
 		const uint16_t	_port;
 		Socket			_sfd;
 		Epollfd			_epfd;
 		epoll_event		_events[MAX_EVENTS];
-		Socket			_initiateSocket() ;
-		void			_accept_client();
-		void			_disconect_client( Socket );
 		string 			admin_pass;
-		int				_epoll_ctl_add(int epfd, int fd, uint32_t events);
 		string			_server_name;
 		const string	_server_version;
 		const string	_server_up_date;
@@ -60,10 +43,11 @@ class Server
 		map<string, command_function>	cmd_map;
 		vector<Channel>					chan_vec;
 
+        //constructor/destructor
 		Server(const char *, const string &);
 		~Server();
 
-		//request from client
+		//input/output
 		void	process_input( Socket );
 
 		//respond from server
@@ -78,12 +62,12 @@ class Server
 
 		//commands
 		void	parse_command(string , Client&  );
-		void	nick(vector<string>, Client& );
-		void	pass(vector<string>, Client& );
-		void	ping(vector<string>, Client& );
-		void	user(vector<string>, Client& );
-		void	join(vector<string>, Client& );
-		void	private_msg(vector<string>, Client& );
+		void	nick( vector<string>, Client& );
+		void	pass( vector<string>, Client& );
+		void	ping( vector<string>, Client& );
+		void	user( vector<string>, Client& );
+		void	join( vector<string>, Client& );
+		void	private_msg( vector<string>, Client& );
 		void	oper( vector<string>, Client& );
 		void	quit( vector<string>, Client& );
 		void	mode( vector<string>, Client& );
@@ -99,21 +83,17 @@ class Server
 		void	process_part_cmd(Channel&, Client&, string&);
 		void	process_part_cmd(Channel&, Client&);		
 		void	process_kick_cmd(Channel&, string&, Client&, string&);
+        void	handle_without_mask(vector<string> params, Client& client );
 
 		//server run functions
 		void 	run();
 
-	//send messages
-	void	notify_chan(const string& , const string& , const string& , Client &);
-	void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
-	void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
-
-
-	//who fn
-	void	handle_without_mask(vector<string> params, Client& client );
+	    //send messages
+        void	notify_chan(const string& , const string& , const string& , Client &);
+        void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
+        void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
 		void displayChannels();
-
 		void getSpecifiedChannels(const vector<string> &params, Client &client);
 };
 
