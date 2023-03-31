@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <cstddef>
+#include <sys/types.h>
 
 /*-------------------------------CONSTRUCTORS---------------------------------*/
 
@@ -40,6 +42,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert (make_pair("LIST", &Server::list));
 	this->cmd_map.insert(make_pair("WHO", &Server::who));
     this->read_conf_file();
+	//MOTD, MAX_EVENT, MAX_USER ON NETWORK
 }
 
 void    Server::read_conf_file() {
@@ -50,21 +53,25 @@ void    Server::read_conf_file() {
         throw runtime_error(string("open conf file:") + strerror(errno));
     }
     while (true) {
-		string temp;
-		conf_file >> temp;
+		char	temp[10000];
+		conf_file.getline(temp, 4294967295);
 		file_read += temp;
-        if (conf_file.eof()) {
-            break ;
-        }
+		if (conf_file.eof()) {
+			break ;
+		}
 		file_read += "\n";
     }
+	if (file_read[file_read.size() - 1] != '\n') {
+		file_read += "\n";
+	}
 //	cout << "contenf of file is [" << file_read << "]" << endl;
 	conf_admin_pass( file_read );
 	conf_banword_file( file_read );
+	conf_motd( file_read );
     conf_file.close();
 }
 
-void Server::conf_admin_pass( std::string &file ) {
+void Server::conf_admin_pass( string &file ) {
 	unsigned long tok_pos = file.find("admin_password");
 	if (tok_pos == string::npos ) {
 		throw runtime_error("open conf file: cant find admin_password key");
@@ -72,11 +79,11 @@ void Server::conf_admin_pass( std::string &file ) {
 	tok_pos += strlen("admin_password=");
 	unsigned long nl_pos = file.find('\n', tok_pos);
 	if ( nl_pos == string::npos ) {
-		throw runtime_error("open conf file: cant find newline");
+		throw runtime_error("open conf file: cant find newline for admin_password");
 	}
 	string temp = file.substr(tok_pos, nl_pos - tok_pos);
-	this->admin_pass = temp;
-	cout << BOLD_GREEN <<  "admin pass is [" << this->admin_pass << "]" << RESET << endl;
+	this->_admin_pass = temp;
+	cout << BOLD_GREEN <<  "admin pass is [" << this->_admin_pass << "]" << RESET << endl;
 }
 
 void	Server::conf_banword_file( string &input ) {
@@ -88,7 +95,7 @@ void	Server::conf_banword_file( string &input ) {
 	tok_pos += strlen("banword_file=");
 	unsigned long nl_pos = input.find('\n', tok_pos);
 	if ( nl_pos == string::npos ) {
-		throw runtime_error("open conf file: cant find newline");
+		throw runtime_error("open conf file: cant find newline for banword_file key");
 	}
 	string temp = input.substr(tok_pos, nl_pos - tok_pos);
 
@@ -116,6 +123,21 @@ void	Server::conf_banword_file( string &input ) {
 		cout << *it << ",";
 	}
 	cout << "]" << RESET << endl;
+}
+
+void	Server::conf_motd( string &file ) {
+	unsigned long tok_pos = file.find("motd");
+	if (tok_pos == string::npos ) {
+		throw runtime_error("open conf file: cant find motd key");
+	}
+	tok_pos += strlen("motd=");
+	unsigned long nl_pos = file.find('\n', tok_pos);
+	if ( nl_pos == string::npos ) {
+		throw runtime_error("open conf file: cant find newline for motd key");
+	}
+	string temp = file.substr(tok_pos, nl_pos - tok_pos);
+	this->_motd = temp;
+	cout << BOLD_GREEN <<  "motd is [" << this->_motd << "]" << RESET << endl;
 }
 
 Socket	Server::_initiateSocket() {

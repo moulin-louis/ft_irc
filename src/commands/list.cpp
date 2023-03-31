@@ -19,19 +19,19 @@ static void displayAllChannels(Server &server, Client &client, vector<Channel> &
 	server.add_rply_from_server(":End of LIST", client, "LIST", RPL_LISTEND);
 }
 
-static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel> &chan_vec, vector<std::string> &params)
+static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel> &chan_vec, vector<string> &params)
 {
-	std::istringstream			ss(params[0]);
-	std::string 				chan_name;
-	std::vector<std::string>	chan_names;
+	istringstream			ss(params[0]);
+	string 				chan_name;
+	vector<string>	chan_names;
 
-	while (std::getline(ss, chan_name, ','))
+	while (getline(ss, chan_name, ','))
 	{
 		if (chan_name[0] != '#')
 			continue;
 		else
 			for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); it++)
-				if (it->getName() == chan_name && std::find(chan_names.begin(), chan_names.end(), chan_name) == chan_names.end())
+				if (it->getName() == chan_name && find(chan_names.begin(), chan_names.end(), chan_name) == chan_names.end())
 				{
 					chan_names.push_back(chan_name);
 					server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "LIST", RPL_LIST);

@@ -22,7 +22,7 @@ void Server::oper(vector<string> params, Client &client) {
 			add_rply_from_server(":Username incorrect", client, "OPER", ERR_PASSWDMISMATCH);
 			throw invalid_argument("oper: Username incorrect");
 		}
-		if (params[1] != this->admin_pass) {
+		if (params[1] != this->_admin_pass) {
 			add_rply_from_server(":Password incorrect", client, "OPER", ERR_PASSWDMISMATCH);
 			throw invalid_argument("oper: Password incorrect");
 		}

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #pragma once
+#include <string>
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
@@ -34,7 +35,8 @@ class Server
 		Socket			_sfd;
 		Epollfd			_epfd;
 		epoll_event		_events[MAX_EVENTS];
-		string 			admin_pass;
+		string 			_admin_pass;
+		string			_motd;
 		string			_server_name;
 		const string	_server_version;
 		const string	_server_up_date;
@@ -100,7 +102,8 @@ class Server
         //read and setup conf file
         void	read_conf_file();
         void	conf_admin_pass( string& file );
-		void	conf_banword_file( string &file );
+		void	conf_banword_file( string& file );
+		void	conf_motd( string& file );
 };
 
 
