@@ -14,13 +14,7 @@
 #ifndef Client_HPP
 # define Client_HPP
 
-# include <string>
-# include <iostream>
 # include "irc.hpp"
-
-typedef uint32_t Mode;
-
-// create a class for our Server's Client in C++98, based on irssi client type
 
 class Client
 {
@@ -31,33 +25,28 @@ class Client
 		string		hostname;
 		string		buffer;
 		Socket		fd;
-		sockaddr_in	sin;
 	public:
+        string 	channel;
+        Mode	mode[4]; //mode[0] == a ; mode[1] == i ; mode[2] == w ; mode[3] == o
+        bool 	passwd_provided;
+        bool	 isRegistered;
+        bool 	isAway;
+        bool 	isOperator;
+
+
+        //canonical form
 		Client(  );
 		Client(const Client &);
 		~Client();
 		Client &operator=(const Client &);
 
-		string 	channel;
-
-		//mode[0] == a
-		//mode[1] == i
-		//mode[2] == w
-		//mode[3] == o
-		Mode	mode[4];
-
-		bool 	passwd_provided;
-		bool	 isRegistered;
-		bool 	isAway;
-		bool 	isOperator;
-
+        //getter/setter
 		const string 		&getNickname() const;
 		const string 		&getUsername() const;
 		const string 		&getRealname() const;
 		const string 		&getHostname() const;
 		const Socket 		&getFd() const;
-		const sockaddr_in	&getSin() const;
-		string		getBuff() const;
+		string		        getBuff() const;
 		Mode				getMode(int );
 
 		void 	setNickname(const string &);
@@ -65,7 +54,6 @@ class Client
 		void 	setRealname(const string &);
 		void 	setHostname(const string &);
 		void 	setFd(const Socket &);
-		void 	setSin(const sockaddr_in &);
 		void 	setBuff( const string&  );
 		void 	clearBuff();
 		void 	setMode( int , Mode );

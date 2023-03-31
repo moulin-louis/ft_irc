@@ -10,13 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
-#ifndef TOOLS_HPP
-# define TOOLS_HPP
 
-# include "irc.hpp"
+#ifndef FT_IRC_TYPEDEF_HPP
+#define FT_IRC_TYPEDEF_HPP
 
-void	check_port(const char *);
-string	int_to_string(int );
-string	itostr(int i);
-#endif
+# include <map>
+# include <vector>
+using namespace std;
+
+class Server;
+class Channel;
+class Client;
+
+typedef int Socket;
+typedef int Epollfd;
+typedef uint32_t Mode;
+
+typedef	void (Server::*command_function)( vector<string>, Client& );
+typedef map<Socket, Client>::iterator	client_iter;
+typedef vector<Channel>::iterator chan_iter;
+typedef vector<Socket>::iterator cl_iter;
+typedef vector<string>::iterator str_iter;
+typedef vector<Socket>::iterator vec_sock_iter;
+
+#endif //FT_IRC_TYPEDEF_HPP
