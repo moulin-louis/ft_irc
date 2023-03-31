@@ -33,12 +33,19 @@ void	Server::_accept_client( void ) {
 }
 
 void	Server::_disconect_client( Socket fd ) {
-	client_iter it = this->fd_map.find(fd);
-	epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, NULL);
+	Client& client = this->fd_map[fd];
+
+    for ( chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); it++) {
+        vec_sock_iter temp = find(it->clients.begin(), it->clients.end(), client.getFd());
+        if (temp != it->clients.end()) {
+            it->clients.erase(temp);
+        }
+    }
+    epoll_ctl(this->_epfd, EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
-	if (!it->second.getNickname().empty())
-		cout << BLUE << it->second.getNickname() << " closed the connection" << RESET << endl;
+	if (!client.getNickname().empty())
+		cout << BLUE << client.getNickname() << " closed the connection" << RESET << endl;
 	else
-		cout << BLUE << it->second.getHostname() << " closed the connection" << RESET << endl;
+		cout << BLUE << client.getHostname() << " closed the connection" << RESET << endl;
 	this->fd_map.erase(fd);
 }
