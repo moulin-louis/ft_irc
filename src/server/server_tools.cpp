@@ -81,3 +81,8 @@ void	little_split(vector<string> &list, string &str, const string& delimiter)
 	}
 	list.push_back(str);
 }
+
+const char *Server::NicknameInUse::what() const throw()
+{
+	return ("Nickname already in use");
+}

@@ -26,10 +26,11 @@ void Server::is_valid_nickname(string &nickname, Client& client) {
 	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
 		if (it->second.getNickname() == nickname) {
 			add_rply_from_server(" :Nickname " + nickname + " is already in use", client, nickname, ERR_NICKNAMEINUSE);
-			throw invalid_argument("nick: nickname already taken");
+			throw Server::NicknameInUse();
 		}
 	}
 }
+
 /*
 static bool nickIsAlreadyInUse(const string &nickname, Server &server)
 {
@@ -60,7 +61,7 @@ void	Server::nick(vector<string>& params, Client& client)
 		is_valid_nickname(params[0], client);
 		string old_nickname = client.getNickname();
 
-		std::string temp = params[0];/*
+		/*std::string temp = params[0];
 		while (nickIsAlreadyInUse(temp, *this))
 		{
 			temp += "_";
@@ -71,16 +72,20 @@ void	Server::nick(vector<string>& params, Client& client)
 			add_rply_from_server(" :Nickname " + temp + " is already in use", client, temp, ERR_NICKNAMEINUSE);
 			throw invalid_argument("nick: nickname already taken");
 		}*/
-		client.setNickname(temp);
+		client.setNickname(params[0]);
 		if (client.isRegistered) {
 			string msg = string(":") + old_nickname + " !" + old_nickname + "@127.0.0.1 NICK :";
 			msg += client.getNickname() + endmsg;
 			client.setBuff(client.getBuff() + msg);
 		}
 	}
+	catch (NicknameInUse &e)
+	{
+		cout << RED << e.what() << RESET << endl;
+		throw Server::NicknameInUse();
+	}
 	catch(exception& e) {
 		cout << RED << e.what() << RESET << endl;
-		throw invalid_argument("nick: invalid nickname");
 		return ;
 	}
 }
