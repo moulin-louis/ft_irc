@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void	Server::kill(vector<string> params, Client &client) {
+void	Server::kill(vector<string>& params, Client &client) {
 	cout << "kill" << endl;
 	try {
 		if ( params.size() != 2 ) {

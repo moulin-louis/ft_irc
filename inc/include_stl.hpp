@@ -15,23 +15,18 @@
 
 
 //include standard library
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <sys/types.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <poll.h>
-#include <sys/epoll.h>
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <cerrno>
-#include <csignal>
-#include <cstdio>
-#include <algorithm>
-#include <vector>
+# include <sys/socket.h>
+# include <netdb.h>
+# include <fcntl.h>
+# include <sys/epoll.h>
+# include <iostream>
+# include <cstring>
+# include <cerrno>
+# include <csignal>
+# include <algorithm>
 # include <sstream>
+# include <fstream>
+
 
 //using namespace std after including standard library
 using namespace std;

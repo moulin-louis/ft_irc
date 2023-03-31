@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
 #include "Server.hpp"
 
-void	Server::pass(vector<string> params, Client& client) {
+void	Server::pass(vector<string>& params, Client& client) {
 	try {
 		if ( params.empty() ) {
 			add_rply_from_server(":Not enough parameters", client, "PASS", ERR_NEEDMOREPARAMS);

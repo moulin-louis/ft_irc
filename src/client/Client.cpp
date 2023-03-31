@@ -13,10 +13,8 @@
 #include "Client.hpp"
 
 Client::Client( void ) {
-	memset((void *)this, 0, sizeof(Client));
-	return ;
+	memset((void *) this, 0, sizeof(Client));
 }
-
 //Client::Client(string &nick, string &user) {
 //	cout << "new client created" << endl;
 //	this->nickname = nick;
@@ -28,7 +26,6 @@ Client::Client(const Client &copy) {
 	//cout << "new client created" << endl;
 	memset((void *)this, 0, sizeof(Client));
 	*this = copy;
-	return ;
 }
 
 Client::~Client() {
@@ -42,7 +39,8 @@ Client &Client::operator=(const Client &assign) {
 }
 
 void Client::clearBuff() {
-	this->buffer.clear();
+	if (this->buffer.size() > 0)
+		this->buffer.clear();
 }
 
 void Client::setMode( int idx, Mode input) {

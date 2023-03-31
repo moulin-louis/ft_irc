@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #pragma once
+#include <string>
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
@@ -34,7 +35,8 @@ class Server
 		Socket			_sfd;
 		Epollfd			_epfd;
 		epoll_event		_events[MAX_EVENTS];
-		string 			admin_pass;
+		string 			_admin_pass;
+		string			_motd;
 		string			_server_name;
 		const string	_server_version;
 		const string	_server_up_date;
@@ -42,6 +44,7 @@ class Server
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
 		vector<Channel>					chan_vec;
+		vector<string>					ban_word;
 
         //constructor/destructor
 		Server(const char *, const string &);
@@ -62,29 +65,29 @@ class Server
 
 		//commands
 		void	parse_command(string , Client&  );
-		void	nick( vector<string>, Client& );
-		void	pass( vector<string>, Client& );
-		void	ping( vector<string>, Client& );
-		void	user( vector<string>, Client& );
-		void	join( vector<string>, Client& );
-		void	private_msg( vector<string>, Client& );
-		void	oper( vector<string>, Client& );
-		void	quit( vector<string>, Client& );
-		void	mode( vector<string>, Client& );
-		void	topic( vector<string>, Client& );
-		void	kill( vector<string>, Client& );
-		void	part( vector<string>, Client& );
-		void    list( vector<string>, Client & );
-		void	kick( vector<string>, Client& );
-		void    who( vector<string>, Client & );
-		void	ban(vector<string>, Client & );
-
+		void	nick( vector<string>&, Client& );
+		void	pass( vector<string>&, Client& );
+		void	ping( vector<string>&, Client& );
+		void	user( vector<string>&, Client& );
+		void	join( vector<string>&, Client& );
+		void	private_msg( vector<string>&, Client& );
+		void	oper( vector<string>&, Client& );
+		void	quit( vector<string>&, Client& );
+		void	mode( vector<string>&, Client& );
+		void	topic( vector<string>&, Client& );
+		void	kill( vector<string>&, Client& );
+		void	part( vector<string>&, Client& );
+		void    list( vector<string>&, Client & );
+		void	kick( vector<string>&, Client& );
+		void    who( vector<string>&, Client & );
+		void	ban(vector<string>&, Client & );
 		//command utils
-		void    process_topic_cmd(vector <string> , Client& , Channel& );
-		void	process_part_cmd(Channel&, Client&, string&);
-		void	process_part_cmd(Channel&, Client&);		
-		void	process_kick_cmd(Channel&, string&, Client&, string&);
-        void	handle_without_mask(vector<string> params, Client& client );
+		void    process_topic_cmd( vector <string>& , Client& , Channel& );
+		void	process_part_cmd( Channel&, Client&, string& );
+		void	process_part_cmd( Channel&, Client& );
+		void	process_kick_cmd( Channel&, string&, Client&, string& );
+        void	handle_without_mask( vector<string>&, Client& );
+		void	check_content( vector<string>& );
 
 		//server run functions
 		void 	run();
@@ -94,8 +97,14 @@ class Server
         void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
         void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
-		void displayChannels();
-		void getSpecifiedChannels(const vector<string> &params, Client &client);
+        void displayChannels();
+        void getSpecifiedChannels(const vector<string> &params, Client &client);
+
+        //read and setup conf file
+        void	read_conf_file();
+        void	conf_admin_pass( string& file );
+		void	conf_banword_file( string& file );
+		void	conf_motd( string& file );
 };
 
 
