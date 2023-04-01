@@ -32,6 +32,7 @@ class Client
         bool	 isRegistered;
         bool 	isAway;
         bool 	isOperator;
+		bool 	asTriedToRegister;
 
 
         //canonical form
