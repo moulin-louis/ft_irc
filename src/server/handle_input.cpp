@@ -66,4 +66,16 @@ void	Server::parse_command( string& input, Client& client ) {
 		return ;
 	}
 	(this->*(it->second))(result, client);
+	if (!client.isRegistered && client.asTriedToRegister)
+	{
+		vector<string>	retry;
+		it = this->cmd_map.find("USER");
+		retry.push_back(client.getNickname());
+		retry.push_back(client.getHostname());
+		retry.push_back(this->_server_name);
+		retry.push_back(":" + client.getNickname());
+		for (vector<string>::iterator it2 = retry.begin(); it2 != retry.end(); it2++)
+			cout << *it2 << endl;
+		(this->*(it->second))(retry, client);
+	}
 }

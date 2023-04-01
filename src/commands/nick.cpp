@@ -54,6 +54,7 @@ void	Server::nick(vector<string>& params, Client& client)
 	catch (NicknameInUse &e)
 	{
 		cout << RED << e.what() << RESET << endl;
+		client.asTriedToRegister = true;
 		throw Server::NicknameInUse();
 	}
 	catch(exception& e) {

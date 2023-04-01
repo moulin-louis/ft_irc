@@ -35,7 +35,7 @@ int Server::_epoll_ctl_add(int epfd, int fd, uint32_t events)
 }
 
 ssize_t 	sendMessage(Client &client, const string& message) {
-	return (send(client.getFd(), message.c_str(), message.length(), 0));
+	return (send(client.getFd(), message.c_str(), message.length(), MSG_NOSIGNAL));
 }
 
 Client&	Server::find_user(const string& nick, Client& client, const string& cmd) {
