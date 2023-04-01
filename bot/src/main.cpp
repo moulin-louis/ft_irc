@@ -9,6 +9,8 @@ int main( void ) {
 
 	try {
 		bot.parse_conf_file();
+		bot.initial_connection();
+		bot.routine();
 	}
 	catch (exception& x) {
 		cout << x.what() << endl;

@@ -28,6 +28,9 @@ NAME		= banbot
 C_DIR		= 	src
 C_FILES		=	main.cpp					\
 				Banbot.cpp					\
+				Parsing.cpp					\
+				Connection.cpp				\
+				routine.cpp					\
 
 SRCS		= $(patsubst %, $(C_DIR)/%, $(C_FILES))
 

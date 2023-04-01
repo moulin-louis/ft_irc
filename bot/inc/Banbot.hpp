@@ -19,21 +19,45 @@
 #include <errno.h>
 #include <cstring>
 #include "colors.h"
+#include <sys/types.h>          /* See NOTES */
+#include <sys/socket.h>
+#include <vector>
+#include <sys/types.h>
+#include <sys/socket.h>
 
 using namespace std;
 
+#define endmsg "\r\n"
+#define send_msg(msg) send(this->sfd, (void *)msg.c_str(), msg.size(), 0)
+
 class Banbot {
 	public:
-		uint16_t	port;
-		uint32_t	address;
-		int 		socket;
-		string 		admin_pasword;
-		string 		bot_name;
+		int 			sfd;
+		string 			admin_pasword;
+		string 			serv_pass;
+		string 			bot_name;
+		vector<string>	ban_word;
+		sockaddr_in		sin;
 		Banbot();
 		~Banbot();
+
+		//parsing
 		void parse_conf_file();
 		void parse_port( string& );
 		void parse_address( string& );
+		void parse_admin_pass( string& );
+		void parse_botname( string& );
+		void parse_password( string& );
+
+		//connection
+		void initial_connection();
+
+		//routine
+		void routine();
+
+		//clean/quit
+		void	clean_n_quit();
+
 };
 
 #endif //FT_IRC_BANBOT_HPP
