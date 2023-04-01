@@ -12,6 +12,16 @@
 
 #include "Server.hpp"
 
+void	retryRegister(Client &client, Server &server, string &svrname)
+{
+	vector<string> retry;
+	retry.push_back(client.getNickname());
+	retry.push_back(client.getHostname());
+	retry.push_back(svrname);
+	retry.push_back(":" + client.getNickname());
+	server.user(retry, client);
+}
+
 void	Server::process_input(Socket fd ) {
 	client_iter it = this->fd_map.find(fd);
 	Client &client = it->second;
@@ -35,14 +45,7 @@ void	Server::process_input(Socket fd ) {
 			parse_command(tok, this->fd_map[fd]);
 			temp.erase(0, temp.find(endmsg) + 2);
 			if (!client.isRegistered && client.asTriedNickname)
-			{
-				vector<string> retry;
-				retry.push_back(client.getNickname());
-				retry.push_back(client.getHostname());
-				retry.push_back(this->_server_name);
-				retry.push_back(":" + client.getNickname());
-				this->user(retry, client);
-			}
+				::retryRegister(client, *this, this->_server_name);
 		}
 		catch (NicknameInUse& e)
 		{

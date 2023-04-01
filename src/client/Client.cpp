@@ -14,7 +14,7 @@
 
 Client::Client( void ) {
 	memset((void *) this, 0, sizeof(Client));
-	asTriedToRegister = false;
+	asTriedNickname = false;
 }
 //Client::Client(string &nick, string &user) {
 //	cout << "new client created" << endl;
