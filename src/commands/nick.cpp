@@ -31,24 +31,8 @@ void Server::is_valid_nickname(string &nickname, Client& client) {
 	}
 }
 
-/*
-static bool nickIsAlreadyInUse(const string &nickname, Server &server)
-{
-	for (client_iter it = server.fd_map.begin(); it != server.fd_map.end(); it++)
-	{
-		if (it->second.getNickname() == nickname)
-		{
-			cout << BLUE << "nickIsAlreadyInUse: " << nickname << " is already in use" << RESET << endl;
-			return true;
-		}
-	}
-	return false;
-}*/
-
 void	Server::nick(vector<string>& params, Client& client)
 {
-	//int i = 0;
-
 	try {
 		if (!client.passwd_provided) {
 			add_rply_from_server(":You did not provide the password", client, "NICK", ERR_PASSWDMISMATCH);
@@ -60,18 +44,6 @@ void	Server::nick(vector<string>& params, Client& client)
 		}
 		is_valid_nickname(params[0], client);
 		string old_nickname = client.getNickname();
-
-		/*std::string temp = params[0];
-		while (nickIsAlreadyInUse(temp, *this))
-		{
-			temp += "_";
-			i++;
-		}
-		if (i < 0)
-		{
-			add_rply_from_server(" :Nickname " + temp + " is already in use", client, temp, ERR_NICKNAMEINUSE);
-			throw invalid_argument("nick: nickname already taken");
-		}*/
 		client.setNickname(params[0]);
 		if (client.isRegistered) {
 			string msg = string(":") + old_nickname + " !" + old_nickname + "@127.0.0.1 NICK :";

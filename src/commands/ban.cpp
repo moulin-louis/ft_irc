@@ -12,9 +12,10 @@
 
 #include "Server.hpp"
 
-void	Server::ban(vector<string> params, Client &client)
+void	Server::ban(vector<string> &params, Client &client)
 {
-	;
+	(void)params;
+	(void)client;
 }
 
 /*
