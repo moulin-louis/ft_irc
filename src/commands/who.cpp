@@ -10,14 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
 #include "Server.hpp"
-#include "cmd_enum.hpp"
-#include "typedef.hpp"
 
-
-
-//WIP, STILL MISSING A LOT OF THINGS
 void Server::who(vector<string>& params, Client &client) {
 	try {
 		if (params.empty() ) {
