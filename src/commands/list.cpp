@@ -21,11 +21,11 @@ static void displayAllChannels(Server &server, Client &client, vector<Channel> &
 
 static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel> &chan_vec, vector<string> &params)
 {
-	istringstream			ss(params[0]);
-	string 				chan_name;
-	vector<string>	chan_names;
+	std::istringstream	ss(params[0]);
+	std::string 		chan_name;
+	std::vector<string>	chan_names;
 
-	while (getline(ss, chan_name, ','))
+	while (std::getline(ss, chan_name, ','))
 	{
 		if (chan_name[0] != '#')
 			continue;

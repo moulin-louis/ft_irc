@@ -97,14 +97,17 @@ class Server
         void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
         void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 
-        void displayChannels();
-        void getSpecifiedChannels(const vector<string> &params, Client &client);
-
         //read and setup conf file
         void	read_conf_file();
         void	conf_admin_pass( string& file );
 		void	conf_banword_file( string& file );
 		void	conf_motd( string& file );
+
+		class NicknameInUse: std::exception
+		{
+			public:
+				virtual const char* what() const throw();
+		};
 };
 
 

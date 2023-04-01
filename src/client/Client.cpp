@@ -39,7 +39,8 @@ Client &Client::operator=(const Client &assign) {
 }
 
 void Client::clearBuff() {
-	this->buffer.clear();
+	if (this->buffer.size() > 0)
+		this->buffer.clear();
 }
 
 void Client::setMode( int idx, Mode input) {

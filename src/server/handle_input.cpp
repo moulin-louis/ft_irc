@@ -30,8 +30,16 @@ void	Server::process_input(Socket fd ) {
 		if (temp.find(endmsg) == string::npos)
 			break;
 		string tok = temp.substr(0, temp.find(endmsg));
-		parse_command(tok, this->fd_map[fd]);
-		temp.erase(0, temp.find(endmsg) + 2);
+		try
+		{
+			parse_command(tok, this->fd_map[fd]);
+			temp.erase(0, temp.find(endmsg) + 2);
+		}
+		catch (NicknameInUse& e)
+		{
+			cout << RED << "Error: " << e.what() << RESET << endl;
+			break ;
+		}
 	}
 	cout << YELLOW << "sending = [" << client.getBuff() << "]" << RESET << endl;
 	byte_count = sendMessage(client, client.getBuff());

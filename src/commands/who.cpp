@@ -10,27 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Channel.hpp"
 #include "Server.hpp"
-#include <stdexcept>
+#include "cmd_enum.hpp"
+#include "typedef.hpp"
 
-void	Server::handle_without_mask(vector<string>& params, Client& client ) {
-	Channel temp;
-	for ( chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); it ++ ) {
-		if (it->getName() == params[0]) {
-			temp = *it;
-		}
-	}
-
-
-	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++ ) {
-		if (it->second.mode[0] && it->second.mode[1]) {
-			vec_sock_iter test = find(temp.clients.begin(), temp.clients.end(), it->second.getFd());
-			if (test != temp.clients.end())
-				add_rply_from_server(it->second.getNickname(), client,"WHO", RPL_WHOREPLY);
-		}
-	}
-	add_rply_from_server(":End of WHO /list", client, "WHO", RPL_ENDOFWHO);
-}
 
 
 //WIP, STILL MISSING A LOT OF THINGS
@@ -40,9 +24,13 @@ void Server::who(vector<string>& params, Client &client) {
 			add_rply_from_server(":Not enough parameters", client, "WHO", ERR_NEEDMOREPARAMS);
 			throw invalid_argument("who: Not enough parameters");
 		}
-		if (params.size() == 1) {
-			cout << "params size = 1" << endl;
-			handle_without_mask(params, client);
+		for (chan_iter it = this->chan_vec.begin() ; it != this->chan_vec.end(); it++ ) {
+			if (it->getName() == params[0] ) {
+				for ( cl_iter x = it->clients.begin(); x != it->clients.end(); x++) {
+					this->add_rply_from_server(this->fd_map[*x].getNickname(), client, "", RPL_WHOREPLY);
+				}
+				this->add_rply_from_server(":End of WHO list", client, "", RPL_ENDOFWHO);
+			}
 		}
 	}
 	catch ( exception& x) {
