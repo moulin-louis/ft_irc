@@ -1,6 +1,9 @@
 
 #include "../inc/irc.hpp"
- 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 int main( int ac, char **av )
 {
 	if ( ac != 3 ) {
@@ -15,7 +18,7 @@ int main( int ac, char **av )
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(port);
  
-	if(connect(sock, (sockaddr*)&sin, sizeof(sin)) != SOCKET_ERROR)
+	if(connect(sock, (sockaddr*)&sin, sizeof(sin)) != -1)
 	{
 		cout << "connected to " << inet_ntoa(sin.sin_addr) << " on port " << htons(sin.sin_port) << endl;
 

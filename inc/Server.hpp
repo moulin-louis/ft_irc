@@ -64,7 +64,7 @@ class Server
 		void		is_valid_chan_name(vector<string> , Client& );
 
 		//commands
-		void	parse_command(string , Client&  );
+		void	parse_command(string& , Client&  );
 		void	nick( vector<string>&, Client& );
 		void	pass( vector<string>&, Client& );
 		void	ping( vector<string>&, Client& );
