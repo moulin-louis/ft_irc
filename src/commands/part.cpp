@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:16:43 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/30 18:38:22 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/02 12:07:02 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client)
 {
 	if (chan.user_in_chan(client))
 	{
-		this->notify_chan(chan.getName(), "has left", "PART", client);
+		this->notify_chan(chan.getName(), client.getNickname(), "PART", client);
 		chan.removeClient(client);
 		return;
 	}
@@ -37,7 +37,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 void	Server::part(vector<string>& params, Client& client)
 {
 	try {
-		if (params.empty())
+		if (params.size() == 1)
 		{
 			this->add_rply_from_server(":Not enough parameters", client, "PART", ERR_NEEDMOREPARAMS);
 			throw  invalid_argument("part: Not enough parameters");
@@ -45,17 +45,18 @@ void	Server::part(vector<string>& params, Client& client)
 		vector<string>	chans_to_part;
 		size_t			pos;
 		string delimiter = ",";
-		while ((pos = params[0].find(delimiter)) != string::npos) {
-			chans_to_part.push_back(params[0].substr(0, pos));
-			params[0].erase(0, pos + delimiter.length());
+		params[1].erase(0, 1);
+		while ((pos = params[1].find(delimiter)) != string::npos) {
+			chans_to_part.push_back("#" + params[1].substr(0, pos));
+			params[1].erase(1, pos + delimiter.length());
 		}
-		chans_to_part.push_back(params[0]);
+		chans_to_part.push_back("#" + params[1]);
 		for ( str_iter it = chans_to_part.begin(); it != chans_to_part.end(); it++) {
 			bool chan_exists = false;
 			for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++) {
 				if (it2->getName() == *it) {
-					if (params.size() > 1)
-						process_part_cmd(*it2, client, params[1]);
+					if (params.size() > 2)
+						process_part_cmd(*it2, client, params[2]);
 					else
 						process_part_cmd(*it2, client);
 					chan_exists = true;

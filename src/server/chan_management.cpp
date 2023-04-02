@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 13:37:37 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/30 17:56:29 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/02 12:06:27 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	Server::add_cmd_client(const string& content, Client& client, Client& author, const string&  cmd, Channel& chan) {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname();
-	msg += " " + cmd + " " + chan.getName() + " " + content + endmsg;
+	msg += " " + cmd + " " + chan.getName() + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 }
 

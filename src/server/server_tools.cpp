@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 19:52:41 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/30 18:08:48 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/02 11:56:47 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ Client&	Server::find_user(const string& nick, Client& client, const string& cmd)
 		if (it->second.getNickname() == nick)
 			return it->second;
 	}
-	add_rply_from_server(nick + " :No such nick/channel", client, cmd, ERR_NOSUCHNICK);
+	add_rply_from_server(" " + nick + " :No such nick/channel", client, cmd, ERR_NOSUCHNICK);
 	throw runtime_error("User not found");
 }
 
@@ -52,7 +52,7 @@ Channel&	Server::find_channel(const string& name, Client& client) {
 		if (it->getName() == name)
 			return *it;
 	}
-	add_rply_from_server(name + " :No such nick/channel", client, "JOIN", ERR_NOSUCHCHANNEL);
+	add_rply_from_server(" " + name + " :No such nick/channel", client, "JOIN", ERR_NOSUCHCHANNEL);
 	throw runtime_error("Channel not found");
 }
 
