@@ -28,7 +28,10 @@
 using namespace std;
 
 #define endmsg "\r\n"
+
 #define send_msg(msg) send(this->sfd, (void *)msg.c_str(), msg.size(), 0)
+#define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), 512, 0)
+#define clear_resize(msg) msg.clear(); msg.resize(512)
 
 class Banbot {
 	public:

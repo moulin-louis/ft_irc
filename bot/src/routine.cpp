@@ -3,19 +3,19 @@
 //
 
 #include "Banbot.hpp"
+#include <sys/socket.h>
 
 void Banbot::routine() {
-	cout << GREEN << "starting the bot routine" << RESET << endl;
+    cout << GREEN << "starting the bot routine" << RESET << endl;
 //	while(true) {
-		int ret_val;
-		string msg = string("LIST ") + endmsg;
-		ret_val = send_msg(msg);
-		if (ret_val == -11) {
-			throw runtime_error(string("send:") + strerror(errno));
-		}
-		msg.clear();
-		msg.resize(512);
-		ret_val = recv(this->sfd, (void *)msg.c_str(), 512, 0);
+        ssize_t ret_val;
+        string msg = string("LIST ") + endmsg;
+        ret_val = send_msg(msg);
+        if (ret_val == -11) {
+            throw runtime_error(string("send:") + strerror(errno));
+        }
+        clear_resize(msg);
+        ret_val = recv_msg(msg);
 		if (ret_val == -1) {
 			throw runtime_error(string("recv:") + strerror(errno));
 		}
@@ -25,5 +25,10 @@ void Banbot::routine() {
 	msg.clear();
 	msg = "QUIT TEST\r\n";
 	send_msg(msg);
-
+    clear_resize(msg);
+    ret_val = recv_msg(msg);
+    if (ret_val == -1) {
+        throw runtime_error(string("recv:") + strerror(errno));
+    }
+    cout << "Bot deconected" << endl;
 }
