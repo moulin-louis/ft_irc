@@ -14,15 +14,6 @@
 #include <stdexcept>
 #include <vector>
 
-void	Server::check_content( vector<string>& params ) {
-	for ( str_iter it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
-		if (params[1].find(*it) != string::npos ) {
-			throw runtime_error("user using banword");
-		}
-	}
-}
-
-
 void	Server::private_msg(vector<string>& params, Client& author) {
 	try	{
 		if (params.empty() || params[0].empty()) {
@@ -33,7 +24,6 @@ void	Server::private_msg(vector<string>& params, Client& author) {
 			add_rply_from_server(":No text to send", author, "PRIVMSG", ERR_NOTEXTTOSEND);
 			throw invalid_argument("private_msg: No text to sen");
 		}
-		check_content(params);
 		if (params[0][0] == '#') {
 			Channel& dest = find_channel(params[0], author);
 			if (dest.user_in_chan(author))

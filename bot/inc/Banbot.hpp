@@ -33,6 +33,7 @@ using namespace std;
 
 #define send_msg(msg) send(this->sfd, (void *)msg.c_str(), msg.size(), 0)
 #define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), 512, 0)
+#define recv_msg_nonblock(msg) recv(this->sfd, (void *)msg.c_str(), 512, MSG_DONTWAIT)
 #define clear_resize(msg) msg.clear(); msg.resize(512)
 
 class Banbot {
@@ -48,23 +49,24 @@ class Banbot {
 		~Banbot();
 
 		//parsing
-		void parse_conf_file();
-		void parse_port( string& );
-		void parse_address( string& );
-		void parse_admin_pass( string& );
-		void parse_botname( string& );
-		void parse_password( string& );
+		void 	parse_conf_file();
+		void 	parse_port( string& );
+		void 	parse_address( string& );
+		void	parse_admin_pass( string& );
+		void	parse_botname( string& );
+		void 	parse_password( string& );
+		void	parse_banfile( );
 
 		//connection
-		void initial_connection();
+		void	initial_connection();
 
 		//routine
-		void routine();
-		void list_chan();
-        void parse_recv_msg( string& );
-        void search_chan( string& );
-		void join_all_chan();
-		void check_all_chan();
+		void	routine();
+		void	list_chan();
+        void	parse_recv_msg( string& );
+        void	search_chan( string& );
+		void	join_all_chan();
+		void	check_all_chan();
 
 };
 

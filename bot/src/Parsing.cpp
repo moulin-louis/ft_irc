@@ -28,6 +28,7 @@ void Banbot::parse_conf_file() {
 	parse_admin_pass(file_read);
 	parse_botname(file_read);
 	parse_password(file_read);
+	parse_banfile();
 	conf_file.close();
 }
 
@@ -105,4 +106,44 @@ void Banbot::parse_password( string& file) {
 	string temp = file.substr(tok_pos, nl_pos - tok_pos);
 	this->serv_pass = temp;
 	cout << BOLD_PURPLE <<  "serv_passowrd is [" << this->serv_pass << "]" << RESET << endl;
+}
+
+void Banbot::parse_banfile( ) {
+	//opening the file and reading it into a string
+	fstream file;
+	file.open("./banword_file", ios::in);
+	if (!file.is_open()) {
+		throw runtime_error(string("open banword_file:") + strerror(errno));
+	}
+	string result;
+	while(true) {
+		string temp_str;
+		file >> temp_str;
+		result += temp_str;
+		if (file.eof()) {
+			break ;
+		}
+		result += ",";
+	}
+
+	//parsing the file into a vector of banword string
+	string	buff;
+	size_t	pos;
+	while ((pos = result.find(',')) != string::npos) {
+		buff = result.substr(0, pos);
+		this->ban_word.push_back(buff);
+		result.erase(0, pos + 1);
+	}
+	this->ban_word.push_back(result);
+
+	cout << BOLD_GREEN << "banword list is [";
+	for ( vector<string>::iterator it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
+		cout << *it;
+		if ((it + 1) == this->ban_word.end()) {
+			continue ;
+		}
+		cout << "-";
+	}
+	cout << "]" << RESET << endl;
+
 }

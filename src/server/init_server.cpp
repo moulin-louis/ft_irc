@@ -66,7 +66,6 @@ void    Server::read_conf_file() {
 	}
 //	cout << "contenf of file is [" << file_read << "]" << endl;
 	conf_admin_pass( file_read );
-	conf_banword_file( file_read );
 	conf_motd( file_read );
     conf_file.close();
 }
@@ -84,45 +83,6 @@ void Server::conf_admin_pass( string &file ) {
 	string temp = file.substr(tok_pos, nl_pos - tok_pos);
 	this->_admin_pass = temp;
 	cout << BOLD_GREEN <<  "admin pass is [" << this->_admin_pass << "]" << RESET << endl;
-}
-
-void	Server::conf_banword_file( string &input ) {
-	//finding and extracting value of token
-	unsigned long tok_pos = input.find("banword_file");
-	if (tok_pos == string::npos ) {
-		throw runtime_error("open conf file: cant find banword_file key");
-	}
-	tok_pos += strlen("banword_file=");
-	unsigned long nl_pos = input.find('\n', tok_pos);
-	if ( nl_pos == string::npos ) {
-		throw runtime_error("open conf file: cant find newline for banword_file key");
-	}
-	string temp = input.substr(tok_pos, nl_pos - tok_pos);
-
-	//opening the file and reading it into a string
-	fstream file;
-	file.open(temp.c_str(), ios::in);
-	if (!file.is_open()) {
-		throw runtime_error(string("open banword_file:") + strerror(errno));
-	}
-	string result;
-	while(true) {
-		string temp_str;
-		file >> temp_str;
-		result += temp_str;
-		if (file.eof()) {
-			break ;
-		}
-		result += ",";
-	}
-
-	//parsing the file into a vector of banword string
-	little_split(this->ban_word, result, ",");
-	cout << BOLD_GREEN << "banword list is [";
-	for ( str_iter it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
-		cout << *it << ",";
-	}
-	cout << "]" << RESET << endl;
 }
 
 void	Server::conf_motd( string &file ) {

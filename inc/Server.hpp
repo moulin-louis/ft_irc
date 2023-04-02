@@ -44,7 +44,6 @@ class Server
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
 		vector<Channel>					chan_vec;
-		vector<string>					ban_word;
 
         //constructor/destructor
 		Server(const char *, const string &);

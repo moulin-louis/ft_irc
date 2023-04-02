@@ -3,11 +3,10 @@
 //
 
 #include "Banbot.hpp"
-#include <ctime>
 
 bool server_up = true;
 
-void signal_handler( int sig ) {
+void	handler_sigint( int sig ) {
 	(void)sig;
 	server_up = false;
 }
@@ -83,9 +82,17 @@ void Banbot::check_all_chan() {
 	time_t	old_time = time(NULL);
 
 	//check for 20 second every chan
-	while ( time(0) < old_time + 20 || server_up) {
+	while ( server_up && time(0) < old_time + 20) {
 		string msg;
-		recv_msg(msg);
+		//receive data in a non-blocking way
+		ssize_t ret_val = recv_msg_nonblock(msg);
+		if (ret_val == -1) {
+			//check if fail is due to blocking operation
+			if (errno == EAGAIN) {
+				continue;
+			}
+			throw runtime_error(string("recv:") + strerror(errno));
+		}
 		for ( vector<string>::iterator it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
 			if ( msg.find(*it) != string::npos) {
 				//banword found
@@ -99,8 +106,8 @@ void Banbot::routine() {
     cout << GREEN << "starting the bot routine" << RESET << endl;
 
 	//clean handling of signal
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, signal_handler);
+	signal(SIGINT, handler_sigint);
+//	signal(SIGQUIT, signal_handler);
 
     string msg;
 	list_chan();
@@ -115,7 +122,6 @@ void Banbot::routine() {
 
 	//tell the server were quitting
 	msg = "QUIT TEST\r\n";
-	cout << "sending data..." << endl;
 	send_msg(msg);
 	clear_resize(msg);
 	recv_msg(msg);
