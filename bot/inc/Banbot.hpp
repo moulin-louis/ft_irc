@@ -5,7 +5,7 @@
 #ifndef FT_IRC_BANBOT_HPP
 #define FT_IRC_BANBOT_HPP
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <exception>
 #include <fstream>
-#include <errno.h>
+#include <cerrno>
 #include <cstring>
 #include "colors.h"
 #include <sys/types.h>          /* See NOTES */
@@ -24,6 +24,8 @@
 #include <vector>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <csignal>
+#include <ctime>
 
 using namespace std;
 
@@ -40,6 +42,7 @@ class Banbot {
 		string 			serv_pass;
 		string 			bot_name;
 		vector<string>	ban_word;
+        vector<string>  chan_server;
 		sockaddr_in		sin;
 		Banbot();
 		~Banbot();
@@ -57,9 +60,11 @@ class Banbot {
 
 		//routine
 		void routine();
-
-		//clean/quit
-		void	clean_n_quit();
+		void list_chan();
+        void parse_recv_msg( string& );
+        void search_chan( string& );
+		void join_all_chan();
+		void check_all_chan();
 
 };
 

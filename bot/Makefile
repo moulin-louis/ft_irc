@@ -44,7 +44,7 @@ OBJS		= $(patsubst %, $(O_DIR)/%, $(O_FILES))
 # ################################## #
 #                FLAGS               #
 # ################################## #
-CFLAGS		= -Wall -Wextra -Werror -g -MMD
+CFLAGS		= -Wall -Wextra -Werror -g -MMD -std=c++98
 
 # ################################## #
 #                INCLUDES            #
