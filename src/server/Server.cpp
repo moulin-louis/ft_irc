@@ -42,10 +42,8 @@ void Server::run() {
 	signal(SIGINT, handler);
 	while (!stop)
 	{
-		nfds = epoll_wait(this->_epfd, this->_events, 10, -1);
+		nfds = epoll_wait(this->_epfd, this->_events, MAX_EVENTS, -1);
 		if (nfds == -1) {
-			if (errno == EINTR)
-				continue;
 			throw runtime_error(string("epoll_wait: ") + strerror(errno));
 		}
 		for (int n = 0; n < nfds; ++n) {

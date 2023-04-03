@@ -1,13 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   motd.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tnoulens <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/03 16:13:34 by tnoulens          #+#    #+#             */
+/*   Updated: 2023/04/03 16:13:37 by tnoulens         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "Server.hpp"
 
-// Assume we have a connected client socket in a variable named "clientSocket"
+void	Server::motd(vector<string> &params, Client &client)
+{
+	std::ifstream	file;
+	std::string		line;
 
-// Send the MOTD header
-send(clientSocket, "375 :- <server> Message of the Day -\r\n", strlen("375 :- <server> Message of the Day -\r\n"), 0);
-
-// Send the MOTD lines
-send(clientSocket, "372 :- Welcome to our server! This is the MOTD.\r\n", strlen("372 :- Welcome to our server! This is the MOTD.\r\n"), 0);
-send(clientSocket, "372 :- Here is some more information.\r\n", strlen("372 :- Here is some more information.\r\n"), 0);
-
-// Send the end of MOTD marker
-send(clientSocket, "376 :End of MOTD command\r\n", strlen("376 :End of MOTD command\r\n"), 0);
+	if (params.size() > 1)
+	{
+		add_rply_from_server(":No such server", client, "", ERR_NOMOTD);
+		throw invalid_argument("motd: No such server");
+	}
+	if (params.size() == 1 && params[0] != this->_server_name)
+	{
+		add_rply_from_server(":No such server", client, "", ERR_NOMOTD);
+		throw invalid_argument("motd: No such server");
+	}
+	file.open(this->_motd.c_str());
+	if (file && file.is_open())
+	{
+		add_rply_from_server(":- " + this->_server_name + " Message of the Day -", client, "", RPL_MOTDSTART);
+		while (getline(file, line))
+			add_rply_from_server(":- " + line, client, "", RPL_MOTD);
+		add_rply_from_server(":End of MOTD command", client, "", RPL_ENDOFMOTD);
+		file.close();
+	}
+	else
+	{
+		add_rply_from_server(":MOTD File is missing", client, "", ERR_NOMOTD);
+		throw invalid_argument("motd: No such server");
+	}
+}

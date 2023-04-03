@@ -80,6 +80,7 @@ class Server
 		void	kick( vector<string>&, Client& );
 		void    who( vector<string>&, Client & );
 		void	ban(vector<string>&, Client & );
+		void	motd(vector<string>&, Client& );
 		//command utils
 		void    process_topic_cmd( vector <string>& , Client& , Channel& );
 		void	process_part_cmd( Channel&, Client&, string& );
