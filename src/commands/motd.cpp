@@ -11,3 +11,31 @@ send(clientSocket, "372 :- Here is some more information.\r\n", strlen("372 :- H
 
 // Send the end of MOTD marker
 send(clientSocket, "376 :End of MOTD command\r\n", strlen("376 :End of MOTD command\r\n"), 0);
+
+
+void    cmd_motd(IrcServer *serv, user *currentUser, std::string & args)
+{
+	(void)args;
+	std::fstream    motd_file;
+	std::string     line;
+
+	motd_file.open(MOTD_FILE, std::ios::in);
+	if (motd_file && motd_file.is_open())
+	{
+		serv->_tcpServer.add_to_buffer(std::make_pair(currentUser->getSdUser(),
+													  send_replies(375, currentUser, serv,
+																   serv->_tcpServer.getHostname())));
+		while (getline(motd_file, line))
+		{
+			serv->_tcpServer.add_to_buffer(std::make_pair(currentUser->getSdUser(),
+														  send_replies(372, currentUser, serv, line)));
+		}
+		serv->_tcpServer.add_to_buffer(std::make_pair(currentUser->getSdUser(),
+													  send_replies(376, currentUser, serv)));
+		motd_file.close();
+	}
+	else
+		serv->_tcpServer.add_to_buffer(std::make_pair(currentUser->getSdUser(),
+													  send_replies(422, currentUser, serv)));
+
+}
