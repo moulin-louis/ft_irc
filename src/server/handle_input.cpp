@@ -33,6 +33,10 @@ void	Server::process_input(Socket fd ) {
 	if (byte_count == -1) {
 		throw runtime_error(string("recv: ") + strerror(errno));
 	}
+	if (byte_count == 0) {
+		this->_disconect_client(fd);
+		return ;
+	}
 	temp.resize(byte_count);
 	cout << YELLOW << "str received = [" << temp << "]" << RESET << endl;
 	cout << YELLOW << byte_count << " bytes RECEIVED" << RESET << endl;
