@@ -22,8 +22,7 @@ void Server::ping(vector<string>& params, Client &client) {
 			add_rply_from_server(params[0] + " :No such server", client, "PING", ERR_NOSUCHSERVER);
 			throw invalid_argument("ping: No such server");
 		}
-		string reply = "PONG " + params[0] + endmsg;
-		client.setBuff(reply);
+		client.setBuff("PONG " + params[0] + endmsg);
 	}
 	catch ( exception& x ) {
 		cout << RED << x.what() << RESET << endl;
