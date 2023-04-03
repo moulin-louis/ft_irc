@@ -47,6 +47,8 @@ void	Server::user(vector<string>& params, Client& client) {
 		add_rply_from_server(":Your host is " + this->_server_name + ", running version " + this->_server_version, client, "USER", RPL_YOURHOST);
 		add_rply_from_server(":This server was created " + this->_server_up_date, client, "USER", RPL_CREATED);
 		add_rply_from_server(":" + this->_server_name + " " + this->_server_version + " aoiw", client, "USER", RPL_MYINFO);
+		vector<string> msg;
+		motd(msg, client);
 	}
 	catch(exception& e) {
 		cout << RED << e.what() << RESET << endl;
