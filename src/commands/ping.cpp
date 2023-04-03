@@ -18,7 +18,7 @@ void Server::ping(vector<string>& params, Client &client) {
 			add_rply_from_server(":No origin specified", client, "PING", ERR_NOORIGIN);
 			throw invalid_argument("ping: No origin specified");
 		}
-		if ( params[0] != "localhost" && params[0] != "127.0.0.1" ) {
+		if ( params[0] != this->_server_name ) {
 			add_rply_from_server(params[0] + " :No such server", client, "PING", ERR_NOSUCHSERVER);
 			throw invalid_argument("ping: No such server");
 		}
