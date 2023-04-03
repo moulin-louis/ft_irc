@@ -66,7 +66,7 @@ void	Server::add_rply_from_server(const string&  msg, Client& dest, const string
 	if (dest_nick.empty())
 		dest_nick = "*";
 	dest_nick = " " + dest_nick;
-	string result = ":localhost " + int_to_string(code) + dest_nick + " " + cmd + msg + endmsg;
+	string result = ":" + this->_server_name + " " + int_to_string(code) + dest_nick + " " + cmd + msg + endmsg;
 	dest.setBuff(dest.getBuff() + result);
 }
 
