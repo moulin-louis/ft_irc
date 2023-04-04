@@ -9,7 +9,7 @@ void Banbot::parse_conf_file() {
 	string  file_read;
 	conf_file.open("./banbot.conf", ios::in);
 	if (!conf_file.is_open()) {
-		throw runtime_error(string("open conf file:") + strerror(errno));
+		throw runtime_error(string("open conf file: ") + strerror(errno));
 	}
 	while (true) {
 		char	temp[10000];
@@ -89,8 +89,8 @@ void Banbot::parse_botname( string& file) {
 		throw runtime_error("open conf file: cant find newline for bot_name key");
 	}
 	string temp = file.substr(tok_pos, nl_pos - tok_pos);
-	this->bot_name = temp;
-	cout << BOLD_PURPLE <<  "bot_name is [" << this->bot_name << "]" << RESET << endl;
+	this->bot_nickname = temp;
+	cout << BOLD_PURPLE <<  "bot_name is [" << this->bot_nickname << "]" << RESET << endl;
 }
 
 void Banbot::parse_password( string& file) {
@@ -113,7 +113,7 @@ void Banbot::parse_banfile( ) {
 	fstream file;
 	file.open("./banword_file", ios::in);
 	if (!file.is_open()) {
-		throw runtime_error(string("open banword_file:") + strerror(errno));
+		throw runtime_error(string("open banword_file: ") + strerror(errno));
 	}
 	string result;
 	while(true) {
@@ -136,7 +136,7 @@ void Banbot::parse_banfile( ) {
 	}
 	this->ban_word.push_back(result);
 
-	cout << BOLD_GREEN << "banword list is [";
+	cout << BOLD_PURPLE << "banword list is [";
 	for ( vector<string>::iterator it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
 		cout << *it;
 		if ((it + 1) == this->ban_word.end()) {
@@ -145,5 +145,4 @@ void Banbot::parse_banfile( ) {
 		cout << "-";
 	}
 	cout << "]" << RESET << endl;
-
 }
