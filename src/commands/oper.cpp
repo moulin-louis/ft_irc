@@ -27,7 +27,7 @@ void Server::oper(vector<string>& params, Client &client) {
 			throw invalid_argument("oper: Password incorrect");
 		}
 		client.isOperator = true;
-		add_rply_from_server(":You are now an IRC operator", client, "OPER", RPL_YOUREOPER);
+		add_rply_from_server(":You are now an IRC operator", client, "", RPL_YOUREOPER);
 	}
 	catch ( exception& e ) {
 		cout << RED << e.what() << RESET << endl;

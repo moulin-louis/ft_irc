@@ -20,9 +20,9 @@ void    Server::process_topic_cmd(vector <string>& params, Client& client, Chann
 	}
     else {
         if (chan.getTopic().empty())
-            this->add_rply_from_server(chan.getName() + ":No topic is set", client, "TOPIC", RPL_NOTOPIC);
+            this->add_rply_from_server(chan.getName() + ":No topic is set", client, "", RPL_NOTOPIC);
         else
-            this->add_rply_from_server(chan.getName() + " :" + chan.getTopic(), client, "TOPIC", RPL_TOPIC);
+            this->add_rply_from_server(chan.getName() + " :" + chan.getTopic(), client, "", RPL_TOPIC);
     }
 }
 

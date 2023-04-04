@@ -22,6 +22,7 @@ class Channel
         string _name;
         string _topic;
     public:
+		vector<string> ban;
         //vector of client's fd
         vector<Socket> clients;
 

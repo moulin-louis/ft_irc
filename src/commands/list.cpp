@@ -15,8 +15,8 @@
 static void displayAllChannels(Server &server, Client &client, vector<Channel> &chan_vec)
 {
 	for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); it++)
-		server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "LIST", RPL_LIST);
-	server.add_rply_from_server(":End of LIST", client, "LIST", RPL_LISTEND);
+		server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "", RPL_LIST);
+	server.add_rply_from_server(":End of LIST", client, "", RPL_LISTEND);
 }
 
 static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel> &chan_vec, vector<string> &params)
@@ -34,10 +34,10 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 				if (it->getName() == chan_name && find(chan_names.begin(), chan_names.end(), chan_name) == chan_names.end())
 				{
 					chan_names.push_back(chan_name);
-					server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "LIST", RPL_LIST);
+					server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "", RPL_LIST);
 				}
 	}
-	server.add_rply_from_server(":End of LIST", client, "LIST", RPL_LISTEND);
+	server.add_rply_from_server(":End of LIST", client, "", RPL_LISTEND);
 }
 
 void	Server::list(vector<string>& params, Client &client)

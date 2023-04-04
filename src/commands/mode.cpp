@@ -23,7 +23,7 @@ string mode_to_str( const Mode (&arr)[4]) {
 
 void	handle_user( Server* server, vector<string>& params, Client& client) {
 	if ( params.size() == 1 ) {
-		server->add_rply_from_server(mode_to_str(client.mode), client , "MODE", RPL_UMODEIS);
+		server->add_rply_from_server(mode_to_str(client.mode), client , "", RPL_UMODEIS);
 		return ;
 	}
 	string input = params[1];
@@ -62,7 +62,7 @@ void	handle_user( Server* server, vector<string>& params, Client& client) {
             if (*it == 'w') { client.mode[2] = 0; }
         }
     }
-	server->add_rply_from_server(mode_to_str(client.mode), client , "MODE", RPL_UMODEIS);
+	server->add_rply_from_server(mode_to_str(client.mode), client , "", RPL_UMODEIS);
 }
 
 void	Server::mode(vector<string>& params, Client &client) {

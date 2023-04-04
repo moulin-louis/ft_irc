@@ -40,6 +40,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert (make_pair("LIST", &Server::list));
 	this->cmd_map.insert(make_pair("WHO", &Server::who));
 	this->cmd_map.insert(make_pair("motd", &Server::motd));
+	this->cmd_map.insert(make_pair("BAN", &Server::ban));
     this->read_conf_file();
 	//MOTD, MAX_EVENT, MAX_USER ON NETWORK
 }

@@ -44,11 +44,11 @@ class Server
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
 		vector<Channel>					chan_vec;
-
+		vector<string>					ban_list_server;
         //constructor/destructor
 		Server(const char *, const string &);
-		~Server();
 
+		~Server();
 		//input/output
 		void	process_input( Socket );
 		void	parse_command(string& , Client&  );
