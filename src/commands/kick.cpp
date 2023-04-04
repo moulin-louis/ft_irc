@@ -42,10 +42,11 @@ void	Server::process_kick_cmd(Channel& chan, string& nick_user, Client& client, 
 
 void	Server::kick(vector<string>& params, Client& client)
 {
-	// cout << "params[0]" << params[0] << endl;
-	// cout << "params[1]" << params[1] << endl;
-	// cout << "params[2]" << params[2] << endl;
-	// cout << "params[3]" << params[3] << endl;
+	cout << "params[0]" << params[0] << endl;
+	cout << "params[1]" << params[1] << endl;
+	cout << "params[2]" << params[2] << endl;
+	cout << "params[3]" << params[3] << endl;
+	cout << params.size() << endl;
 	try {
 		if (params.size() < 3) {
 			this->add_rply_from_server(":Not enough parameters", client, "KICK", ERR_NEEDMOREPARAMS);
