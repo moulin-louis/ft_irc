@@ -6,11 +6,13 @@
 /*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 20:03:18 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/29 15:50:41 by tnoulens         ###   ########.fr       */
+/*   Updated: 2023/04/04 12:39:58 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "typedef.hpp"
+#include <sys/types.h>
 
 void	retryRegister(Client &client, Server &server, string &svrname)
 {
@@ -59,12 +61,8 @@ void	Server::process_input(Socket fd ) {
 		}
 	}
 	cout << YELLOW << "sending = [" << client.getBuff() << "]" << RESET << endl;
-	byte_count = sendMessage(client, client.getBuff());
-	if (byte_count == -1) {
-		throw runtime_error(string("send: ") + strerror(errno));
-	}
-	cout << YELLOW << byte_count << " bytes SENT" << RESET << endl << endl;
-	client.clearBuff();
+	//flushing all buffer from all client
+	flush_all_buffers();
 }
 
 void	Server::parse_command( string& input, Client& client ) {
@@ -83,4 +81,16 @@ void	Server::parse_command( string& input, Client& client ) {
 		return ;
 	}
 	(this->*(it->second))(result, client);
+}
+
+void Server::flush_all_buffers() {
+	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++ ) {
+		cout << "flusing buffer of " << it->second.getNickname() << endl;
+		ssize_t byte_count = sendMessage(it->second, it->second.getBuff());
+		if (byte_count == -1) {
+			throw runtime_error(string("send: ") + strerror(errno));
+		}
+		cout << YELLOW << byte_count << " bytes SENT" << RESET << endl << endl;
+		it->second.clearBuff();
+	}
 }

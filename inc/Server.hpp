@@ -51,6 +51,8 @@ class Server
 
 		//input/output
 		void	process_input( Socket );
+		void	parse_command(string& , Client&  );
+		void 	flush_all_buffers();
 
 		//respond from server
 		void	add_rply_from_server(const string& , Client& , const string& , int );
@@ -63,7 +65,6 @@ class Server
 		void		is_valid_chan_name(vector<string> , Client& );
 
 		//commands
-		void	parse_command(string& , Client&  );
 		void	nick( vector<string>&, Client& );
 		void	pass( vector<string>&, Client& );
 		void	ping( vector<string>&, Client& );
@@ -86,8 +87,6 @@ class Server
 		void	process_part_cmd( Channel&, Client&, string& );
 		void	process_part_cmd( Channel&, Client& );
 		void	process_kick_cmd( Channel&, string&, Client&, string& );
-        void	handle_without_mask( vector<string>&, Client& );
-		void	check_content( vector<string>& );
 
 		//server run functions
 		void 	run();
@@ -100,7 +99,6 @@ class Server
         //read and setup conf file
         void	read_conf_file();
         void	conf_admin_pass( string& file );
-		void	conf_banword_file( string& file );
 		void	conf_motd( string& file );
 
 		class NicknameInUse: exception

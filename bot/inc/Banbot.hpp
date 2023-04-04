@@ -26,25 +26,28 @@
 #include <sys/socket.h>
 #include <csignal>
 #include <ctime>
-
+#include <pthread.h>
 using namespace std;
 
 #define endmsg "\r\n"
-
 #define send_msg(msg) send(this->sfd, (void *)msg.c_str(), msg.size(), 0)
-#define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), 512, 0)
+#define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), 20000, 0)
 #define recv_msg_nonblock(msg) recv(this->sfd, (void *)msg.c_str(), 512, MSG_DONTWAIT)
-#define clear_resize(msg) msg.clear(); msg.resize(512)
+#define clear_resize(msg) msg.clear(); msg.resize(20000)
+#define	vec_str_iter vector<string>::iterator
 
 class Banbot {
 	public:
 		int 			sfd;
 		string 			admin_pasword;
 		string 			serv_pass;
-		string 			bot_name;
+		string 			bot_nickname;
+		string 			bot_username;
 		vector<string>	ban_word;
         vector<string>  chan_server;
 		sockaddr_in		sin;
+		pthread_mutex_t lock_vec;
+
 		Banbot();
 		~Banbot();
 
@@ -65,8 +68,8 @@ class Banbot {
 		void	list_chan();
         void	parse_recv_msg( string& );
         void	search_chan( string& );
-		void	join_all_chan();
 		void	check_all_chan();
+		void	search_word( string& );
 
 };
 

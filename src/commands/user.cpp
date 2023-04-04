@@ -41,7 +41,8 @@ void	Server::user(vector<string>& params, Client& client) {
 		}
 		is_valid_username(params[0], client);
 		client.setUsername(params[0]);
-		client.setRealname(params[3].erase(0, 1));
+		params[3].erase(0, 1);
+		client.setRealname(params[3]);
 		client.isRegistered = true;
 		add_rply_from_server(":Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname(), client, "USER", RPL_WELCOME);
 		add_rply_from_server(":Your host is " + this->_server_name + ", running version " + this->_server_version, client, "USER", RPL_YOURHOST);
