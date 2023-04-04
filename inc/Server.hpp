@@ -103,7 +103,7 @@ class Server
 		void	conf_banword_file( string& file );
 		void	conf_motd( string& file );
 
-		class NicknameInUse: std::exception
+		class NicknameInUse: exception
 		{
 			public:
 				virtual const char* what() const throw();

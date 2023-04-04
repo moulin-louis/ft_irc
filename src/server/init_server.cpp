@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include <exception>
-#include <stdexcept>
 
 /*-------------------------------CONSTRUCTORS---------------------------------*/
 
@@ -65,7 +63,6 @@ void    Server::read_conf_file() {
 	if (file_read[file_read.size() - 1] != '\n') {
 		file_read += "\n";
 	}
-//	cout << "contenf of file is [" << file_read << "]" << endl;
 	conf_admin_pass( file_read );
 	conf_motd( file_read );
     conf_file.close();
@@ -87,6 +84,7 @@ void Server::conf_admin_pass( string &file ) {
 }
 
 void	Server::conf_motd( string &file ) {
+	//opening the file and reading it into a string
 	unsigned long tok_pos = file.find("motd");
 	if (tok_pos == string::npos ) {
 		throw runtime_error("open conf file: cant find motd key");
@@ -94,11 +92,25 @@ void	Server::conf_motd( string &file ) {
 	tok_pos += strlen("motd=");
 	unsigned long nl_pos = file.find('\n', tok_pos);
 	if ( nl_pos == string::npos ) {
-		throw runtime_error("open conf file: cant find newline for motd key");
+		throw runtime_error("open conf file: cant find newline for motd");
 	}
 	string temp = file.substr(tok_pos, nl_pos - tok_pos);
-	this->_motd = temp;
-	cout << BOLD_GREEN <<  "motd is [" << this->_motd << "]" << RESET << endl;
+	fstream file_stream;
+	file_stream.open(temp.c_str(), ios::in);
+	if (!file_stream.is_open()) {
+		throw runtime_error(string("open banword_file:") + strerror(errno));
+	}
+	string result;
+	while(true) {
+		string temp_str;
+		file_stream >> temp_str;
+		result += temp_str;
+		if (file_stream.eof()) {
+			break ;
+		}
+	}
+	this->_motd = result;
+	cout << GREEN << "MOTD file successfully opened " << RESET << endl;
 }
 
 Socket	Server::_initiateSocket() {
