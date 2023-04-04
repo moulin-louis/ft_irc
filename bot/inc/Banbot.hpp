@@ -30,10 +30,13 @@
 using namespace std;
 
 #define endmsg "\r\n"
+#define SIZE_BUFFER 20000
 #define send_msg(msg) send(this->sfd, (void *)msg.c_str(), msg.size(), 0)
-#define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), 20000, 0)
-#define recv_msg_nonblock(msg) recv(this->sfd, (void *)msg.c_str(), 512, MSG_DONTWAIT)
-#define clear_resize(msg) msg.clear(); msg.resize(20000)
+#define send_msg_bot(msg) send(bot->sfd, (void *)msg.c_str(), msg.size(), 0)
+#define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), SIZE_BUFFER, 0)
+#define recv_msg_bot(msg) recv(bot->sfd, (void *)msg.c_str(), SIZE_BUFFER, 0)
+#define recv_msg_nonblock(msg) recv(this->sfd, (void *)msg.c_str(), SIZE_BUFFER, MSG_DONTWAIT)
+#define clear_resize(msg) msg.clear(); msg.resize(SIZE_BUFFER)
 #define	vec_str_iter vector<string>::iterator
 
 class Banbot {
@@ -47,6 +50,8 @@ class Banbot {
         vector<string>  chan_server;
 		sockaddr_in		sin;
 		pthread_mutex_t lock_vec;
+		pthread_mutex_t lock_socket;
+		pthread_t 		id_thread;
 
 		Banbot();
 		~Banbot();
@@ -65,7 +70,6 @@ class Banbot {
 
 		//routine
 		void	routine();
-		void	list_chan();
         void	parse_recv_msg( string& );
         void	search_chan( string& );
 		void	check_all_chan();
