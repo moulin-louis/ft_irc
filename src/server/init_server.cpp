@@ -95,21 +95,7 @@ void	Server::conf_motd( string &file ) {
 		throw runtime_error("open conf file: cant find newline for motd");
 	}
 	string temp = file.substr(tok_pos, nl_pos - tok_pos);
-	fstream file_stream;
-	file_stream.open(temp.c_str(), ios::in);
-	if (!file_stream.is_open()) {
-		throw runtime_error(string("open banword_file:") + strerror(errno));
-	}
-	string result;
-	while(true) {
-		string temp_str;
-		file_stream >> temp_str;
-		result += temp_str;
-		if (file_stream.eof()) {
-			break ;
-		}
-	}
-	this->_motd = result;
+	this->_motd = temp;
 	cout << GREEN << "MOTD file successfully opened " << RESET << endl;
 }
 
