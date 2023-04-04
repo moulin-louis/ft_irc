@@ -14,8 +14,8 @@
 
 void	Server::motd(vector<string> &params, Client &client)
 {
-	std::ifstream	file;
-	std::string		line;
+	ifstream	file;
+	string		line;
 
 	if (params.size() > 1)
 	{
