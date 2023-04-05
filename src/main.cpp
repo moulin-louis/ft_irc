@@ -27,7 +27,7 @@ void	tmp_handler(int sig, siginfo_t *info, void *context)
 	}
 	if (sig == SIGUSR1)
 	{
-		cout << YELLOW << "Restarting the server with pass: " << av[2] << " and port: " << av[1] << RESET << endl;
+		cout << YELLOW << "Restarting the server..." << RESET << endl;
 		server_restarting = false;
 	}
 }
