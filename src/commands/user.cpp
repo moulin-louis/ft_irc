@@ -35,7 +35,7 @@ void	Server::user(vector<string>& params, Client& client) {
 			add_rply_from_server(":Unauthorized command (already registered)", client, "USER", ERR_ALREADYREGISTRED);
 			throw invalid_argument("user: Unauthorized command");
 		}
-		if (params.empty()) {
+		if (params.empty() || params.size() < 4) {
 			add_rply_from_server(":Not enough parameters", client, "USER", ERR_NEEDMOREPARAMS);
 			throw invalid_argument("user: Not enough parameters");
 		}
