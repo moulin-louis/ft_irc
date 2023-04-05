@@ -21,5 +21,8 @@ void	Server::restart(vector<string>& params, Client &client)
 		return ;
 	}
 	else
-		::kill(_pid, SIGUSR1);
+	{
+		if (::kill(_pid, SIGUSR1) == -1)
+			throw runtime_error(string("restart: kill failed: ") + strerror(errno));
+	}
 }
