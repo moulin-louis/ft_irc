@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "cmd_enum.hpp"
-#include "typedef.hpp"
 
 bool stop = false;
 

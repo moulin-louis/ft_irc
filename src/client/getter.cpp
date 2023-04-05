@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "Client.hpp"
 
 const string &Client::getNickname() const
 {

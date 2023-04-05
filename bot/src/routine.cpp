@@ -3,21 +3,25 @@
 //
 
 #include "Banbot.hpp"
-#include <pthread.h>
-#include <stdexcept>
-#include <sys/types.h>
 
 bool server_up = true;
-bool server_up_thread = true;
-pthread_mutex_t id;
+
+pthread_mutex_t lock;
 
 void handler_sigint(int sig) {
-	(void)sig;
+	(void) sig;
+	cout << "sigint in thread" << endl;
 	server_up = false;
 }
-void handler_sigint_thread(int sig) {
-	(void)sig;
-	server_up_thread = false;
+
+bool check_server_up() {
+	pthread_mutex_lock(&lock);
+	if (server_up) {
+		pthread_mutex_unlock(&lock);
+		return true;
+	}
+	pthread_mutex_unlock(&lock);
+	return false;
 }
 
 void Banbot::search_chan(string &str) {
@@ -77,8 +81,7 @@ void Banbot::parse_recv_msg( string& str ) {
 
 void *list_chan( void*ptr ) {
 	Banbot	*bot = (Banbot *)ptr;
-	signal(SIGINT, handler_sigint_thread);
-	while (server_up_thread) {
+	while (check_server_up()) {
 		string msg = string("LIST ") + endmsg;
 		pthread_mutex_lock(&(bot->lock_socket));
 		ssize_t ret_val = send_msg_bot(msg);
@@ -101,8 +104,8 @@ void *list_chan( void*ptr ) {
 
 void Banbot::search_word( string& msg ) {
 	string user = msg.substr(msg.find(':') + 1, msg.find('!') - 1);
-	ssize_t hastag_pos = msg.find('#') + 1;
-	ssize_t end = 0;
+	size_t hastag_pos = msg.find('#') + 1;
+	size_t end = 0;
 	while(msg[hastag_pos + end] != ' ') {
 		end++;
 	}
@@ -126,9 +129,7 @@ void Banbot::search_word( string& msg ) {
 }
 
 void Banbot::check_all_chan() {
-	time_t	old_time = time(NULL);
-	//check for 20 second every chan
-	while ( server_up && time(0) < old_time + 20) {
+	while (check_server_up()) {
 		string msg;
 		//receive data in a non-blocking way
 		clear_resize(msg);
@@ -156,15 +157,15 @@ void Banbot::check_all_chan() {
 
 void Banbot::routine() {
     cout << GREEN << "starting the bot routine" << RESET << endl;
-	pthread_mutex_init(&id, NULL);
-	pthread_create(&(this->id_thread), NULL, &list_chan, (void *) this);
 	signal(SIGINT, handler_sigint);
+	pthread_mutex_init(&lock, NULL);
+	pthread_create(&(this->id_thread), NULL, &list_chan, (void *) this);
     string msg;
     while(server_up) {
 		check_all_chan();
 	}
 	pthread_join(this->id_thread, NULL);
-	pthread_mutex_destroy(&id);
+	pthread_mutex_destroy(&lock);
 	msg = "QUIT TEST\r\n";
 	send_msg(msg);
 	clear_resize(msg);

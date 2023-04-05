@@ -12,7 +12,6 @@
 
 #include "Server.hpp"
 
-
 string	displayTimestamp( )
 {
 	struct tm*timestruct;
