@@ -13,8 +13,8 @@
 #include "Server.hpp"
 
 void Server::is_valid_username(string &username, Client& client) {
-	if (username.size() > 9) {
-		add_rply_from_server(":Username has invalid characters", client, " * ", ERR_NICKNAMEINUSE);
+	if (username.size() > 9 || username.empty()) {
+		add_rply_from_server(":Username has invalid characters", client, " * ", ERR_ERRONEUSNICKNAME);
 		throw invalid_argument("user: invalid username");
 	}
 	// On peut avoit plusieurs fois le même username
@@ -42,6 +42,7 @@ void	Server::user(vector<string>& params, Client& client) {
 		is_valid_username(params[0], client);
 		client.setUsername(params[0]);
 		params[3].erase(0, 1);
+		is_valid_username(params[3], client);
 		client.setRealname(params[3]);
 		client.isRegistered = true;
 		add_rply_from_server(":Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname(), client, "USER", RPL_WELCOME);

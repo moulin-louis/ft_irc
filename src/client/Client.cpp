@@ -27,6 +27,7 @@ Client::Client( void ) {
 Client::Client(const Client &copy) {
 	//cout << "new client created" << endl;
 	memset((void *)this, 0, sizeof(Client));
+	this->nickname = copy.nickname;
 	*this = copy;
 }
 

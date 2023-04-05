@@ -14,7 +14,7 @@
 
 void	retryRegister(Client &client, Server &server, string &svrname)
 {
-	vector<string> retry;
+	vector<string> retry = vector<string>();
 	retry.push_back(client.getNickname());
 	retry.push_back(client.getHostname());
 	retry.push_back(svrname);
