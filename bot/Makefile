@@ -14,7 +14,7 @@
 ## Variables ##
 ###############
 
-NAME		=	ircserv
+NAME		=	banbot
 
 ## add library here (minilibx, ncurses, libft, ...)
 LIB			=
@@ -26,9 +26,9 @@ DEPDIR		=	$(BUILDIR)/.deps
 
 SRCS_DIR	=	$(sort $(dir $(wildcard src/*/)))
 
-SRC			=	$(addprefix src/,		\
-						main.cpp		\
-						$(addprefix files/,\
+SRC			=	$(addprefix src/,			\
+						main.cpp			\
+						$(addprefix files/,	\
                             Banbot.cpp		\
                             Connection.cpp	\
                             Parsing.cpp		\
@@ -40,7 +40,7 @@ OBJ			=	$(SRC:%.cpp=$(BUILDIR)/%.o)
 DEP			=	$(SRC:%.cpp=$(DEPDIR)/%.d)
 
 CXX			=	c++
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O3
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O2
 CPPFLAGS	=	$(addprefix -I, $(INCLDIR))
 LDFLAGS		=	$(addprefix -L, $(LIBDIR)) $(addprefix -l, $(LIB))
 DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
@@ -86,38 +86,38 @@ BODY_WIDTH	=	$(shell printf "$$(($(HEAD_SIZE) - 1))")
 .PHONY:			all bonus clean fclean header lib re verbose
 
 all:
-				$(MAKE) -s $(NAME)
+				@$(MAKE) -s $(NAME)
 
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
-				mkdir -p build/ $(addprefix build/, $(SRCS_DIR))
-				mkdir -p build/.deps/ $(addprefix build/.deps/, $(SRCS_DIR))
-				printf "$(YELLOW)Compiling $(BLUE)$@$(DEFAULT)$(YELLOW) and generating/checking make dependency file...$(DEFAULT)\n"
+				@mkdir -p build/ $(addprefix build/, $(SRCS_DIR))
+				@mkdir -p build/.deps/ $(addprefix build/.deps/, $(SRCS_DIR))
+				@printf "$(YELLOW)Compiling $(BLUE)$@$(DEFAULT)$(YELLOW) and generating/checking make dependency file...$(DEFAULT)\n"
 				$(CXX) $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-				printf '$(DELPREV)%-*s$(GREEN)$(CHECK)$(DEFAULT)\n' $(BODY_WIDTH) $(notdir $@)
+				@printf '$(DELPREV)%-*s$(GREEN)$(CHECK)$(DEFAULT)\n' $(BODY_WIDTH) $(notdir $@)
 
 $(NAME):		$(OBJ)
-				printf "$(YELLOW)Linking source files and generating $(CYAN)$@$(DEFAULT) $(YELLOW)binary...\n$(DEFAULT)"
+				@printf "$(YELLOW)Linking source files and generating $(CYAN)$@$(DEFAULT) $(YELLOW)binary...\n$(DEFAULT)"
 				$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
-				printf "$(DELPREV)$(GREEN)Binary generated$(DEFAULT)\n"
+				@printf "$(DELPREV)$(GREEN)Binary generated$(DEFAULT)\n"
 
 $(DEPDIR):
-				printf "$(YELLOW)Creating $(BLUE)$@$(DEFAULT)$(YELLOW) folder...$(DEFAULT)\n"
-				mkdir -p $@
-				printf "$(DELPREV)"
+				@printf "$(YELLOW)Creating $(BLUE)$@$(DEFAULT)$(YELLOW) folder...$(DEFAULT)\n"
+				@mkdir -p $@
+				@printf "$(DELPREV)"
 $(DEP):
 -include $(wildcard $(DEP))
 
 clean:
-				printf "$(YELLOW)Deleting object and dependency files...$(DEFAULT)\n"
+				@printf "$(YELLOW)Deleting object and dependency files...$(DEFAULT)\n"
 				$(RM) $(OBJ)
-				printf "$(DELPREV)Build files deleted\n"
+				@printf "$(DELPREV)Build files deleted\n"
 
 fclean:			clean
-				printf "$(YELLOW)Deleting build directory...$(DEFAULT)\n"
+				@printf "$(YELLOW)Deleting build directory...$(DEFAULT)\n"
 				$(RM) $(BUILDIR) $(NAME)
-				printf "$(DELPREV)Build directory and binary deleted\n"
+				@printf "$(DELPREV)Build directory and binary deleted\n"
 
 re:				fclean
-				$(MAKE) -s all
+				@$(MAKE) -s all
 
 
