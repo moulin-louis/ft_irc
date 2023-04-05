@@ -14,6 +14,7 @@
 
 Client::Client( void ) {
 	memset((void *) this, 0, sizeof(Client));
+	this->setNickname("*");
 	asTriedNickname = false;
 }
 //Client::Client(string &nick, string &user) {

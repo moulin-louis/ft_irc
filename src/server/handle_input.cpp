@@ -64,7 +64,7 @@ void	Server::process_input(Socket fd ) {
 }
 
 void	Server::parse_command( string& input, Client& client ) {
-	vector<string>	result;
+	vector<string>	result = vector<string>();
 	size_t			pos;
 	string delimiter = " ";
 	while ((pos = input.find(delimiter)) != string::npos) {
@@ -76,6 +76,11 @@ void	Server::parse_command( string& input, Client& client ) {
 	result.erase(result.begin());
 	map<string, command_function>::iterator it = this->cmd_map.find(cmd);
 	if (it == this->cmd_map.end()) {
+		return ;
+	}
+	if (!client.isRegistered && cmd != "PASS" && cmd != "NICK" && cmd != "USER")
+	{
+		add_rply_from_server(":You have not registered",client, "", ERR_NOTREGISTERED);
 		return ;
 	}
 	(this->*(it->second))(result, client);
