@@ -60,7 +60,7 @@ SRC			=	$(addprefix src/,		\
 						kick.cpp		\
 						list.cpp		\
 						who.cpp			\
-						ban.cpp			\
+						restart.cpp		\
 						motd.cpp		\
 					)					\
 					$(addprefix tools/,	\

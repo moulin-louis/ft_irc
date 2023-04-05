@@ -12,13 +12,6 @@
 
 #include "Server.hpp"
 
-bool stop = false;
-
-void handler(int) {
-	cout << endl << YELLOW << "Signal received" << RESET << endl;
-	stop = true;
-}
-
 Server::~Server() {
 	if (this->_sfd >= 0)
 		close(this->_sfd);
@@ -31,14 +24,13 @@ Server::~Server() {
 	}
 }
 
-void Server::run() {
+void Server::run(bool &server_restarting) {
 	epoll_event ev = {};
 	int nfds;
 
 	if (this->_epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN) == -1)
 		throw runtime_error(string("epoll_ctl: ") + strerror(errno));
-	signal(SIGINT, handler);
-	while (!stop)
+	while (server_restarting)
 	{
 		nfds = epoll_wait(this->_epfd, this->_events, MAX_EVENTS, -1);
 		if (nfds == -1) {

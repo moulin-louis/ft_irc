@@ -30,6 +30,7 @@ class Server
         void			_disconect_client( Socket );
         int				_epoll_ctl_add(int epfd, int fd, uint32_t events);
         //private variable
+		const pid_t		_pid;
 		const string 	_password;
 		const uint16_t	_port;
 		Socket			_sfd;
@@ -80,8 +81,8 @@ class Server
 		void    list( vector<string>&, Client & );
 		void	kick( vector<string>&, Client& );
 		void    who( vector<string>&, Client & );
-		void	ban(vector<string>&, Client & );
 		void	motd(vector<string>&, Client& );
+		void	restart(vector<string>&, Client& );
 		//command utils
 		void    process_topic_cmd( vector <string>& , Client& , Channel& );
 		void	process_part_cmd( Channel&, Client&, string& );
@@ -89,7 +90,7 @@ class Server
 		void	process_kick_cmd( Channel&, string&, Client&, string& );
 
 		//server run functions
-		void 	run();
+		void 	run(bool&);
 
 	    //send messages
         void	notify_chan(const string& , const string& , const string& , Client &);
@@ -100,7 +101,7 @@ class Server
         void	read_conf_file();
         void	conf_admin_pass( string& file );
 		void	conf_motd( string& file );
-
+		//exception
 		class NicknameInUse: exception
 		{
 			public:

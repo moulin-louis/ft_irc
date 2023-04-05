@@ -15,7 +15,7 @@
 /*-------------------------------CONSTRUCTORS---------------------------------*/
 
 Server::Server(const char *port, const string &password)
-		: _password(password), _port(strtoul(port, NULL, 10)), _server_version("v1.0"),
+		: _pid(getpid()), _password(password), _port(strtoul(port, NULL, 10)), _server_version("v1.0"),
 		  _server_up_date(displayTimestamp()), fd_map() {
 	cout << endl << YELLOW << "🅵 🆃" << BLINK_YELLOW << " ->" << YELLOW << "🅸 🆁 🅲" << RESET << endl;
 	this->_sfd = _initiateSocket();
@@ -40,7 +40,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert (make_pair("LIST", &Server::list));
 	this->cmd_map.insert(make_pair("WHO", &Server::who));
 	this->cmd_map.insert(make_pair("motd", &Server::motd));
-	this->cmd_map.insert(make_pair("BAN", &Server::ban));
+	this->cmd_map.insert(make_pair("restart", &Server::restart));
     this->read_conf_file();
 	//MOTD, MAX_EVENT, MAX_USER ON NETWORK
 }
