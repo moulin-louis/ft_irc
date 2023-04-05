@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "typedef.hpp"
-#include <sys/types.h>
 
 void	retryRegister(Client &client, Server &server, string &svrname)
 {

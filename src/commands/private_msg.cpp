@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include <stdexcept>
-#include <vector>
 
 void	Server::private_msg(vector<string>& params, Client& author) {
 	try	{

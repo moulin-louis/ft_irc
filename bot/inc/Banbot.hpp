@@ -49,7 +49,6 @@ class Banbot {
 		vector<string>	ban_word;
         vector<string>  chan_server;
 		sockaddr_in		sin;
-		pthread_mutex_t lock_vec;
 		pthread_mutex_t lock_socket;
 		pthread_t 		id_thread;
 

@@ -35,4 +35,6 @@ build/
 *.out
 *.app
 ircserv
+banbot
+./bot/banbot
 .vscode
