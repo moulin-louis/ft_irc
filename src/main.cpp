@@ -19,7 +19,7 @@ void	tmp_handler(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
-	if (sig == SIGINT || sig == SIGTERM)
+	if (sig == SIGINT || sig == SIGTERM || sig == SIGQUIT)
 	{
 		cout << endl << YELLOW << "Signal received" << RESET << endl;
 		server_running = false;
@@ -27,6 +27,7 @@ void	tmp_handler(int sig, siginfo_t *info, void *context)
 	}
 	if (sig == SIGUSR1)
 	{
+		cout << YELLOW << "Restarting the server with pass: " << av[2] << " and port: " << av[1] << RESET << endl;
 		server_restarting = false;
 	}
 }
@@ -58,7 +59,6 @@ int main( int ac, char **av )
 			if (!server_restarting)
 			{
 				delete server;
-				cout << YELLOW << "Restarting the server with pass: " << av[2] << " and port: " << av[1] << RESET << endl;
 				server = new Server(av[1], av[2]);
 				server_restarting = true;
 			}
