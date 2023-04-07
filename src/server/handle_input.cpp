@@ -88,9 +88,9 @@ void	Server::parse_command( string& input, Client& client ) {
 
 void Server::flush_all_buffers() {
 	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++ ) {
-		cout << "flushing buffer of " << it->second.getNickname() << endl;
 		if (it->second.isLeaving)
 			continue ;
+		cout << "flushing buffer of " << it->second.getNickname() << endl;
 		ssize_t byte_count = sendMessage(it->second, it->second.getBuff());
 		if (byte_count == -1) {
 			throw runtime_error(string("send: ") + strerror(errno));
