@@ -27,6 +27,7 @@ void	Server::private_msg(vector<string>& params, Client& author) {
 			if (dest.user_in_chan(author))
 			{				
 				string msg = params[1];
+                msg.erase(string::size_type(0), 1);
 				for (size_t i = 2; i < params.size(); i++) {
 					msg += " ";
 					msg += params[i];
@@ -39,6 +40,7 @@ void	Server::private_msg(vector<string>& params, Client& author) {
 		else
         {
             string msg = params[1];
+            msg.erase(string::size_type(0), 1);
             for (size_t i = 2; i < params.size(); i++)
             {
                 msg += " ";
