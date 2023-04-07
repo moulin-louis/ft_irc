@@ -51,7 +51,7 @@ Channel&	Server::find_channel(const string& name, Client& client) {
 		if (it->getName() == name)
 			return *it;
 	}
-	add_rply_from_server(" " + name + " :No such nick/channel", client, "JOIN", ERR_NOSUCHCHANNEL);
+	add_rply_from_server(name + " :No such nick/channel", client, "", ERR_NOSUCHCHANNEL);
 	throw runtime_error("Channel not found");
 }
 
