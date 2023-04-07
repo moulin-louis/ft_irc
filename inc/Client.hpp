@@ -28,6 +28,7 @@ class Client
 	public:
         string 	channel;
         Mode	mode[4]; //mode[0] == a ; mode[1] == i ; mode[2] == w ; mode[3] == o
+        Mode    modeUser; //modeUser[0] == i ; modeUser[1] == w ; modeUser[2] == s ; modeUser[3] == o
         bool 	passwd_provided;
         bool	 isRegistered;
         bool 	isAway;

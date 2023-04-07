@@ -15,6 +15,7 @@
 Client::Client( void ) {
 	memset((void *) this, 0, sizeof(Client));
 	this->setNickname("*");
+    this->modeUser = 0;
 	asTriedNickname = false;
 }
 //Client::Client(string &nick, string &user) {
@@ -28,6 +29,7 @@ Client::Client(const Client &copy) {
 	//cout << "new client created" << endl;
 	memset((void *)this, 0, sizeof(Client));
 	this->nickname = copy.nickname;
+    this->modeUser = copy.modeUser;
 	*this = copy;
 }
 

@@ -12,6 +12,14 @@
 
 #include "Server.hpp"
 
+typedef enum e_modes
+{
+    a = 97,
+    i = 105,
+    w = 119,
+    o = 111
+}   MODES;
+
 string mode_to_str( const Mode (&arr)[4]) {
 	string result = "+";
 	if (arr[0]) { result += "a"; }
@@ -24,7 +32,7 @@ string mode_to_str( const Mode (&arr)[4]) {
 void	handle_user( Server* server, vector<string>& params, Client& client) {
 	if ( params.size() == 1 ) {
 		server->add_rply_from_server(mode_to_str(client.mode), client , "", RPL_UMODEIS);
-		return ;
+        return ;
 	}
 	string input = params[1];
 	if (input[0] != '+' && input[0] != '-') {
