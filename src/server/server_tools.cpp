@@ -14,7 +14,7 @@
 
 string	displayTimestamp( )
 {
-	struct tm*timestruct;
+	struct tm *timestruct;
 	time_t timet;
 	char buf[24];
 
@@ -56,7 +56,7 @@ Channel&	Server::find_channel(const string& name, Client& client) {
 }
 
 void	Server::add_cmd_client(const string& content, Client& client, Client& author, const string&  cmd) {
-	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " :" + content + endmsg;
+	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " " + client.getNickname() + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 }
 

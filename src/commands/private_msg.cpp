@@ -20,7 +20,7 @@ void	Server::private_msg(vector<string>& params, Client& author) {
 		}
 		if (params.size() == 1) {
 			add_rply_from_server(":No text to send", author, "PRIVMSG", ERR_NOTEXTTOSEND);
-			throw invalid_argument("private_msg: No text to sen");
+			throw invalid_argument("private_msg: No text to send");
 		}
 		if (params[0][0] == '#') {
 			Channel& dest = find_channel(params[0], author);
@@ -36,9 +36,16 @@ void	Server::private_msg(vector<string>& params, Client& author) {
 			else
 				add_rply_from_server(":" + dest.getName() + " :Cannot send to channel", author, "PRIVMSG", ERR_CANNOTSENDTOCHAN);
 		}
-		else {
+		else
+        {
+            string msg = params[1];
+            for (size_t i = 2; i < params.size(); i++)
+            {
+                msg += " ";
+                msg += params[i];
+            }
 			Client& dest = find_user(params[0], author, "PRIVMSG");
-			this->add_cmd_client(params[1], dest, author, "PRIVMSG");
+            this->add_cmd_client(msg, dest, author, "PRIVMSG");
 		}
 	}
 	catch ( runtime_error& x) {
