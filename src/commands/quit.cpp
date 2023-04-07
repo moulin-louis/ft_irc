@@ -14,23 +14,27 @@
 
 void Server::quit(vector<string>& params, Client &client)
 {
-        string msg1;
-		if (!params.empty())
+	string msg;
+	if (!params.empty())
+	{
+		msg = params[0];
+		for (size_t i = 1; i < params.size(); i++)
 		{
-			msg1 = params[0];
-			for (size_t i = 1; i < params.size(); i++)
-			{
-				msg1 += " ";
-				msg1 += params[i];
-			}
-			msg1.erase(string::size_type(0), 1);
+			msg += " ";
+			msg += params[i];
 		}
-		string msg = ":" + client.getNickname() +\
-					(client.getUsername().empty() ? "" : "!" + client.getUsername()) +\
-					(client.getHostname().empty() ? "" : "@" + client.getHostname()) +\
-					" QUIT :closed connection " + msg1 + endmsg;
-		client.setBuff(client.getBuff() + msg);
-		sendMessage(client, client.getBuff());
-		this->_disconect_client(client.getFd());
-		throw runtime_error("client lost connection: " + msg1);
+		msg.erase(string::size_type(0), 1);
+	}
+	string msg1 = ":" + client.getNickname() + \
+                    (client.getUsername().empty() ? "" : "!" + client.getUsername()) + \
+                    (client.getHostname().empty() ? "" : "@" + client.getHostname()) + \
+                    " QUIT :closed connection " + msg + endmsg;
+	client.setBuff(client.getBuff() + msg1);
+	for (vector<Channel *>::iterator it = client.channelsMember.begin(); it != client.channelsMember.end(); it++)
+	{
+		Channel &dest = *(*it);
+		this->notify_chan(dest.getName(), msg, "QUIT", client);
+	}
+	client.isLeaving = true;
+	sendMessage(client, client.getBuff());
 }

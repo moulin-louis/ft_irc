@@ -12,24 +12,19 @@
 
 #include "Client.hpp"
 
-Client::Client( void ) {
+Client::Client( void ) : fd(), mode(), passwd_provided(), isRegistered(), isAway(), isOperator() {
 	memset((void *) this, 0, sizeof(Client));
 	this->setNickname("*");
     this->modeUser = 0;
+	this->isLeaving = false;
 	asTriedNickname = false;
 }
-//Client::Client(string &nick, string &user) {
-//	cout << "new client created" << endl;
-//	this->nickname = nick;
-//	this->username = user;
-//	return ;
-//}
 
-Client::Client(const Client &copy) {
-	//cout << "new client created" << endl;
+Client::Client(const Client &copy) : fd(), mode(), passwd_provided(), isRegistered(), isAway(), isOperator(), asTriedNickname() {
 	memset((void *)this, 0, sizeof(Client));
 	this->nickname = copy.nickname;
     this->modeUser = copy.modeUser;
+	this->isLeaving = copy.isLeaving;
 	*this = copy;
 }
 
@@ -44,7 +39,7 @@ Client &Client::operator=(const Client &assign) {
 }
 
 void Client::clearBuff() {
-	if (this->buffer.size() > 0)
+	if (!this->buffer.empty())
 		this->buffer.clear();
 }
 

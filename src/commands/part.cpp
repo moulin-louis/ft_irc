@@ -29,7 +29,14 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 	{
 		this->notify_chan(chan.getName(), reason, "PART", client);
 		chan.removeClient(client);
-		return;
+		for (vector<Channel *>::iterator itr = client.channelsMember.begin(); itr != client.channelsMember.end(); itr++)
+		{
+			if ((*itr)->getName() == chan.getName())
+			{
+				client.channelsMember.erase(itr);
+				break;
+			}
+		}
 	}
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
 }
