@@ -29,9 +29,9 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 	{
 		this->notify_chan(chan.getName(), reason, "PART", client);
 		chan.removeClient(client);
-		for (vector<Channel *>::iterator itr = client.channelsMember.begin(); itr != client.channelsMember.end(); itr++)
+		for (vector<string>::iterator itr = client.channelsMember.begin(); itr != client.channelsMember.end(); itr++)
 		{
-			if ((*itr)->getName() == chan.getName())
+			if (*itr == chan.getName())
 			{
 				client.channelsMember.erase(itr);
 				break;
@@ -44,11 +44,11 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 void	Server::part(vector<string>& params, Client& client)
 {
 	try {
-		if (params.size() == 1)
-		{
-			this->add_rply_from_server(":Not enough parameters", client, "PART", ERR_NEEDMOREPARAMS);
-			throw  invalid_argument("part: Not enough parameters");
-		}
+//		if (params.size() == 1)
+//		{
+//			this->add_rply_from_server(":Not enough parameters", client, "PART", ERR_NEEDMOREPARAMS);
+//			throw  invalid_argument("part: Not enough parameters");
+//		}
 		vector<string>	chans_to_part;
 		size_t			pos;
 		string delimiter = ",";

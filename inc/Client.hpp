@@ -26,7 +26,7 @@ class Client
 		string		buffer;
 		Socket		fd;
 	public:
-        vector <Channel *> channelsMember;
+        vector<string> channelsMember;
         Mode	mode[4]; //mode[0] == a ; mode[1] == i ; mode[2] == w ; mode[3] == o
         Mode    modeUser; // Use enum MODES to define flags ex: modeUser = a | i | w | o
         bool 	passwd_provided;

@@ -35,7 +35,7 @@ void	Server::join(vector<string>& params, Client& client)
 			for ( chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++) {
 				if (it2->getName() == *it) {
 					it2->addClient(client);
-					client.channelsMember.push_back(&*it2);
+					client.channelsMember.push_back(*it);
 					this->notify_chan(it2->getName(), *it, "JOIN", client);
 					chan_exists = true;
 					break ;
@@ -45,6 +45,7 @@ void	Server::join(vector<string>& params, Client& client)
 				continue ;
 			Channel new_channel(*it, client);
 			this->chan_vec.push_back(new_channel);
+			client.channelsMember.push_back(new_channel.getName());
 			notify_chan(new_channel.getName(), *it, "JOIN", client);
 		}
 	}

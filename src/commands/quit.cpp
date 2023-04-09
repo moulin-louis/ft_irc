@@ -30,9 +30,9 @@ void Server::quit(vector<string>& params, Client &client)
                     (client.getHostname().empty() ? "" : "@" + client.getHostname()) + \
                     " QUIT :closed connection " + msg + endmsg;
 	client.setBuff(client.getBuff() + msg1);
-	for (vector<Channel *>::iterator it = client.channelsMember.begin(); it != client.channelsMember.end(); it++)
+	for (vector<string>::iterator it = client.channelsMember.begin(); it != client.channelsMember.end(); it++)
 	{
-		Channel &dest = *(*it);
+		Channel dest = find_channel(*it, client);
 		this->notify_chan(dest.getName(), msg, "QUIT", client);
 	}
 	client.isLeaving = true;

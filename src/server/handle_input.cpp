@@ -92,7 +92,8 @@ void Server::flush_all_buffers() {
 			continue ;
 		cout << "flushing buffer of " << it->second.getNickname() << endl;
 		ssize_t byte_count = sendMessage(it->second, it->second.getBuff());
-		if (byte_count == -1) {
+		if (byte_count == -1)
+		{
 			throw runtime_error(string("send: ") + strerror(errno));
 		}
 		cout << YELLOW << byte_count << " bytes SENT" << RESET << endl << endl;
