@@ -18,6 +18,15 @@ void	Server::process_part_cmd(Channel& chan, Client& client)
 	{
 		this->notify_chan(chan.getName(), client.getNickname(), "PART", client);
 		chan.removeClient(client);
+        if (!client.channelsMember.empty())
+        {
+            for (vector<string>::iterator itr = client.channelsMember.begin();
+                 itr != client.channelsMember.end(); itr++) {
+                if (*itr == chan.getName()) {
+                    client.channelsMember.erase(itr);
+                }
+            }
+        }
 		return;
 	}
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
@@ -29,14 +38,15 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 	{
 		this->notify_chan(chan.getName(), reason, "PART", client);
 		chan.removeClient(client);
-		for (vector<string>::iterator itr = client.channelsMember.begin(); itr != client.channelsMember.end(); itr++)
-		{
-			if (*itr == chan.getName())
-			{
-				client.channelsMember.erase(itr);
-				break;
-			}
-		}
+        if (!client.channelsMember.empty())
+        {
+            for (vector<string>::iterator itr = client.channelsMember.begin();
+                 itr != client.channelsMember.end(); itr++) {
+                if (*itr == chan.getName()) {
+                    client.channelsMember.erase(itr);
+                }
+            }
+        }
 	}
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
 }
