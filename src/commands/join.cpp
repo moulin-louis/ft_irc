@@ -45,7 +45,7 @@ void	Server::join(vector<string>& params, Client& client)
 				continue ;
 			Channel new_channel(*it, client);
 			this->chan_vec.push_back(new_channel);
-			client.channelsMember.push_back(new_channel.getName());
+			client.channelsMember.push_back(*it);
 			notify_chan(new_channel.getName(), *it, "JOIN", client);
 		}
 	}

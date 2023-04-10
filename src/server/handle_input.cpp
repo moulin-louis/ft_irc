@@ -78,7 +78,7 @@ void	Server::parse_command( string& input, Client& client ) {
 	if (it == this->cmd_map.end()) {
 		return ;
 	}
-	if (!client.isRegistered && cmd != "PASS" && cmd != "NICK" && cmd != "USER")
+	if (!client.isRegistered && cmd != "PASS" && cmd != "NICK" && cmd != "USER" && cmd != "QUIT")
 	{
 		add_rply_from_server(":You have not registered",client, "", ERR_NOTREGISTERED);
 		return ;
@@ -90,13 +90,13 @@ void Server::flush_all_buffers() {
 	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++ ) {
 		if (it->second.isLeaving)
 			continue ;
-		cout << "flushing buffer of " << it->second.getNickname() << endl;
-		ssize_t byte_count = sendMessage(it->second, it->second.getBuff());
-		if (byte_count == -1)
-		{
-			throw runtime_error(string("send: ") + strerror(errno));
-		}
-		cout << YELLOW << byte_count << " bytes SENT" << RESET << endl << endl;
+        cout << "flushing buffer of " << it->second.getNickname() << endl;
+        ssize_t byte_count = sendMessage(it->second, it->second.getBuff());
+        if (byte_count == -1)
+        {
+            throw runtime_error(string("send: ") + strerror(errno));
+        }
+        cout << YELLOW << byte_count << " bytes SENT" << RESET << endl << endl;
 		it->second.clearBuff();
 	}
 }

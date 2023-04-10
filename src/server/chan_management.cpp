@@ -23,11 +23,14 @@ void	Server::notify_chan(const string& chan, const string& content, const string
 		Channel& channel = this->find_channel(chan, author);
 		for ( cl_iter it = channel.clients.begin(); it != channel.clients.end(); it++ ) {
 			if (*it == author.getFd()) {
-				if (cmd == "JOIN" || cmd == "PART" || cmd == "QUIT" || cmd == "KICK")
+				if (cmd == "JOIN" || cmd == "PART" || cmd == "QUIT" || cmd == "KICK") {
 					this->add_cmd_client(content, (this->fd_map[*it]), author, cmd, channel);
+				}
 			}
 			else
+			{
 				this->add_cmd_client(content, (this->fd_map[*it]), author, cmd, channel);
+			}
 		}
 	}
 	catch (exception& e) {
