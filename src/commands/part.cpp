@@ -20,15 +20,14 @@ void	Server::process_part_cmd(Channel& chan, Client& client)
 		chan.removeClient(client);
         if (!client.channelsMember.empty())
         {
-            for (size_t i = 0; i < client.channelsMember.size(); i++) {
-                if (client.channelsMember[i] == chan.getName()) {
+            for (size_t i = 0; i < client.channelsMember.size(); i++)
+			{
+                if (client.channelsMember[i] == chan.getName())
+				{
                     client.channelsMember.erase(find(client.channelsMember.begin(), client.channelsMember.end(), chan.getName()));
                 }
             }
         }
-		for (size_t i = 0; i < client.channelsMember.size(); i++) {
-			cout << CYAN << client.channelsMember[i] << RESET << endl;
-		}
 		return;
 	}
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
@@ -42,14 +41,13 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 		chan.removeClient(client);
 		if (!client.channelsMember.empty())
 		{
-			for (size_t i = 0; i < client.channelsMember.size(); i++) {
-				if (client.channelsMember[i] == chan.getName()) {
+			for (size_t i = 0; i < client.channelsMember.size(); i++)
+			{
+				if (client.channelsMember[i] == chan.getName())
+				{
 					client.channelsMember.erase(find(client.channelsMember.begin(), client.channelsMember.end(), chan.getName()));
 				}
 			}
-		}
-		for (size_t i = 0; i < client.channelsMember.size(); i++) {
-			cout << CYAN << client.channelsMember[i] << RESET << endl;
 		}
 		return ;
 	}
