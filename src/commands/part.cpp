@@ -85,7 +85,12 @@ void	Server::part(vector<string>& params, Client& client)
 			for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++) {
 				if (it2->getName() == *it) {
 					if (params.size() > 2)
-						process_part_cmd(*it2, client, params[2]);
+					{
+						string reason = params[2];
+						for (size_t i = 3; i < params.size(); i++)
+							reason += " " + params[i];
+						process_part_cmd(*it2, client, reason);
+					}
 					else
 						process_part_cmd(*it2, client);
 					chan_exists = true;
