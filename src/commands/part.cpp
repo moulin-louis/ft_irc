@@ -68,9 +68,10 @@ void	Server::part(vector<string>& params, Client& client)
 //		irssi always appends the channel of the active channel window as a parameter
 //		if the active window is the main window, and no parameter is given then an error
 //		is thrown by irssi, we push back it directly to the vector as it already has the #
-		chans_to_part.push_back(params[0]);
-//		get the rest of the channels to part:
-		if (params.size() > 1)
+		if (params.size() == 1)
+			chans_to_part.push_back(params[0]);
+//		if there are parameters given then we get these channels to part instead of the active one:
+		else if (params.size() > 1)
 		{
 			params[1].erase(0, 1);
 			while ((pos = params[1].find(delimiter)) != string::npos) {
