@@ -20,13 +20,15 @@ void	Server::process_part_cmd(Channel& chan, Client& client)
 		chan.removeClient(client);
         if (!client.channelsMember.empty())
         {
-            for (vector<string>::iterator itr = client.channelsMember.begin();
-                 itr != client.channelsMember.end(); itr++) {
-                if (*itr == chan.getName()) {
-                    client.channelsMember.erase(itr);
+            for (size_t i = 0; i < client.channelsMember.size(); i++) {
+                if (client.channelsMember[i] == chan.getName()) {
+                    client.channelsMember.erase(find(client.channelsMember.begin(), client.channelsMember.end(), chan.getName()));
                 }
             }
         }
+		for (size_t i = 0; i < client.channelsMember.size(); i++) {
+			cout << CYAN << client.channelsMember[i] << RESET << endl;
+		}
 		return;
 	}
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
@@ -38,15 +40,18 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 	{
 		this->notify_chan(chan.getName(), reason, "PART", client);
 		chan.removeClient(client);
-        if (!client.channelsMember.empty())
-        {
-            for (vector<string>::iterator itr = client.channelsMember.begin();
-                 itr != client.channelsMember.end(); itr++) {
-                if (*itr == chan.getName()) {
-                    client.channelsMember.erase(itr);
-                }
-            }
-        }
+		if (!client.channelsMember.empty())
+		{
+			for (size_t i = 0; i < client.channelsMember.size(); i++) {
+				if (client.channelsMember[i] == chan.getName()) {
+					client.channelsMember.erase(find(client.channelsMember.begin(), client.channelsMember.end(), chan.getName()));
+				}
+			}
+		}
+		for (size_t i = 0; i < client.channelsMember.size(); i++) {
+			cout << CYAN << client.channelsMember[i] << RESET << endl;
+		}
+		return ;
 	}
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
 }
@@ -54,20 +59,28 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 void	Server::part(vector<string>& params, Client& client)
 {
 	try {
-//		if (params.size() == 1)
-//		{
-//			this->add_rply_from_server(":Not enough parameters", client, "PART", ERR_NEEDMOREPARAMS);
-//			throw  invalid_argument("part: Not enough parameters");
-//		}
+		if (params.empty())
+		{
+			this->add_rply_from_server(":Not enough parameters", client, "PART", ERR_NEEDMOREPARAMS);
+			throw  invalid_argument("part: Not enough parameters");
+		}
 		vector<string>	chans_to_part;
 		size_t			pos;
 		string delimiter = ",";
-		params[1].erase(0, 1);
-		while ((pos = params[1].find(delimiter)) != string::npos) {
-			chans_to_part.push_back("#" + params[1].substr(0, pos));
-			params[1].erase(1, pos + delimiter.length());
+//		irssi always appends the channel of the active channel window as a parameter
+//		if the active window is the main window, and no parameter is given then an error
+//		is thrown by irssi, we push back it directly to the vector as it already has the #
+		chans_to_part.push_back(params[0]);
+//		get the rest of the channels to part:
+		if (params.size() > 1)
+		{
+			params[1].erase(0, 1);
+			while ((pos = params[1].find(delimiter)) != string::npos) {
+				chans_to_part.push_back("#" + params[1].substr(0, pos));
+				params[1].erase(1, pos + delimiter.length());
+			}
+			chans_to_part.push_back("#" + params[1]);
 		}
-		chans_to_part.push_back("#" + params[1]);
 		for ( str_iter it = chans_to_part.begin(); it != chans_to_part.end(); it++) {
 			bool chan_exists = false;
 			for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++) {
