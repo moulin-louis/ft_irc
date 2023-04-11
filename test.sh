@@ -13,7 +13,7 @@ password=$2
 gnome-terminal -- bash -c "valgrind --track-fds=yes ./ircserv $port $password; exec bash"
 
 # Wait for the server to start
-sleep 1
+sleep 2
 
 # Launch two instances of irssi, each in a separate terminal window, connecting to the server
 for i in {1..2}; do

@@ -77,10 +77,16 @@ void	Server::part(vector<string>& params, Client& client)
 			params[1].erase(0, 1);
 			while ((pos = params[1].find(delimiter)) != string::npos)
             {
-				chans_to_part.push_back("#" + params[1].substr(0, pos));
+                if (params[1][0] == '#')
+    				chans_to_part.push_back(params[1].substr(0, pos));
+                else
+                    chans_to_part.push_back("#" + params[1].substr(0, pos));
 				params[1].erase(0, pos + delimiter.length());
 			}
-			chans_to_part.push_back("#" + params[1]);
+			if (params[1][0] == '#')
+				chans_to_part.push_back(params[1]);
+			else
+				chans_to_part.push_back("#" + params[1]);
 		}
 		for ( str_iter it = chans_to_part.begin(); it != chans_to_part.end(); it++)
         {
