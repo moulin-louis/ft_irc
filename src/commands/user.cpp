@@ -48,7 +48,7 @@ void	Server::user(vector<string>& params, Client& client) {
 		add_rply_from_server(":Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname(), client, "USER", RPL_WELCOME);
 		add_rply_from_server(":Your host is " + this->_server_name + ", running version " + this->_server_version, client, "", RPL_YOURHOST);
 		add_rply_from_server(":This server was created " + this->_server_up_date, client, "", RPL_CREATED);
-		add_rply_from_server(":" + this->_server_name + " " + this->_server_version + " aoiw", client, "", RPL_MYINFO);
+		add_rply_from_server(":" + this->_server_name + " " + this->_server_version + " aoiwr", client, "", RPL_MYINFO);
 		vector<string> msg;
 		motd(msg, client);
 	}

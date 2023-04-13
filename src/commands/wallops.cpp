@@ -41,7 +41,7 @@ void Server::wallops(vector<string>& params, Client &client)
 					" WALLOPS :" + msg + endmsg;
 	for (map<Socket, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
 	{
-		if (it->second.isRegistered && (it->second.getMode() & w))
+		if (!it->second.isLeaving && it->second.isRegistered && (it->second.getMode() & w))
 			it->second.setBuff(it->second.getBuff() + msg1);
 	}
 }
