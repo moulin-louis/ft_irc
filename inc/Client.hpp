@@ -27,7 +27,6 @@ class Client
 		Socket		fd;
 	public:
         vector<string> channelsMember;
-        Mode	mode[5]; //mode[0] == a ; mode[1] == i ; mode[2] == w ; mode[3] == o ; mode[4] == r
         Mode    modeUser; // Use enum MODES to define flags ex: modeUser = a | i | w | o | r
         bool 	passwd_provided;
         bool	 isRegistered;
