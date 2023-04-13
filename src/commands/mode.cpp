@@ -74,7 +74,6 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 					break ;
 				case 'i':
 					target.modeUser |= i;
-					cout << CYAN << target.modeUser << RESET << endl;
 					break ;
 				case 'w':
 					target.modeUser |= w;
