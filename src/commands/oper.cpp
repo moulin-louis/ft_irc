@@ -28,6 +28,10 @@ void Server::oper(vector<string>& params, Client &client) {
 		}
 		client.isOperator = true;
 		add_rply_from_server(":You are now an IRC operator", client, "", RPL_YOUREOPER);
+		vector<string> modeparams;
+		modeparams.push_back(client.getNickname());
+		modeparams.push_back("+o");
+		this->mode(modeparams, client);
 	}
 	catch ( exception& e ) {
 		cout << RED << e.what() << RESET << endl;

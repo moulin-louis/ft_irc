@@ -18,7 +18,7 @@ Server::~Server() {
 	if (this->_epfd >= 0)
 		close(this->_epfd);
 	for( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); ) {
-		this->add_rply_from_server(":Server is stoping", it->second, "ERROR", ERR_RESTRICTED);
+		this->add_rply_from_server(":Server is stopping", it->second, "ERROR", ERR_RESTRICTED);
 		sendMessage(it->second, it->second.getBuff());
 		it++;
 	}
@@ -28,7 +28,7 @@ void Server::run(bool &server_restarting) {
 	epoll_event ev = {};
 	int nfds;
 
-	if (this->_epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN) == -1)
+	if (this->_epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN | EPOLLET) == -1)
 		throw runtime_error(string("epoll_ctl: ") + strerror(errno));
 	while (server_restarting)
 	{

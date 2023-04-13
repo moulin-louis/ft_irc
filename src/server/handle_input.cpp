@@ -29,11 +29,13 @@ void	Server::process_input(Socket fd ) {
 	string temp;
 
 	temp.resize(512);
-	byte_count = recv(fd, (void *) temp.c_str(), temp.length(), 0);
-	if (byte_count == -1) {
+	byte_count = recv(fd, (void *) temp.c_str(), temp.length(), MSG_DONTWAIT);
+	if (byte_count == -1)
+    {
 		throw runtime_error(string("recv: ") + strerror(errno));
 	}
-	if (byte_count == 0) {
+	if (byte_count == 0)
+    {
 		this->_disconect_client(fd);
 		return ;
 	}
