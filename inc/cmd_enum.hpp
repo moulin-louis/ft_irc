@@ -13,6 +13,15 @@
 #ifndef CMD_ENUM_HPP
 #define CMD_ENUM_HPP
 
+typedef enum e_modes
+{
+	a = 1 << 0,
+	i = 1 << 1,
+	o = 1 << 2,
+	r = 1 << 3,
+	w = 1 << 4
+}	MODES;
+
 enum	cmd {
 	RPL_WELCOME = 1,
 	RPL_YOURHOST = 2,

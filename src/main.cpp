@@ -19,7 +19,7 @@ void	tmp_handler(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
-	if (sig == SIGINT || sig == SIGTERM || sig == SIGQUIT)
+	if (sig == SIGINT)
 	{
 		cout << endl << YELLOW << "Signal received" << RESET << endl;
 		server_running = false;
@@ -40,8 +40,6 @@ void	signal_handling()
 	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = tmp_handler;
 	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-	sigaction(SIGTERM, &sa, NULL);
 	sigaction(SIGUSR1, &sa, NULL);
 }
 
