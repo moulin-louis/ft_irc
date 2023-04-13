@@ -21,7 +21,7 @@ typedef enum e_modes
 	w = 1 << 4
 }	MODES;
 
-string mode_to_str(const uint32_t &mode)
+string mode_to_str(const Mode &mode)
 {
 	string result = "+";
 	if (mode & a)
@@ -41,7 +41,7 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 {
 	if ( params.size() == 1 )
 	{
-		server->add_rply_from_server(mode_to_str(client.modeUser), target, "", RPL_UMODEIS);
+		server->add_rply_from_server(mode_to_str(client.getMode()), target, "", RPL_UMODEIS);
         return ;
 	}
 	string input = params[1];
@@ -59,27 +59,28 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 			{
 				case 'a':
 					server->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
-					throw invalid_argument("mode: Please use AWAY to set your mode to away");
+//					throw invalid_argument("mode: Please use AWAY to set your mode to away");
+					break ;
 				case 'o':
 					if (!client.isOperator)
 					{
 						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
-						throw invalid_argument("mode: Permission Denied- You're not an IRC operator");
+//						throw invalid_argument("mode: Permission Denied- You're not an IRC operator");
 					}
 					else
 					{
 						target.isOperator = true;
-						target.modeUser |= o;
+						target.setMode(o);
 					}
 					break ;
 				case 'i':
-					target.modeUser |= i;
+					target.setMode(i);
 					break ;
 				case 'w':
-					target.modeUser |= w;
+					target.setMode(w);
 					break ;
 				case 'r':
-					target.modeUser |= r;
+					target.setMode(r);
 					break ;
 				default:
 					server->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
@@ -106,17 +107,17 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 					else
 					{
 						target.isOperator = false;
-						target.modeUser &= ~o;
+						target.unSetMode(o);
 					}
 					break ;
 				case 'i':
-					target.modeUser &= ~i;
+					target.unSetMode(i);
 					break ;
 				case 'w':
-					target.modeUser &= ~w;
+					target.unSetMode(w);
 					break ;
 				case 'r':
-					target.modeUser &= ~r;
+					target.unSetMode(r);
 					break ;
 				default:
 					server->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
@@ -124,7 +125,7 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 			}
         }
     }
-	server->add_rply_from_server(mode_to_str(target.modeUser), target, "", RPL_UMODEIS);
+	server->add_rply_from_server(mode_to_str(target.getMode()), target, "", RPL_UMODEIS);
 }
 
 void	Server::mode(vector<string>& params, Client &client)

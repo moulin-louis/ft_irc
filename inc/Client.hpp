@@ -25,9 +25,10 @@ class Client
 		string		hostname;
 		string		buffer;
 		Socket		fd;
+		Mode		modeUser; // Use enum MODES to define flags ex: modeUser = a | i | w | o | r
 	public:
         vector<string> channelsMember;
-        Mode    modeUser; // Use enum MODES to define flags ex: modeUser = a | i | w | o | r
+		vector<string> buddyList;
         bool 	passwd_provided;
         bool	 isRegistered;
         bool 	isAway;
@@ -49,7 +50,7 @@ class Client
 		const string 		&getHostname() const;
 		const Socket 		&getFd() const;
 		string		        getBuff() const;
-		Mode				getMode(int );
+		Mode				getMode();
 
 		void 	setNickname(const string &);
 		void 	setUsername(const string &);
@@ -58,7 +59,8 @@ class Client
 		void 	setFd(const Socket &);
 		void 	setBuff( const string&  );
 		void 	clearBuff();
-		void 	setMode( int , Mode );
+		void 	setMode(Mode);
+		void	unSetMode(Mode);
 };
 
 #endif

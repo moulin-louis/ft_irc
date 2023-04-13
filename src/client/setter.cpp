@@ -40,3 +40,13 @@ void Client::setFd(const Socket &fd_input)
 void Client::setBuff(const string &buffer_input) {
 	this->buffer = buffer_input;
 }
+
+void Client::setMode(Mode input)
+{
+	this->modeUser |= input;
+}
+
+void Client::unSetMode(Mode input)
+{
+	this->modeUser &= ~input;
+}

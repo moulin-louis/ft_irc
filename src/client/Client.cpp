@@ -12,7 +12,7 @@
 
 #include "Client.hpp"
 
-Client::Client( void ) : fd(), mode(), passwd_provided(), isRegistered(), isAway(), isOperator() {
+Client::Client( void ) : fd(), passwd_provided(), isRegistered(), isAway(), isOperator() {
 	memset((void *) this, 0, sizeof(Client));
 	this->setNickname("*");
     this->modeUser = 0;
@@ -20,7 +20,7 @@ Client::Client( void ) : fd(), mode(), passwd_provided(), isRegistered(), isAway
 	asTriedNickname = false;
 }
 
-Client::Client(const Client &copy) : fd(), mode(), passwd_provided(), isRegistered(), isAway(), isOperator(), asTriedNickname() {
+Client::Client(const Client &copy) : fd(), passwd_provided(), isRegistered(), isAway(), isOperator(), asTriedNickname() {
 	memset((void *)this, 0, sizeof(Client));
 	this->nickname = copy.nickname;
     this->modeUser = copy.modeUser;
@@ -41,8 +41,4 @@ Client &Client::operator=(const Client &assign) {
 void Client::clearBuff() {
 	if (!this->buffer.empty())
 		this->buffer.clear();
-}
-
-void Client::setMode( int idx, Mode input) {
-	this->mode[idx] = input;
 }

@@ -42,6 +42,6 @@ string Client::getBuff() const {
 	return this->buffer;
 }
 
-Mode	Client::getMode(int idx ) {
-	return (this->mode[idx]);
+Mode	Client::getMode() {
+	return (this->modeUser);
 }
