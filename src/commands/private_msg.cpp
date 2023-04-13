@@ -46,7 +46,7 @@ void	Server::private_msg(vector<string>& params, Client& author) {
                 msg += " ";
                 msg += params[i];
             }
-			Client& dest = find_user(params[0], author, "");
+			Client& dest = find_user(params[0], author, "PRIVMSG");
             this->add_cmd_client(msg, dest, author, "PRIVMSG");
 		}
 	}

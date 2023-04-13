@@ -42,7 +42,7 @@ Client&	Server::find_user(const string& nick, Client& client, const string& cmd)
 		if (it->second.getNickname() == nick)
 			return it->second;
 	}
-	add_rply_from_server(nick + " :No such nick/channel", client, cmd, ERR_NOSUCHNICK);
+	add_rply_from_server(" : No such nick/channel", client, cmd, ERR_NOSUCHNICK);
 	throw runtime_error("User not found");
 }
 
