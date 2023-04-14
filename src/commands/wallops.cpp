@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void Server::wallops(vector<string>& params, Client &client)
+void    Server::wallops(vector<string>& params, Client &client)
 {
 	string	msg;
 	if (params.empty())
