@@ -23,6 +23,8 @@ string mode_to_str(const Mode &mode)
 		result += "o";
 	if (mode & w)
 		result += "w";
+	if (mode & r)
+		result += "r";
 	return (result);
 }
 
@@ -68,6 +70,9 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 				case 'w':
 					target.setMode(w);
 					break ;
+				case 'r':
+					target.setMode(r);
+					break ;
 				default:
 					server->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 					break ;
@@ -101,6 +106,9 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 					break ;
 				case 'w':
 					target.unSetMode(w);
+					break ;
+				case 'r':
+					target.unSetMode(r);
 					break ;
 				default:
 					server->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
