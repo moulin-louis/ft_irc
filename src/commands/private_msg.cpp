@@ -22,6 +22,10 @@ void	Server::private_msg(vector<string>& params, Client& author) {
 			add_rply_from_server(":No text to send", author, "", ERR_NOTEXTTOSEND);
 			throw invalid_argument("private_msg: No text to send");
 		}
+		if (author.getMode() & r) {
+			add_rply_from_server(":You are restricted", author, "", ERR_RESTRICTED);
+			throw invalid_argument("private_msg: sender is restricted");
+		}
 		if (params[0][0] == '#') {
 			Channel& dest = find_channel(params[0], author);
 			if (dest.user_in_chan(author))
@@ -47,6 +51,10 @@ void	Server::private_msg(vector<string>& params, Client& author) {
                 msg += params[i];
             }
 			Client& dest = find_user(params[0], author, "PRIVMSG");
+	        if (dest.getMode() & r) {
+		        add_rply_from_server(":User is restricted", author, "", ERR_RESTRICTED);
+		        throw invalid_argument("private_msg: receiver is restricted");
+	        }
             this->add_cmd_client(msg, dest, author, "PRIVMSG");
 		}
 	}

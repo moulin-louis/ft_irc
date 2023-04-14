@@ -84,6 +84,7 @@ class Server
 		void	motd(vector<string>&, Client& );
 		void	restart(vector<string>&, Client& );
 		void	wallops(vector<string>&, Client& );
+		void    ignore(vector<string> &params, Client &client);
 		//command utils
 		void    process_topic_cmd( vector <string>& , Client& , Channel& );
 		void	process_part_cmd( Channel&, Client&, string& );

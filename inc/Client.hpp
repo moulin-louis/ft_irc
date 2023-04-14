@@ -25,10 +25,9 @@ class Client
 		string		hostname;
 		string		buffer;
 		Socket		fd;
-		Mode		modeUser; // Use enum MODES to define flags ex: modeUser = a | i | w | o | r
+		Mode		modeUser; // Use enum MODES to define flags ex: modeUser = a | i | w | o
 	public:
         vector<string> channelsMember;
-		vector<string> buddyList;
         bool 	passwd_provided;
         bool	 isRegistered;
         bool 	isAway;

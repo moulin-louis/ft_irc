@@ -21,10 +21,10 @@ string mode_to_str(const Mode &mode)
 		result += "i";
 	if (mode & o)
 		result += "o";
-	if (mode & r)
-		result += "r";
 	if (mode & w)
 		result += "w";
+	if (mode & r)
+		result += "r";
 	return (result);
 }
 
@@ -121,7 +121,6 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 
 void	Server::mode(vector<string>& params, Client &client)
 {
-
 	try
 	{
 		if (params.empty())
