@@ -86,7 +86,7 @@ vector<string> Server::get_botList()
 	return (this->_botList);
 }
 
-vector<string> Server::set_botList(string bot)
+void Server::set_botList(const string& bot)
 {
 	this->_botList.push_back(bot);
 }

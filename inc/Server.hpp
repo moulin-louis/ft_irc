@@ -107,14 +107,13 @@ class Server
 		void	conf_motd( string& file );
 		//Getter
 		vector<string>	get_botList();
+		void	set_botList(const string& bot);
 		//exception
 		class NicknameInUse: exception
 		{
 			public:
 				virtual const char* what() const throw();
 		};
-
-	vector <string> set_botList(string bot);
 };
 
 

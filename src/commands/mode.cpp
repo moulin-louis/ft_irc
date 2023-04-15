@@ -76,7 +76,7 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "MODE", ERR_NOPRIVILEGES);
 					else
 					{
-						server->_botList.push_back(target);
+						server->get_botList().push_back(target.getNickname());
 						target.setMode(B);
 					}
 					break ;
@@ -121,6 +121,7 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 					}
 					else
 					{
+						server->get_botList().erase(find(server->get_botList().begin(), server->get_botList().end(), target.getNickname()));
 						target.unSetMode(B);
 					}
 					break ;
