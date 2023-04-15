@@ -63,6 +63,7 @@ SRC			=	$(addprefix src/,		\
 						restart.cpp		\
 						motd.cpp		\
 						wallops.cpp		\
+						names.cpp		\
 					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\

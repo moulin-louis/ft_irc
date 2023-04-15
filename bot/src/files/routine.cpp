@@ -6,22 +6,9 @@
 
 bool server_up = true;
 
-pthread_mutex_t lock;
-
 void handler_sigint(int sig) {
 	(void) sig;
-	cout << "sigint in thread" << endl;
 	server_up = false;
-}
-
-bool check_server_up() {
-	pthread_mutex_lock(&lock);
-	if (server_up) {
-		pthread_mutex_unlock(&lock);
-		return true;
-	}
-	pthread_mutex_unlock(&lock);
-	return false;
 }
 
 void Banbot::search_chan(string &str) {
@@ -45,19 +32,15 @@ void Banbot::search_chan(string &str) {
 	}
     this->chan_server.push_back(str);
 	string msg = "JOIN #" + str + endmsg;
-	pthread_mutex_lock(&(this->lock_socket));
 	ssize_t ret_val = send_msg(msg);
 	if (ret_val == -1) {
-		pthread_mutex_unlock(&(this->lock_socket));
 		throw runtime_error(string("send: ") + strerror(errno));
 	}
 	clear_resize(msg);
 	ret_val = recv_msg(msg);
 	if (ret_val == -1) {
-		pthread_mutex_unlock(&(this->lock_socket));
 		throw runtime_error(string("recv: ") + strerror(errno));
 	}
-	pthread_mutex_unlock(&(this->lock_socket));
 	cout << YELLOW << "joined [" << str << "]" << RESET << endl;
 }
 
@@ -79,29 +62,6 @@ void Banbot::parse_recv_msg( string& str ) {
     }
 }
 
-void *list_chan( void*ptr ) {
-	Banbot	*bot = (Banbot *)ptr;
-	while (check_server_up()) {
-		string msg = string("LIST ") + endmsg;
-		pthread_mutex_lock(&(bot->lock_socket));
-		ssize_t ret_val = send_msg_bot(msg);
-		if (ret_val == -1) {
-			pthread_mutex_unlock(&(bot->lock_socket));
-			throw runtime_error(string("send: ") + strerror(errno));
-		}
-		clear_resize(msg);
-		ret_val = recv_msg_bot(msg);
-		if (ret_val == -1) {
-			pthread_mutex_unlock(&(bot->lock_socket));
-			throw runtime_error(string("recv: ") + strerror(errno));
-		}
-		pthread_mutex_unlock(&(bot->lock_socket));
-		msg.resize(ret_val);
-		bot->parse_recv_msg(msg);
-	}
-	return (NULL);
-}
-
 void Banbot::search_word( string& msg ) {
 	string user = msg.substr(msg.find(':') + 1, msg.find('!') - 1);
 	size_t hastag_pos = msg.find('#') + 1;
@@ -117,34 +77,28 @@ void Banbot::search_word( string& msg ) {
 			msg_to_send += chan + " ";
 			msg_to_send += chan + " :";
 			msg_to_send += user  + endmsg;
-			pthread_mutex_lock(&(this->lock_socket));
 			ssize_t ret_val = send_msg(msg_to_send);
 			if (ret_val == -1) {
-				pthread_mutex_unlock(&(this->lock_socket));
 				throw runtime_error(string("send: ") + strerror(errno));
 			}
-			pthread_mutex_unlock(&(this->lock_socket));
 		}
 	}
 }
 
 void Banbot::check_all_chan() {
-	while (check_server_up()) {
+	while (server_up) {
 		string msg;
 		//receive data in a non-blocking way
 		clear_resize(msg);
-		pthread_mutex_lock(&(this->lock_socket));
 		ssize_t ret_val = recv_msg_nonblock(msg);
 		if (ret_val == -1) {
 			//check if fail is due to blocking operation
-			pthread_mutex_unlock(&(this->lock_socket));
 			if (errno == EAGAIN)
 				continue;
 			throw runtime_error(string("recv: ") + strerror(errno));
 		}
 		if (ret_val == 0)
 			continue;
-		pthread_mutex_unlock(&(this->lock_socket));
 		msg.resize(ret_val);
 		unsigned long pos;
 		while ((pos = msg.find(endmsg)) != string::npos) {
@@ -158,14 +112,10 @@ void Banbot::check_all_chan() {
 void Banbot::routine() {
     cout << GREEN << "starting the bot routine" << RESET << endl;
 	signal(SIGINT, handler_sigint);
-	pthread_mutex_init(&lock, NULL);
-	pthread_create(&(this->id_thread), NULL, &list_chan, (void *) this);
     string msg;
     while(server_up) {
 		check_all_chan();
 	}
-	pthread_join(this->id_thread, NULL);
-	pthread_mutex_destroy(&lock);
 	msg = "QUIT TEST\r\n";
 	send_msg(msg);
 	clear_resize(msg);

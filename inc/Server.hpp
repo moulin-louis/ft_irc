@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 #pragma once
+#include "Client.hpp"
 #include <string>
+#include <vector>
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
@@ -87,6 +89,7 @@ class Server
 		void	restart(vector<string>&, Client& );
 		void	wallops(vector<string>&, Client& );
 		void    ignore(vector<string> &params, Client &client);
+		void	names( vector<string>&, Client& );
 		//command utils
 		void    process_topic_cmd( vector <string>& , Client& , Channel& );
 		void	process_part_cmd( Channel&, Client&, string& );
