@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Channel.hpp"
 #include "Server.hpp"
+#include <vector>
 
 void	Server::is_valid_chan_name(vector<string> params, Client& client)
 {

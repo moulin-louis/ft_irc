@@ -14,15 +14,15 @@
 
 void Server::names(vector<string>& params, Client &client ) {
 	try {
-		if (params.empty()) {
-			throw runtime_error("Names: params empyt");
-		}
 		Channel chan = find_channel(params[0], client);
-		cout << "names: chan name is " << chan.getName() << endl;
+		for ( vec_sock_iter it = chan.clients.begin(); it != chan.clients.end(); it++ ) {
+			if (!(this->fd_map[*it].getMode() & i)) {
+				add_rply_from_server(this->fd_map[*it].getUsername(),  client, "", RPL_LINKS);
+			}
+		}
 	}
-	catch ( exception& x) {
+	catch ( exception& x){
 		cout << RED << x.what() << RESET << endl;
-		add_rply_from_server("", client, "", RPL_ENDOFLINKS);
 	}
 	add_rply_from_server("", client, "", RPL_ENDOFLINKS);
 	return ;
