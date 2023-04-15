@@ -34,7 +34,7 @@ void	Server::join( const vector<string>& params, Client& client)
 		string temp_str = params[0];
 		little_split(chan_names, temp_str, ",");
 		for (str_iter it = chan_names.begin(); it != chan_names.end(); ++it) {
-			bool chan_exists = false;		
+			bool chan_exists = false;
 			for ( chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); ++it2) {
 				if (it2->getName() == *it) {
 					it2->addClient(client);

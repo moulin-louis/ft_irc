@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "typedef.hpp"
 
 /*-------------------------------CONSTRUCTORS---------------------------------*/
 
@@ -56,11 +57,11 @@ void    Channel::setTopic(const string &topic) {
 }
 
 bool	Channel::user_in_chan(const Client& client) {
-	for (cl_iter it = this->clients.begin(); it != this->clients.end(); ++it) {
-		if (*it == client.getFd())
-			return (true);
+	cl_iter it = find(this->clients.begin(), this->clients.end(), client.getFd());
+	if (it == this->clients.end()) {
+		return (false);
 	}
-	return (false);
+	return (true);
 }
 
 void    Channel::addClient(const Client &client) {
@@ -68,10 +69,5 @@ void    Channel::addClient(const Client &client) {
 }
 
 void    Channel::removeClient(const Client &client) {
-    for (cl_iter it = this->clients.begin(); it != this->clients.end(); ++it) {
-        if (*it == client.getFd()) {
-            this->clients.erase(it);
-            return ;
-        }
-    }
+	this->clients.erase(find(this->clients.begin(), this->clients.end(), client.getFd()));
 }
