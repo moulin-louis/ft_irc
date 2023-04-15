@@ -50,7 +50,7 @@ void	Server::join( const vector<string>& params, Client& client)
 			this->chan_vec.push_back(new_channel);
 			client.channelsMember.push_back(*it);
 			notify_chan(new_channel, *it, "JOIN", client);
-			for (client_iter it3 = this->fd_map.begin(); it3 != this->fd_map.end(); it3++)
+			for (client_iter it3 = this->fd_map.begin(); it3 != this->fd_map.end(); ++it3 )
 			{
 				if (it3->second.getMode() & B)
 				{

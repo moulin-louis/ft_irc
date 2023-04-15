@@ -88,7 +88,6 @@ class Server
 		void	motd( const vector<string>&, Client& );
 		void	restart( const vector<string>&, Client& );
 		void	wallops( const  vector<string>&, Client& );
-		void    ignore( const vector<string> &params, Client &client);
 		void	names( const vector<string>&, Client& );
 		//command utils
 		void    process_topic_cmd( const vector <string>& , Client& , Channel& );
@@ -100,7 +99,7 @@ class Server
 		void 	run(const bool& );
 
 	    //send messages
-        void	notify_chan(Channel& , const string& , const string& , Client &);
+        void	notify_chan(Channel& , const string& , const string& , const Client &);
         void	add_cmd_client(const string& , Client& , const Client&, const string&  ); //foo
         void	add_cmd_client(const string&, Client&, const Client&, const string& , const Channel& );
 
@@ -110,7 +109,6 @@ class Server
 		void	conf_motd( string& file );
 		//Getter
 		vector<string>	get_botList();
-		void	set_botList(const string& bot);
 		//exception
 		class NicknameInUse: exception
 		{
