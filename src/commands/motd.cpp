@@ -12,10 +12,9 @@
 
 #include "Server.hpp"
 
-void	Server::motd(vector<string> &params, Client &client)
+void	Server::motd( const vector<string> &params, Client &client)
 {
 	ifstream	file;
-	string		line;
 
 	if (params.size() > 1)
 	{
@@ -30,6 +29,7 @@ void	Server::motd(vector<string> &params, Client &client)
 	file.open(this->_motd.c_str());
 	if (file && file.is_open())
 	{
+		string		line;
 		add_rply_from_server(":- " + this->_server_name + " Message of the Day -", client, "", RPL_MOTDSTART);
 		while (getline(file, line))
 			add_rply_from_server(":- " + line, client, "", RPL_MOTD);

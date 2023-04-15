@@ -26,7 +26,7 @@ typedef int Socket;
 typedef int Epollfd;
 typedef uint32_t Mode;
 
-typedef	void (Server::*command_function)( vector<string>&, Client& );
+typedef	void (Server::*command_function)( const vector<string>&, Client& );
 typedef map<Socket, Client>::iterator	client_iter;
 typedef vector<Channel>::iterator chan_iter;
 typedef vector<Socket>::iterator cl_iter;

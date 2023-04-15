@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void	Server::kill(vector<string>& params, Client &client) {
+void	Server::kill( const vector<string>& params, Client &client) {
 	cout << "kill" << endl;
 	try {
 		if ( params.size() != 2 ) {
@@ -28,7 +28,7 @@ void	Server::kill(vector<string>& params, Client &client) {
 		cout << RED << x.what() << RESET << endl;
 		return ;
 	}
-	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
+	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); ++it) {
 		if (it->second.getNickname() == params[0]) {
 			add_rply_from_server(string(":") + params[1], client, "KILL", 0);
 			sendMessage(client, client.getBuff());

@@ -12,10 +12,10 @@
 
 #include "Server.hpp"
 
-void Server::names(vector<string> &params, Client &client) {
+void Server::names( const vector<string> &params, Client &client) {
 	try {
 		Channel chan = find_channel(params[0], client);
-		for (vec_sock_iter it = chan.clients.begin(); it != chan.clients.end(); it++) {
+		for (vec_sock_iter it = chan.clients.begin(); it != chan.clients.end(); ++it) {
 			if (this->fd_map[*it].getNickname() == client.getNickname()) {
 				continue ;
 			}

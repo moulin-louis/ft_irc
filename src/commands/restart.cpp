@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void	Server::restart(vector<string>& params, Client &client)
+void	Server::restart( const vector<string>& params, Client &client)
 {
 	(void)params;
 	if (!client.isOperator)

@@ -12,18 +12,19 @@
 
 #include "Client.hpp"
 
-Client::Client( void ) : fd(), passwd_provided(), isRegistered(), isAway(), isOperator() {
-	memset((void *) this, 0, sizeof(Client));
+Client::Client(void) : fd(), passwd_provided(), isRegistered(), isAway(), isOperator() {
+	memset(static_cast<void *>(this), 0, sizeof(Client));
 	this->setNickname("*");
-    this->modeUser = 0;
+	this->modeUser = 0;
 	this->isLeaving = false;
 	asTriedNickname = false;
 }
 
-Client::Client(const Client &copy) : fd(), passwd_provided(), isRegistered(), isAway(), isOperator(), asTriedNickname() {
-	memset((void *)this, 0, sizeof(Client));
+Client::Client(const Client &copy)
+		: fd(), passwd_provided(), isRegistered(), isAway(), isOperator(), asTriedNickname() {
+	memset(static_cast<void *>(this), 0, sizeof(Client));
 	this->nickname = copy.nickname;
-    this->modeUser = copy.modeUser;
+	this->modeUser = copy.modeUser;
 	this->isLeaving = copy.isLeaving;
 	*this = copy;
 }
@@ -34,7 +35,9 @@ Client::~Client() {
 }
 
 Client &Client::operator=(const Client &assign) {
-	(void)assign;
+	(void) assign;
+	this->fd = assign.fd;
+	this->modeUser = assign.modeUser;
 	return (*this);
 }
 

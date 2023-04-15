@@ -123,7 +123,7 @@ Socket	Server::_initiateSocket() {
         close(sfd);
         throw runtime_error(string("fcntl: ") + strerror(errno));
     }
-	if (bind(sfd, (sockaddr *)&sin, sizeof(sin)) == -1 ) {
+	if (bind(sfd, reinterpret_cast<sockaddr *>(&sin), sizeof(sin)) == -1 ) {
         close(sfd);
 		throw runtime_error(string("bind: ") + strerror(errno));
     }

@@ -28,7 +28,7 @@ class Channel
 
         //canonical form
         Channel();
-        Channel(string &, Client& );
+        Channel(const string &, const Client& );
         Channel(const Channel &);
         ~Channel();
         Channel &operator=(const Channel &);
@@ -36,15 +36,15 @@ class Channel
 		//getter/setter
         const string    &getName() const;
         const string    &getTopic() const;
-        void            setTopic(string &);
-        void            setName(string &);
+        void            setTopic(const string &);
+        void            setName(const string &);
 
         //checks
-        bool	user_in_chan(Client&);
+        bool	user_in_chan(const Client&);
 
         //actions
-        void    addClient(Client &);
-        void    removeClient(Client &client);
+        void    addClient(const Client &);
+        void    removeClient(const Client &client);
 };
 
 #endif

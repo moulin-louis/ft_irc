@@ -17,7 +17,7 @@ void	Server::_accept_client( ) {
 	socklen_t crecsize = sizeof(csin);
 	Client	temp;
 
-	Socket csock = accept(this->_sfd, (struct sockaddr *)&csin, &crecsize);
+	Socket csock = accept(this->_sfd, static_cast<struct sockaddr*>(&csin), &crecsize);
 	if (csock < 0)
 		throw runtime_error(string("accept: ") + strerror(errno));
 	this->fd_map.insert(make_pair(csock, temp ));
@@ -33,9 +33,9 @@ void	Server::_accept_client( ) {
 }
 
 void	Server::_disconect_client( Socket fd ) {
-	Client& client = this->fd_map[fd];
+	const Client& client = this->fd_map[fd];
 
-    for ( chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); it++) {
+    for ( chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); ++it) {
         vec_sock_iter temp = find(it->clients.begin(), it->clients.end(), client.getFd());
         if (temp != it->clients.end()) {
             it->clients.erase(temp);

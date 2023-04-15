@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void    Server::wallops(vector<string>& params, Client &client)
+void    Server::wallops( const vector<string>& params, Client &client)
 {
 	string	msg;
 	if (params.empty())
@@ -39,7 +39,7 @@ void    Server::wallops(vector<string>& params, Client &client)
 					(client.getUsername().empty() ? "" : "!" + client.getUsername()) + \
 					(client.getHostname().empty() ? "" : "@" + client.getHostname()) + \
 					" WALLOPS :" + msg + endmsg;
-	for (map<Socket, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++)
+	for (map<Socket, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); ++it)
 	{
 		if (!it->second.isLeaving && it->second.isRegistered && (it->second.getMode() & w))
 			it->second.setBuff(it->second.getBuff() + msg1);

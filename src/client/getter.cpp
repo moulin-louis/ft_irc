@@ -22,11 +22,6 @@ const string &Client::getUsername() const
 	return (this->username);
 }
 
-const string &Client::getRealname() const
-{
-	return (this->realname);
-}
-
 const string &Client::getHostname() const
 {
 	return (this->hostname);

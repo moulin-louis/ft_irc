@@ -11,26 +11,26 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <vector>
 
-void	split_kick_version(vector<string> &list, string &str, const string& delimiter)
+void	split_kick_version( vector<string>& list, string& str, const string& delimiter)
 {
-	string	buff;
 	size_t	pos;
 	while ((pos = str.find(delimiter)) != string::npos) {
-		buff = "#" + str.substr(0, pos);
+		string buff = "#" + str.substr(0, pos);
 		list.push_back(buff);
 		str.erase(1, pos + delimiter.length());
 	}
 	list.push_back("#" + str);
 }
 
-void	Server::process_kick_cmd(Channel& chan, string& nick_user, Client& client, string& reason)
+void	Server::process_kick_cmd(Channel& chan, const string& nick_user, Client& client, const string& reason)
 {
 	if (!chan.user_in_chan(client)) {
 		this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "KICK", ERR_NOTONCHANNEL);
 		return ;
 	}
-	Client& target = find_user(nick_user, client, "KICK");
+	const Client& target = find_user(nick_user, client, "KICK");
 	if (chan.user_in_chan(target))
 	{
 		this->notify_chan(chan.getName(), reason, "KICK", client);
@@ -40,13 +40,8 @@ void	Server::process_kick_cmd(Channel& chan, string& nick_user, Client& client, 
 	this->add_rply_from_server(" :"  + target.getNickname() + chan.getName() + " :They aren't on that channel", client, "KICK", ERR_USERNOTINCHANNEL);
 }
 
-void	Server::kick(vector<string>& params, Client& client)
+void	Server::kick( const vector<string>& params, Client& client)
 {
-	cout << "params[0]" << params[0] << endl;
-	cout << "params[1]" << params[1] << endl;
-	cout << "params[2]" << params[2] << endl;
-	cout << "params[3]" << params[3] << endl;
-	cout << params.size() << endl;
 	try {
 		if (params.size() < 3) {
 			this->add_rply_from_server(":Not enough parameters", client, "KICK", ERR_NEEDMOREPARAMS);
@@ -58,17 +53,19 @@ void	Server::kick(vector<string>& params, Client& client)
 		}
 		vector <string> chan_list;
 		vector <string> user_list;
-		split_kick_version(chan_list, params[1], ",");
-		params[2].erase(0, 1);
-		little_split(user_list, params[2], ",");
+		vector<string> temp_vec = params;
+		split_kick_version(temp_vec, temp_vec[1], string(","));
+		string temp = temp_vec[2];
+		temp.erase(0, 1);
+		little_split(user_list, temp, ",");
 		if (chan_list.size() == 1) {
 			bool found = false;
-			for (chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); it++) {
+			for (chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); ++it) {
 				if (it->getName() == chan_list[0]) {
 					found = true;
-					for (str_iter it2 = user_list.begin(); it2 != user_list.end(); it2++)
+					for (str_iter it2 = user_list.begin(); it2 != user_list.end(); ++it2)
 					{
-						if (params.size() == 3)
+						if (temp_vec.size() == 3)
 							process_kick_cmd(*it, *it2, client, *it2);
 						else
 							process_kick_cmd(*it, *it2, client, params[3]);
@@ -76,7 +73,7 @@ void	Server::kick(vector<string>& params, Client& client)
 					break ;
 				}
 			}
-			if (found == false)
+			if (!found)
 				this->add_rply_from_server(" :" + chan_list[0] + " :No such channel", client, "KICK", ERR_NOSUCHCHANNEL);
 		}
 		else {			
@@ -85,9 +82,9 @@ void	Server::kick(vector<string>& params, Client& client)
 				throw invalid_argument("kick: No recipient given");
 			}
 			int	i = 0;
-			for (str_iter it = chan_list.begin(); it != chan_list.end(); it++) {
+			for (str_iter it = chan_list.begin(); it != chan_list.end(); ++it) {
 				bool found = false;
-				for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++) {
+				for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); ++it2) {
 					if (it2->getName() == *it) {
 						process_kick_cmd(*it2, user_list[i], client, params[3]);
 						found = true;

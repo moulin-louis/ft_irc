@@ -17,7 +17,7 @@
 Channel::Channel() {
 }
 
-Channel::Channel(string &name, Client& client) {
+Channel::Channel(const string &name, const Client& client) {
     cout << "Creating new channel " << name << endl;
     this->_name = name;
     this->addClient(client);
@@ -51,28 +51,24 @@ const string    &Channel::getTopic() const {
     return (this->_topic);
 }
 
-void    Channel::setTopic(string &topic) {
+void    Channel::setTopic(const string &topic) {
     this->_topic = topic;
 }
 
-void    Channel::setName(string &name) {
-    this->_name = name;
-}
-
-bool	Channel::user_in_chan(Client& client) {
-	for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
+bool	Channel::user_in_chan(const Client& client) {
+	for (cl_iter it = this->clients.begin(); it != this->clients.end(); ++it) {
 		if (*it == client.getFd())
 			return (true);
 	}
 	return (false);
 }
 
-void    Channel::addClient(Client &client) {
+void    Channel::addClient(const Client &client) {
     this->clients.push_back(client.getFd());
 }
 
-void    Channel::removeClient(Client &client) {
-    for (cl_iter it = this->clients.begin(); it != this->clients.end(); it++) {
+void    Channel::removeClient(const Client &client) {
+    for (cl_iter it = this->clients.begin(); it != this->clients.end(); ++it) {
         if (*it == client.getFd()) {
             this->clients.erase(it);
             return ;

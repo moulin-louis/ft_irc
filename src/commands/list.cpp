@@ -14,12 +14,12 @@
 
 static void displayAllChannels(Server &server, Client &client, vector<Channel> &chan_vec)
 {
-	for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); it++)
+	for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); ++it)
 		server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "", RPL_LIST);
 	server.add_rply_from_server(":End of LIST", client, "", RPL_LISTEND);
 }
 
-static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel> &chan_vec, vector<string> &params)
+static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel> &chan_vec, const vector<string> &params)
 {
 	istringstream	ss(params[0]);
 	string 		chan_name;
@@ -30,7 +30,7 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 		if (chan_name[0] != '#')
 			continue;
 		else
-			for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); it++)
+			for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); ++it)
 				if (it->getName() == chan_name && find(chan_names.begin(), chan_names.end(), chan_name) == chan_names.end())
 				{
 					chan_names.push_back(chan_name);
@@ -40,13 +40,13 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 	server.add_rply_from_server(":End of LIST", client, "", RPL_LISTEND);
 }
 
-void	Server::list(vector<string>& params, Client &client)
+void	Server::list( const vector<string>& params, Client &client)
 {
 	if (params.empty())
 		throw invalid_argument("list: invalid number of parameters");
 	if (!params[0].length())
 		::displayAllChannels(*this, client, this->chan_vec);
-	else if (params[0].length() && params.size() == 1)
+	else if (params.size() == 1)
 		::getSpecifiedChannels(*this, client, this->chan_vec, params);
 	else
 	{

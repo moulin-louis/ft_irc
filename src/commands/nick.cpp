@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void Server::is_valid_nickname(string &nickname, Client& client) {
+void Server::is_valid_nickname( const string &nickname, Client& client) {
 	if (nickname.size() > 9) {
 		add_rply_from_server(":Nickname is too long", client, "NICK", ERR_ERRONEUSNICKNAME);
 		throw invalid_argument("nick: nickname too long");
@@ -23,7 +23,7 @@ void Server::is_valid_nickname(string &nickname, Client& client) {
 			throw invalid_argument("nick: invalid character in nickname");
 		}
 	}
-	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
+	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); ++it) {
 		if (it->second.getNickname() == nickname) {
 			add_rply_from_server(" :Nickname " + nickname + " is already in use", client, nickname, ERR_NICKNAMEINUSE);
 			throw Server::NicknameInUse();
@@ -31,7 +31,7 @@ void Server::is_valid_nickname(string &nickname, Client& client) {
 	}
 }
 
-void	Server::nick(vector<string>& params, Client& client)
+void	Server::nick( const vector<string>& params, Client& client)
 {
 	try {
 		if (!client.passwd_provided) {

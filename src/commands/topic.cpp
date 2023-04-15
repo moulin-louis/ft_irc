@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void    Server::process_topic_cmd(vector <string>& params, Client& client, Channel& chan)
+void    Server::process_topic_cmd( const vector <string>& params, Client& client, Channel& chan)
 {
     if (params.size() == 2) {
         chan.setTopic(params[1]);
@@ -26,7 +26,7 @@ void    Server::process_topic_cmd(vector <string>& params, Client& client, Chann
     }
 }
 
-void	Server::topic( vector<string>& params, Client& client )
+void	Server::topic( const vector<string>& params, Client& client )
 {
     try {
         if (params.size() != 1) {
@@ -37,7 +37,7 @@ void	Server::topic( vector<string>& params, Client& client )
             add_rply_from_server(params[0] + " :Invalid channel name", client, "TOPIC", ERR_NOSUCHCHANNEL);
             throw invalid_argument("join: invalid channel name");
         }
-        for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); it++) {
+        for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); ++it) {
             if (it->getName() == params[0])
             {
                 if (it->user_in_chan(client))

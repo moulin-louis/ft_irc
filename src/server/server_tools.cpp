@@ -33,12 +33,12 @@ int Server::_epoll_ctl_add(int epfd, int fd, uint32_t events)
 	return (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev));
 }
 
-ssize_t 	sendMessage(Client &client, const string& message) {
+ssize_t 	sendMessage(const Client &client, const string& message) {
 	return (send(client.getFd(), message.c_str(), message.length(), MSG_NOSIGNAL));
 }
 
 Client&	Server::find_user(const string& nick, Client& client, const string& cmd) {
-	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
+	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); ++it) {
 		if (it->second.getNickname() == nick)
 			return it->second;
 	}
@@ -47,7 +47,7 @@ Client&	Server::find_user(const string& nick, Client& client, const string& cmd)
 }
 
 Channel&	Server::find_channel(const string& name, Client& client) {
-	for (vector<Channel>::iterator it = this->chan_vec.begin(); it != this->chan_vec.end(); it++) {
+	for (vector<Channel>::iterator it = this->chan_vec.begin(); it != this->chan_vec.end(); ++it) {
 		if (it->getName() == name)
 			return *it;
 	}
@@ -55,7 +55,7 @@ Channel&	Server::find_channel(const string& name, Client& client) {
 	throw runtime_error("Channel not found");
 }
 
-void	Server::add_cmd_client(const string& content, Client& client, Client& author, const string&  cmd) {
+void	Server::add_cmd_client(const string& content, Client& client, const Client& author, const string&  cmd) {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " " + client.getNickname() + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 }
@@ -69,12 +69,12 @@ void	Server::add_rply_from_server(const string&  msg, Client& dest, const string
 	dest.setBuff(dest.getBuff() + result);
 }
 
-void	little_split(vector<string> &list, string &str, const string& delimiter)
+void	little_split( vector<string> &list, string &str, const string& delimiter)
 {
-	string	buff;
+
 	size_t	pos;
 	while ((pos = str.find(delimiter)) != string::npos) {
-		buff = str.substr(0, pos);
+		string buff = str.substr(0, pos);
 		list.push_back(buff);
 		str.erase(0, pos + delimiter.length());
 	}
@@ -84,11 +84,6 @@ void	little_split(vector<string> &list, string &str, const string& delimiter)
 vector<string> Server::get_botList()
 {
 	return (this->_botList);
-}
-
-void Server::set_botList(const string& bot)
-{
-	this->_botList.push_back(bot);
 }
 
 const char *Server::NicknameInUse::what() const throw()

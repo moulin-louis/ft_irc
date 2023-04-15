@@ -29,13 +29,10 @@ void	Server::process_input(Socket fd ) {
 	string temp;
 
 	temp.resize(512);
-	byte_count = recv(fd, (void *) temp.c_str(), temp.length(), MSG_DONTWAIT);
+	byte_count = recv(fd, (void *)(temp.c_str()), temp.length(), MSG_DONTWAIT);
 	if (byte_count == -1)
-    {
 		throw runtime_error(string("recv: ") + strerror(errno));
-	}
-	if (byte_count == 0)
-    {
+	if (byte_count == 0) {
 		this->_disconect_client(fd);
 		return ;
 	}
@@ -46,15 +43,13 @@ void	Server::process_input(Socket fd ) {
 		if (temp.find(endmsg) == string::npos)
 			break;
 		string tok = temp.substr(0, temp.find(endmsg));
-		try
-		{
+		try {
 			parse_command(tok, this->fd_map[fd]);
 			temp.erase(0, temp.find(endmsg) + 2);
 			if (!client.isRegistered && client.asTriedNickname)
 				::retryRegister(client, *this, this->_server_name);
 		}
-		catch (NicknameInUse& e)
-		{
+		catch (NicknameInUse& e) {
 			cout << RED << "Error: " << e.what() << RESET << endl;
 			client.asTriedNickname = true;
 			break ;
@@ -89,7 +84,7 @@ void	Server::parse_command( string& input, Client& client ) {
 }
 
 void Server::flush_all_buffers() {
-	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++ ) {
+	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); ++it ) {
 		if (it->second.isLeaving)
 			continue ;
         cout << "flushing buffer of " << it->second.getNickname() << endl;

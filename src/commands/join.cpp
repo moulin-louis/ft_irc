@@ -26,15 +26,16 @@ void	Server::is_valid_chan_name(vector<string> params, Client& client)
 	}
 }
 
-void	Server::join(vector<string>& params, Client& client)
+void	Server::join( const vector<string>& params, Client& client)
 {
 	try {
 		is_valid_chan_name(params, client);
 		vector<string>	chan_names;
-		little_split(chan_names, params[0], ",");
-		for (str_iter it = chan_names.begin(); it != chan_names.end(); it++) {
+		string temp_str = params[0];
+		little_split(chan_names, temp_str, ",");
+		for (str_iter it = chan_names.begin(); it != chan_names.end(); ++it) {
 			bool chan_exists = false;		
-			for ( chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++) {
+			for ( chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); ++it2) {
 				if (it2->getName() == *it) {
 					it2->addClient(client);
 					client.channelsMember.push_back(*it);
@@ -53,7 +54,7 @@ void	Server::join(vector<string>& params, Client& client)
 			this->chan_vec.push_back(new_channel);
 			client.channelsMember.push_back(*it);
 			notify_chan(new_channel.getName(), *it, "JOIN", client);
-			for (client_iter it2 = this->fd_map.begin(); it2 != this->fd_map.end(); it2++)
+			for (client_iter it2 = this->fd_map.begin(); it2 != this->fd_map.end(); ++it2)
 			{
 				if (it2->second.getMode() & B)
 					notify_chan(new_channel.getName(), *it, "JOIN", it2->second);

@@ -30,7 +30,7 @@ string mode_to_str(const Mode &mode)
 	return (result);
 }
 
-void	handle_user( Server* server, vector<string>& params, Client& client, Client &target)
+void	handle_user( Server* server, const vector<string>& params, Client& client, Client &target)
 {
 	if ( params.size() == 1 )
 	{
@@ -134,7 +134,7 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 	server->add_rply_from_server(mode_to_str(target.getMode()), target, "", RPL_UMODEIS);
 }
 
-void	Server::mode(vector<string>& params, Client &client)
+void	Server::mode( const vector<string>& params, Client &client)
 {
 	try
 	{

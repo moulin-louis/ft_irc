@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void	Server::private_msg(vector<string>& params, Client& author) {
+void	Server::private_msg( const vector<string>& params, Client& author) {
 	try	{
 		if (params.empty() || params[0].empty()) {
 			add_rply_from_server(":No recipient given", author, "", ERR_NORECIPIENT);

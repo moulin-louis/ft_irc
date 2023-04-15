@@ -33,7 +33,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client)
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
 }
 
-void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
+void	Server::process_part_cmd(Channel& chan, Client& client, const string& reason)
 {
 	if (chan.user_in_chan(client))
 	{
@@ -54,7 +54,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client, string& reason)
 	this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "PART", ERR_NOTONCHANNEL);
 }
 
-void	Server::part(vector<string>& params, Client& client)
+void	Server::part( const vector<string>& params, Client& client)
 {
 	try
     {
@@ -74,24 +74,25 @@ void	Server::part(vector<string>& params, Client& client)
 		{
             size_t			pos;
             string delimiter = ",";
-			params[1].erase(0, 1);
-			while ((pos = params[1].find(delimiter)) != string::npos)
+			string temp = params[1];
+			temp.erase(0, 1);
+			while ((pos = temp.find(delimiter)) != string::npos)
             {
-                if (params[1][0] == '#')
-    				chans_to_part.push_back(params[1].substr(0, pos));
+                if (temp[0] == '#')
+    				chans_to_part.push_back(temp.substr(0, pos));
                 else
-                    chans_to_part.push_back("#" + params[1].substr(0, pos));
-				params[1].erase(0, pos + delimiter.length());
+                    chans_to_part.push_back("#" + temp.substr(0, pos));
+				temp.erase(0, pos + delimiter.length());
 			}
-			if (params[1][0] == '#')
-				chans_to_part.push_back(params[1]);
+			if (temp[0] == '#')
+				chans_to_part.push_back(temp);
 			else
-				chans_to_part.push_back("#" + params[1]);
+				chans_to_part.push_back("#" + temp);
 		}
-		for ( str_iter it = chans_to_part.begin(); it != chans_to_part.end(); it++)
+		for ( str_iter it = chans_to_part.begin(); it != chans_to_part.end(); ++it)
         {
 			bool chan_exists = false;
-			for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); it2++)
+			for (chan_iter it2 = this->chan_vec.begin(); it2 != this->chan_vec.end(); ++it2)
             {
 				if (it2->getName() == *it)
                 {

@@ -19,8 +19,8 @@
 
 # include "irc.hpp"
 
-ssize_t 	sendMessage(Client &, const string& );
-void        little_split(vector<string> &list, string &str, const string& delimiter);
+ssize_t 	sendMessage( const Client &, const string& );
+void        little_split( vector<string> &list, string &str, const string& delimiter);
 string      displayTimestamp();
 
 class Server
@@ -65,44 +65,44 @@ class Server
 		//checks
 		Client&		find_user(const string& , Client&, const string&);
 		Channel&	find_channel(const string& , Client& );
-		void		is_valid_nickname(string &, Client& );
-		void		is_valid_username(string &, Client& );
+		void		is_valid_nickname( const string &, Client& );
+		void		is_valid_username( const string &, Client& );
 		void		is_valid_chan_name(vector<string> , Client& );
 
 		//commands
-		void	nick( vector<string>&, Client& );
-		void	pass( vector<string>&, Client& );
-		void	ping( vector<string>&, Client& );
-		void	user( vector<string>&, Client& );
-		void	join( vector<string>&, Client& );
-		void	private_msg( vector<string>&, Client& );
-		void	oper( vector<string>&, Client& );
-		void	quit( vector<string>&, Client& );
-		void	mode( vector<string>&, Client& );
-		void	topic( vector<string>&, Client& );
-		void	kill( vector<string>&, Client& );
-		void	part( vector<string>&, Client& );
-		void    list( vector<string>&, Client & );
-		void	kick( vector<string>&, Client& );
-		void    who( vector<string>&, Client & );
-		void	motd(vector<string>&, Client& );
-		void	restart(vector<string>&, Client& );
-		void	wallops(vector<string>&, Client& );
-		void    ignore(vector<string> &params, Client &client);
-		void	names( vector<string>&, Client& );
+		void	nick( const vector<string>&, Client& );
+		void	pass( const vector<string>&, Client& );
+		void	ping( const vector<string>&, Client& );
+		void	user( const vector<string>&, Client& );
+		void	join( const vector<string>&, Client& );
+		void	private_msg( const vector<string>&, Client& );
+		void	oper( const vector<string>&, Client& );
+		void	quit( const vector<string>&, Client& );
+		void	mode( const vector<string>&, Client& );
+		void	topic( const vector<string>&, Client& );
+		void	kill( const vector<string>&, Client& );
+		void	part( const vector<string>&, Client& );
+		void    list( const vector<string>&, Client & );
+		void	kick( const vector<string>&, Client& );
+		void    who( const vector<string>&, Client & );
+		void	motd( const vector<string>&, Client& );
+		void	restart( const vector<string>&, Client& );
+		void	wallops( const  vector<string>&, Client& );
+		void    ignore( const vector<string> &params, Client &client);
+		void	names( const vector<string>&, Client& );
 		//command utils
-		void    process_topic_cmd( vector <string>& , Client& , Channel& );
-		void	process_part_cmd( Channel&, Client&, string& );
+		void    process_topic_cmd( const vector <string>& , Client& , Channel& );
+		void	process_part_cmd( Channel&, Client&, const string& );
 		void	process_part_cmd( Channel&, Client& );
-		void	process_kick_cmd( Channel&, string&, Client&, string& );
+		void	process_kick_cmd( Channel&, const string&, Client&, const string& );
 
 		//server run functions
-		void 	run(bool&);
+		void 	run(const bool& );
 
 	    //send messages
         void	notify_chan(const string& , const string& , const string& , Client &);
-        void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
-        void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
+        void	add_cmd_client(const string& , Client& , const Client&, const string&  ); //foo
+        void	add_cmd_client(const string&, Client&, const Client&, const string& , const Channel& );
 
         //read and setup conf file
         void	read_conf_file();
