@@ -55,9 +55,8 @@ void	Server::kick( const vector<string>& params, Client& client)
 		vector <string> user_list;
 		vector<string> temp_vec = params;
 		split_kick_version(temp_vec, temp_vec[1], string(","));
-		string temp = temp_vec[2];
-		temp.erase(0, 1);
-		little_split(user_list, temp, ",");
+		temp_vec[2].erase(0, 1);
+		little_split(user_list, temp_vec[2], ",");
 		if (chan_list.size() == 1) {
 			bool found = false;
 			for (chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); ++it) {
