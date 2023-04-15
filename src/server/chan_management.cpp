@@ -18,18 +18,17 @@ void	Server::add_cmd_client(const string& content, Client& client, Client& autho
 	client.setBuff(client.getBuff() + msg);
 }
 
-void	Server::notify_chan(const string& chan, const string& content, const string& cmd, Client &author) {
+void	Server::notify_chan(Channel& chan, const string& content, const string& cmd, Client &author) {
 	try {
-		Channel& channel = this->find_channel(chan, author);
-		for ( cl_iter it = channel.clients.begin(); it != channel.clients.end(); it++ ) {
+		for ( cl_iter it = chan.clients.begin(); it != chan.clients.end(); it++ ) {
 			if (*it == author.getFd()) {
 				if (cmd == "JOIN" || cmd == "PART" || cmd == "QUIT" || cmd == "KICK") {
-					this->add_cmd_client(content, (this->fd_map[*it]), author, cmd, channel);
+					this->add_cmd_client(content, (this->fd_map[*it]), author, cmd, chan);
 				}
 			}
 			else
 			{
-				this->add_cmd_client(content, (this->fd_map[*it]), author, cmd, channel);
+				this->add_cmd_client(content, (this->fd_map[*it]), author, cmd, chan);
 			}
 		}
 	}

@@ -33,7 +33,7 @@ void Server::quit(vector<string>& params, Client &client)
 	for (vector<string>::iterator it = client.channelsMember.begin(); it != client.channelsMember.end(); it++)
 	{
 		Channel dest = find_channel(*it, client);
-		this->notify_chan(dest.getName(), msg, "QUIT", client);
+		this->notify_chan(dest, msg, "QUIT", client);
 	}
 	client.isLeaving = true;
 	sendMessage(client, client.getBuff());
