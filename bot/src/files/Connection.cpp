@@ -43,5 +43,19 @@ void Banbot::initial_connection() {
 	msg.resize(ret_val);
 	if (msg.find("381") == string::npos)
 		throw runtime_error("Cant become an operator, check your config");
+//	ajout du mode B au bot
+	msg = "MODE " + this->bot_nickname + " " + "+B" + endmsg;
+	ret_val = send_msg(msg);
+	if (ret_val == -1) {
+		throw runtime_error(string("send: ") + strerror(errno));
+	}
+	clear_resize(msg);
+	ret_val = recv_msg(msg);
+	if (ret_val == -1) {
+		throw runtime_error(string("send: ") + strerror(errno));
+	}
+	msg.resize(ret_val);
+	if (msg.find("481") != string::npos)
+		throw runtime_error("Cant switch to B mode, check your config");
 	cout << GREEN << "Initial connection done" << RESET << endl;
 }

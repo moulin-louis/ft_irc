@@ -81,6 +81,16 @@ void	little_split(vector<string> &list, string &str, const string& delimiter)
 	list.push_back(str);
 }
 
+vector<string> Server::get_botList()
+{
+	return (this->_botList);
+}
+
+vector<string> Server::set_botList(string bot)
+{
+	this->_botList.push_back(bot);
+}
+
 const char *Server::NicknameInUse::what() const throw()
 {
 	return ("Nickname already in use");

@@ -16,6 +16,7 @@
 # define SERVER_HPP
 
 # include "irc.hpp"
+#include <curl/curl.h>
 
 ssize_t 	sendMessage(Client &, const string& );
 void        little_split(vector<string> &list, string &str, const string& delimiter);
@@ -41,6 +42,8 @@ class Server
 		string			_server_name;
 		const string	_server_version;
 		const string	_server_up_date;
+		vector<string>	_botList;
+
 	public:
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
@@ -103,12 +106,16 @@ class Server
         void	read_conf_file();
         void	conf_admin_pass( string& file );
 		void	conf_motd( string& file );
+		//Getter
+		vector<string>	get_botList();
 		//exception
 		class NicknameInUse: exception
 		{
 			public:
 				virtual const char* what() const throw();
 		};
+
+	vector <string> set_botList(string bot);
 };
 
 
