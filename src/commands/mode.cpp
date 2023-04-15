@@ -25,6 +25,8 @@ string mode_to_str(const Mode &mode)
 		result += "w";
 	if (mode & r)
 		result += "r";
+	if (mode & B)
+		result += "B";
 	return (result);
 }
 
@@ -50,14 +52,10 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 			{
 				case 'a':
 					server->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
-//					throw invalid_argument("mode: Please use AWAY to set your mode to away");
 					break ;
 				case 'o':
 					if (!client.isOperator)
-					{
 						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
-//						throw invalid_argument("mode: Permission Denied- You're not an IRC operator");
-					}
 					else
 					{
 						target.isOperator = true;
@@ -72,6 +70,15 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 					break ;
 				case 'r':
 					target.setMode(r);
+					break ;
+				case 'B':
+					if (!client.isOperator)
+						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "MODE", ERR_NOPRIVILEGES);
+					else
+					{
+						server->get_botList().push_back(target.getNickname());
+						target.setMode(B);
+					}
 					break ;
 				default:
 					server->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
@@ -91,10 +98,7 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 					throw invalid_argument("mode: Please use AWAY to set your mode to away");
 				case 'o':
 					if (!client.isOperator)
-					{
 						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
-						throw invalid_argument("mode: Permission Denied- You're not an IRC operator");
-					}
 					else
 					{
 						target.isOperator = false;
@@ -109,6 +113,17 @@ void	handle_user( Server* server, vector<string>& params, Client& client, Client
 					break ;
 				case 'r':
 					target.unSetMode(r);
+					break ;
+				case 'B':
+					if (!client.isOperator)
+					{
+						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "MODE", ERR_NOPRIVILEGES);
+					}
+					else
+					{
+						server->get_botList().erase(find(server->get_botList().begin(), server->get_botList().end(), target.getNickname()));
+						target.unSetMode(B);
+					}
 					break ;
 				default:
 					server->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);

@@ -41,6 +41,8 @@ class Server
 		string			_server_name;
 		const string	_server_version;
 		const string	_server_up_date;
+		vector<string>	_botList;
+
 	public:
 		map<Socket, Client>				fd_map;
 		map<string, command_function>	cmd_map;
@@ -103,6 +105,9 @@ class Server
         void	read_conf_file();
         void	conf_admin_pass( string& file );
 		void	conf_motd( string& file );
+		//Getter
+		vector<string>	get_botList();
+		void	set_botList(const string& bot);
 		//exception
 		class NicknameInUse: exception
 		{

@@ -19,7 +19,8 @@ typedef enum e_modes
 	i = 1 << 1,
 	o = 1 << 2,
 	w = 1 << 3,
-	r = 1 << 4
+	r = 1 << 4,
+	B = 1 << 5,
 }	MODES;
 
 enum	cmd {
