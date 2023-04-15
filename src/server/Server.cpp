@@ -28,7 +28,7 @@ void Server::run(const bool &server_restarting) {
 	epoll_event ev = {};
 
 
-	if (this->_epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN | EPOLLET) == -1)
+	if (this->_epoll_ctl_add(this->_epfd, this->_sfd, EPOLLIN) == -1)
 		throw runtime_error(string("epoll_ctl: ") + strerror(errno));
 	while (server_restarting)
 	{

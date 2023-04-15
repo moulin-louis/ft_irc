@@ -100,7 +100,7 @@ class Server
 		void 	run(const bool& );
 
 	    //send messages
-        void	notify_chan(const string& , const string& , const string& , Client &);
+        void	notify_chan(Channel& , const string& , const string& , Client &);
         void	add_cmd_client(const string& , Client& , const Client&, const string&  ); //foo
         void	add_cmd_client(const string&, Client&, const Client&, const string& , const Channel& );
 

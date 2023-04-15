@@ -16,7 +16,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client)
 {
 	if (chan.user_in_chan(client))
 	{
-		this->notify_chan(chan.getName(), client.getNickname(), "PART", client);
+		this->notify_chan(chan, client.getNickname(), "PART", client);
 		chan.removeClient(client);
         if (!client.channelsMember.empty())
         {
@@ -37,7 +37,7 @@ void	Server::process_part_cmd(Channel& chan, Client& client, const string& reaso
 {
 	if (chan.user_in_chan(client))
 	{
-		this->notify_chan(chan.getName(), reason, "PART", client);
+		this->notify_chan(chan, reason, "PART", client);
 		chan.removeClient(client);
 		if (!client.channelsMember.empty())
 		{
