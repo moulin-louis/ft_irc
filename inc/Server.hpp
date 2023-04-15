@@ -16,7 +16,6 @@
 # define SERVER_HPP
 
 # include "irc.hpp"
-#include <curl/curl.h>
 
 ssize_t 	sendMessage(Client &, const string& );
 void        little_split(vector<string> &list, string &str, const string& delimiter);
