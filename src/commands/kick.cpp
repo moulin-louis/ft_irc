@@ -33,7 +33,7 @@ void	Server::process_kick_cmd(Channel& chan, string& nick_user, Client& client, 
 	Client& target = find_user(nick_user, client, "KICK");
 	if (chan.user_in_chan(target))
 	{
-		this->notify_chan(chan.getName(), reason, "KICK", client);
+		this->notify_chan(chan, reason, "KICK", client);
 		chan.removeClient(target);
 		return;
 	}

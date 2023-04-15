@@ -36,7 +36,7 @@ void	Server::private_msg(vector<string>& params, Client& author) {
 					msg += " ";
 					msg += params[i];
 				}
-				this->notify_chan(params[0], msg, "PRIVMSG", author);
+				this->notify_chan(dest, msg, "PRIVMSG", author);
 			}
 			else
 				add_rply_from_server(":" + dest.getName() + " :Cannot send to channel", author, "", ERR_CANNOTSENDTOCHAN);
@@ -58,14 +58,6 @@ void	Server::private_msg(vector<string>& params, Client& author) {
             this->add_cmd_client(msg, dest, author, "PRIVMSG");
 		}
 	}
-	// WTF ? Catch les runtime error qui viennent de find_user et find_channel et kick le client lol
-//	catch ( runtime_error& x) {
-//		cout << RED << x.what() << RESET << endl;
-//		add_rply_from_server(":Unauthorized word in your message", author, "PRIVMSG", ERR_CANNOTSENDTOCHAN);
-//		vector<string> temp;
-//		temp.push_back(":kick for using banword");
-//		this->quit(temp, author);
-//	}
 	catch (exception& e) {
 		cout << RED << e.what() << RESET << endl;
 	}

@@ -88,7 +88,6 @@ class Server
 		void	motd(vector<string>&, Client& );
 		void	restart(vector<string>&, Client& );
 		void	wallops(vector<string>&, Client& );
-		void    ignore(vector<string> &params, Client &client);
 		void	names( vector<string>&, Client& );
 		//command utils
 		void    process_topic_cmd( vector <string>& , Client& , Channel& );
@@ -100,7 +99,7 @@ class Server
 		void 	run(bool&);
 
 	    //send messages
-        void	notify_chan(const string& , const string& , const string& , Client &);
+        void	notify_chan(Channel& , const string& , const string& , Client &);
         void	add_cmd_client(const string& , Client& , Client&, const string&  ); //foo
         void	add_cmd_client(const string&, Client&, Client&, const string& , Channel& );
 

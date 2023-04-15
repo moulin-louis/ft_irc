@@ -16,7 +16,7 @@ void    Server::process_topic_cmd(vector <string>& params, Client& client, Chann
 {
     if (params.size() == 2) {
         chan.setTopic(params[1]);
-        this->notify_chan(chan.getName(), params[1], "TOPIC", client);
+        this->notify_chan(chan, params[1], "TOPIC", client);
 	}
     else {
         if (chan.getTopic().empty())
