@@ -116,7 +116,7 @@ void Banbot::routine() {
     while(server_up) {
 		check_all_chan();
 	}
-	msg = "QUIT TEST\r\n";
+	msg = "QUIT :TEST\r\n";
 	send_msg(msg);
 	clear_resize(msg);
 	recv_msg(msg);
