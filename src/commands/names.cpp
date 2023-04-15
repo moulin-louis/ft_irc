@@ -12,18 +12,33 @@
 
 #include "Server.hpp"
 
-void Server::names(vector<string>& params, Client &client ) {
+void Server::names(vector<string> &params, Client &client) {
 	try {
 		Channel chan = find_channel(params[0], client);
-		for ( vec_sock_iter it = chan.clients.begin(); it != chan.clients.end(); it++ ) {
+		for (vec_sock_iter it = chan.clients.begin(); it != chan.clients.end(); it++) {
+			if (this->fd_map[*it].getNickname() == client.getNickname()) {
+				continue ;
+			}
 			if (!(this->fd_map[*it].getMode() & i)) {
-				add_rply_from_server(this->fd_map[*it].getUsername(),  client, "", RPL_LINKS);
+				string msg = ":";
+				msg += this->_server_name + " ";
+				msg += int_to_string(RPL_NAMREPLY) + " ";
+				msg += client.getNickname() + " = ";
+				msg += params[0] + " :";
+				msg += client.getNickname() + " ";
+				msg += this->fd_map[*it].getNickname() + endmsg;
+				client.setBuff(client.getBuff() + msg);
 			}
 		}
 	}
-	catch ( exception& x){
+	catch (exception &x) {
 		cout << RED << x.what() << RESET << endl;
 	}
-	add_rply_from_server("", client, "", RPL_ENDOFLINKS);
-	return ;
+	string msg = ":";
+	msg += this->_server_name + " ";
+	msg += int_to_string(RPL_ENDOFNAMES) + " ";
+	msg += client.getNickname() + " ";
+	msg += params[0] + " :";
+	msg += "End of /NAMES list." + endmsg;
+	client.setBuff(client.getBuff() + msg);
 }

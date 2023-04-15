@@ -39,6 +39,10 @@ void	Server::join(vector<string>& params, Client& client)
 					it2->addClient(client);
 					client.channelsMember.push_back(*it);
 					this->notify_chan(it2->getName(), *it, "JOIN", client);
+					vector<string> temp;
+					temp.push_back(it2->getName());
+					cout << "calling names here" << endl;
+					this->names(temp, client);
 					chan_exists = true;
 					break ;
 				}
@@ -54,6 +58,10 @@ void	Server::join(vector<string>& params, Client& client)
 				if (it2->second.getMode() & B)
 					notify_chan(new_channel.getName(), *it, "JOIN", it2->second);
 			}
+			vector<string> temp;
+			temp.push_back(new_channel.getName());
+			cout << "calling names here" << endl;
+			this->names(temp, client);
 		}
 	}
 	catch(exception& e) {
