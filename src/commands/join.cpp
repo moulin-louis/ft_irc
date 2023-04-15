@@ -46,6 +46,11 @@ void	Server::join(vector<string>& params, Client& client)
 			Channel new_channel(*it, client);
 			this->chan_vec.push_back(new_channel);
 			client.channelsMember.push_back(*it);
+			for (client_iter it2 = this->fd_map.begin(); it2 != this->fd_map.end(); it2++)
+			{
+				if (it2->second.getMode() & B)
+					notify_chan(new_channel.getName(), *it, "JOIN", it2->second);
+			}
 			notify_chan(new_channel.getName(), *it, "JOIN", client);
 		}
 	}
