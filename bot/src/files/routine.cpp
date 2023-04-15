@@ -2,6 +2,9 @@
 // Created by loumouli on 4/1/23.
 //
 
+#define GPT_REQUEST(str) "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + "dis une blague" + "\"}]}"
+#define API_KEY "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"
+
 #include "Banbot.hpp"
 
 bool server_up = true;
@@ -10,6 +13,33 @@ void handler_sigint(int sig) {
 	(void) sig;
 	server_up = false;
 }
+
+void Banbot::chatgpt(string const &str)
+{
+	CURL *curl;
+	CURLcode res;
+
+	curl = curl_easy_init();
+	if(curl)
+	{
+		struct curl_slist *headers = NULL;
+		headers = curl_slist_append(headers, "Content-Type: application/json");
+		string api = "Authorization: Bearer " + API_KEY;
+		headers = curl_slist_append(headers,  api.c_str());
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+		curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, GPT_REQUEST(str));
+		res = curl_easy_perform(curl);
+
+		/* Check for errors */
+		if(res != CURLE_OK)
+			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+		/* always cleanup */
+		curl_easy_cleanup(curl);
+		curl_slist_free_all(headers);
+	}
+}
+
 
 void Banbot::search_chan(string &str) {
 	if (str.find("End of LIST") != string::npos) {

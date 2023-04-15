@@ -27,6 +27,7 @@
 #include <csignal>
 #include <ctime>
 #include <pthread.h>
+#include "../libcurl/include/curl/curl.h"
 using namespace std;
 
 #define endmsg "\r\n"
@@ -71,6 +72,7 @@ class Banbot {
         void	search_chan( string& );
 		void	check_all_chan();
 		void	search_word( string& );
+		void	chatgpt(string const &str);
 
 };
 
