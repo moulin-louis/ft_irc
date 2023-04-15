@@ -17,8 +17,7 @@
 NAME		=	ircserv
 
 ## add library here (minilibx, ncurses, libft, ...)
-LIB			=
-LIBDIR		=
+LIBDIR		=	libcurl/lib/
 
 INCLDIR		=	$(addsuffix /inc,$(LIBDIR) .)
 BUILDIR		=	build
@@ -79,7 +78,7 @@ DEP			=	$(SRC:%.cpp=$(DEPDIR)/%.d)
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O3
 CPPFLAGS	=	$(addprefix -I, $(INCLDIR))
-LDFLAGS		=	$(addprefix -L, $(LIBDIR)) $(addprefix -l, $(LIB))
+LDFLAGS		=	$(LIBDIR)libcurl.a
 DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 
 RM			=	/bin/rm -rf
@@ -133,13 +132,13 @@ $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
 				@printf '$(DELPREV)%-*s$(GREEN)$(CHECK)$(DEFAULT)\n' $(BODY_WIDTH) $(notdir $@)
 
 $(NAME):		$(OBJ)
-				@printf "$(YELLOW)Linking source files and generating $(CYAN)$@$(DEFAULT) $(YELLOW)binary...\n$(DEFAULT)"
+				printf "$(YELLOW)Linking source files and generating $(CYAN)$@$(DEFAULT) $(YELLOW)binary...\n$(DEFAULT)"
 				$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
-				@printf "$(DELPREV)$(GREEN)Binary generated$(DEFAULT)\n"
+				printf "$(DELPREV)$(GREEN)Binary generated$(DEFAULT)\n"
 
 $(DEPDIR):
 				@printf "$(YELLOW)Creating $(BLUE)$@$(DEFAULT)$(YELLOW) folder...$(DEFAULT)\n"
-				@mkdir -p $@
+				mkdir -p $@
 				@printf "$(DELPREV)"
 $(DEP):
 -include $(wildcard $(DEP))
