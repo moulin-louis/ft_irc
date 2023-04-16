@@ -3,6 +3,7 @@
 //
 
 #include "Banbot.hpp"
+#include <stdexcept>
 
 bool server_up = true;
 
@@ -10,7 +11,6 @@ void handler_sigint(int sig) {
 	(void) sig;
 	server_up = false;
 }
-
 void Banbot::search_chan(string &str) {
 	if (str.find("End of LIST") != string::npos) {
 		throw invalid_argument("end of list");
@@ -25,12 +25,6 @@ void Banbot::search_chan(string &str) {
 		throw invalid_argument("cant find space in chan respond");
 	}
 	str.erase(pos_space, str.size());
-	for ( vec_str_iter it = this->chan_server.begin(); it != this->chan_server.end(); it++ ) {
-		if (*it == str) {
-			return;
-		}
-	}
-    this->chan_server.push_back(str);
 	string msg = "JOIN #" + str + endmsg;
 	ssize_t ret_val = send_msg(msg);
 	if (ret_val == -1) {
@@ -45,21 +39,36 @@ void Banbot::search_chan(string &str) {
 }
 
 void Banbot::parse_recv_msg( string& str ) {
-    while(true) {
-        size_t pos = str.find(endmsg);
-        if (pos != string::npos) {
-            string temp = str.substr(0, pos);
-            try {
-                search_chan(temp);
-            }
-            catch ( invalid_argument& x) {
-                return ;
-            }
-            str.erase(0, pos + 2);
-        }
-        else
-            break ;
-    }
+	while(true) {
+		size_t pos = str.find(endmsg);
+		if (pos != string::npos) {
+			string temp = str.substr(0, pos);
+			try {
+				search_chan(temp);
+			}
+			catch ( invalid_argument& x) {
+				return ;
+			}
+			str.erase(0, pos + 2);
+		}
+		else
+			break ;
+	}
+}
+
+void	Banbot::initial_chan_join() {
+	string msg = string("LIST ") + endmsg;
+	ssize_t ret_val = send_msg(msg);
+	if ( ret_val == -1 ) {
+		throw runtime_error(string("send: ") + strerror(errno));
+	}
+	clear_resize(msg);
+	ret_val = recv_msg(msg);
+	if ( ret_val == -1 ) {
+		throw runtime_error(string("recv: ") + strerror(errno));
+	}
+	msg.resize(ret_val);
+	parse_recv_msg(msg);
 }
 
 void Banbot::search_word( string& msg ) {
@@ -112,6 +121,7 @@ void Banbot::check_all_chan() {
 void Banbot::routine() {
     cout << GREEN << "starting the bot routine" << RESET << endl;
 	signal(SIGINT, handler_sigint);
+	initial_chan_join();
     string msg;
     while(server_up) {
 		check_all_chan();

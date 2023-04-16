@@ -63,9 +63,9 @@ class Server
 		//checks
 		Client&		find_user(const string& , Client&, const string&);
 		Channel&	find_channel(const string& , Client& );
-		void		is_valid_nickname( const string &, Client& );
-		void		is_valid_username( const string &, Client& );
-		void		is_valid_chan_name(vector<string> , Client& );
+		void		is_valid_nickname( const string&, Client& );
+		void		is_valid_username( const string&, Client& );
+		void		is_valid_chan_name( const vector<string>& , Client& );
 
 		//commands
 		void	nick( const vector<string>&, Client& );
@@ -97,12 +97,12 @@ class Server
 		void 	run(const bool& );
 
 	    //send messages
-        void	notify_chan(Channel& , const string& , const string& , const Client &);
+        void	notify_chan(Channel& , const string& , const string& , const Client&);
 
         //read and setup conf file
         void	read_conf_file();
-        void	conf_admin_pass( string& file );
-		void	conf_motd( string& file );
+        void	conf_admin_pass( string& );
+		void	conf_motd( string& );
 		//Getter
 		vector<string>	get_botList();
 		//exception

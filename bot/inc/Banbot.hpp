@@ -26,7 +26,6 @@
 #include <sys/socket.h>
 #include <csignal>
 #include <ctime>
-#include <pthread.h>
 using namespace std;
 
 #define endmsg "\r\n"
@@ -67,8 +66,9 @@ class Banbot {
 
 		//routine
 		void	routine();
-        void	parse_recv_msg( string& );
-        void	search_chan( string& );
+		void	initial_chan_join();
+		void	parse_recv_msg( string& str );
+		void	search_chan(string &str);
 		void	check_all_chan();
 		void	search_word( string& );
 

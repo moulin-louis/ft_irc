@@ -37,6 +37,23 @@ ssize_t 	sendMessage(const Client &client, const string& message) {
 	return (send(client.getFd(), message.c_str(), message.length(), MSG_NOSIGNAL));
 }
 
+//struct MyPred {
+//	string x;
+//	bool operator()(const std::pair<Socket, Client>& i) const { return (i.second.getNickname() == x); }
+//};
+//
+//Client&	Server::find_user(const string& nick, Client& client, const string& cmd) {
+//
+//	MyPred pred;
+//	pred.x = nick;
+//	map<Socket , Client>::iterator it = find_if(this->fd_map.begin(),this->fd_map.end(), pred);
+//	if (it == this->fd_map.end()) {
+//		add_rply_from_server(" : No such nick/channel", client, cmd, ERR_NOSUCHNICK);
+//		throw runtime_error("User not found");
+//	}
+//	return (it->second);
+//}
+
 Client&	Server::find_user(const string& nick, Client& client, const string& cmd) {
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); ++it) {
 		if (it->second.getNickname() == nick)
@@ -69,9 +86,9 @@ void	Server::add_rply_from_server(const string&  msg, Client& dest, const string
 	dest.setBuff(dest.getBuff() + result);
 }
 
+
 void	little_split( vector<string> &list, string &str, const string& delimiter)
 {
-
 	size_t	pos;
 	while ((pos = str.find(delimiter)) != string::npos) {
 		string buff = str.substr(0, pos);

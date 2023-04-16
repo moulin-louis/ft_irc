@@ -51,12 +51,12 @@ class Client
 		string		        getBuff() const;
 		Mode				getMode();
 
-		void 	setNickname(const string &);
-		void 	setUsername(const string &);
-		void 	setRealname(const string &);
-		void 	setHostname(const string &);
-		void 	setFd(const Socket &);
-		void 	setBuff( const string&  );
+		void 	setNickname(const string&);
+		void 	setUsername(const string&);
+		void 	setRealname(const string&);
+		void 	setHostname(const string&);
+		void 	setFd(const Socket&);
+		void 	setBuff( const string&);
 		void 	clearBuff();
 		void 	setMode(Mode);
 		void	unSetMode(Mode);

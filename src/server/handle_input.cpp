@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <ostream>
 
 void	retryRegister(Client &client, Server &server, string &svrname)
 {
@@ -87,10 +88,10 @@ void Server::flush_all_buffers() {
 	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); ++it ) {
 		if (it->second.isLeaving)
 			continue ;
-        cout << "flushing buffer of " << it->second.getNickname() << endl;
         ssize_t byte_count = sendMessage(it->second, it->second.getBuff());
         if (byte_count == -1)
         {
+			cout << RED << "fd is " << it->first << RESET << endl;
             throw runtime_error(string("send: ") + strerror(errno));
         }
         cout << YELLOW << byte_count << " bytes SENT" << RESET << endl << endl;

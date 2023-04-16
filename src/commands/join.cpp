@@ -10,11 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
 #include "Server.hpp"
-#include <vector>
 
-void	Server::is_valid_chan_name(vector<string> params, Client& client)
+void	Server::is_valid_chan_name(const vector<string>& params, Client& client)
 {
 	if (params.size() != 1) {
 		add_rply_from_server(":Not enough parameters", client, "JOIN", ERR_NEEDMOREPARAMS);
