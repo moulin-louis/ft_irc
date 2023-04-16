@@ -34,7 +34,7 @@ size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *user
 	memcpy(&(mem->memory[mem->size]), contents, realsize);
 	mem->size += realsize;
 	mem->memory[mem->size] = 0;
-	return realsize;
+	return (realsize);
 }
 
 void    Banbot::chatgpt(string const &str)
@@ -43,8 +43,8 @@ void    Banbot::chatgpt(string const &str)
 	CURLcode    res;
 	string      request;
 	string      api;
+	t_ms        chunk;
 	struct curl_slist *headers;
-	t_ms chunk;
 
 	headers = NULL;
 	chunk.memory = (char *)malloc(1);
