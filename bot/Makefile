@@ -15,17 +15,12 @@
 ###############
 
 NAME		=	banbot
-
 ## add library here (minilibx, ncurses, libft, ...)
-LIB			=
-LIBDIR		=
-
+LIBDIR		=	temp/curl-8.0.1/lib/.libs/
 INCLDIR		=	$(addsuffix /inc,$(LIBDIR) .)
 BUILDIR		=	build
 DEPDIR		=	$(BUILDIR)/.deps
-
 SRCS_DIR	=	$(sort $(dir $(wildcard src/*/)))
-
 SRC			=	$(addprefix src/,			\
 						main.cpp			\
 						$(addprefix files/,	\
@@ -34,17 +29,16 @@ SRC			=	$(addprefix src/,			\
                             Parsing.cpp		\
                             routine.cpp		\
                         )					\
-				)							\
+				)
 
 OBJ			=	$(SRC:%.cpp=$(BUILDIR)/%.o)
 DEP			=	$(SRC:%.cpp=$(DEPDIR)/%.d)
-
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O2
 CPPFLAGS	=	$(addprefix -I, $(INCLDIR))
-LDFLAGS		=	$(addprefix -L, $(LIBDIR)) $(addprefix -l, $(LIB))
-DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
+LDFLAGS		=	$(LIBDIR)libcurl.a -L/usr/lib -lcurl -lz -L"$libbrotli_path" -lbrotlidec
 
+DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 RM			=	/bin/rm -rf
 
 # FG COLORS
@@ -86,6 +80,8 @@ BODY_WIDTH	=	$(shell printf "$$(($(HEAD_SIZE) - 1))")
 .PHONY:			all bonus clean fclean header lib re verbose
 
 all:
+				$(info Running script.sh to install libcurl)
+				@sh ./script.sh
 				@$(MAKE) -s $(NAME)
 
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
@@ -110,11 +106,12 @@ $(DEP):
 clean:
 				@printf "$(YELLOW)Deleting object and dependency files...$(DEFAULT)\n"
 				$(RM) $(OBJ)
+				$(RM)
 				@printf "$(DELPREV)Build files deleted\n"
 
 fclean:			clean
 				@printf "$(YELLOW)Deleting build directory...$(DEFAULT)\n"
-				$(RM) $(BUILDIR) $(NAME)
+				$(RM) $(BUILDIR) $(NAME) temp
 				@printf "$(DELPREV)Build directory and binary deleted\n"
 
 re:				fclean

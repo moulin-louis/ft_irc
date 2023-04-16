@@ -26,18 +26,25 @@
 #include <sys/socket.h>
 #include <csignal>
 #include <ctime>
+#include "../temp/curl-8.0.1/include/curl/curl.h"
 using namespace std;
 
 #define endmsg "\r\n"
 #define SIZE_BUFFER 20000
 #define send_msg(msg) send(this->sfd, (void *)msg.c_str(), msg.size(), 0)
+#define send_msg_bot(msg) send(bot->sfd, (void *)msg.c_str(), msg.size(), 0)
 #define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), SIZE_BUFFER, 0)
+#define recv_msg_bot(msg) recv(bot->sfd, (void *)msg.c_str(), SIZE_BUFFER, 0)
 #define recv_msg_nonblock(msg) recv(this->sfd, (void *)msg.c_str(), SIZE_BUFFER, MSG_DONTWAIT)
 #define clear_resize(msg) msg.clear(); msg.resize(SIZE_BUFFER)
 #define	vec_str_iter vector<string>::iterator
 
+#define GPT_REQUEST(str) "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + str + "\"}]}"
+
 class Banbot {
-	public:
+    private:
+        string  _api;
+    public:
 		int 			sfd;
 		string 			admin_pasword;
 		string 			serv_pass;
@@ -57,6 +64,7 @@ class Banbot {
 		void	parse_admin_pass( string& );
 		void	parse_botname( string& );
 		void 	parse_password( string& );
+        void    parse_api( );
 		void	parse_banfile( );
 
 		//connection
@@ -69,7 +77,10 @@ class Banbot {
 		void	search_chan(string &str) const;
 		void	check_all_chan();
 		void	search_word( string& );
+		void	chatgpt(string const &str);
 
+        //getter
+        string  getApi();
 };
 
 #endif //FT_IRC_BANBOT_HPP

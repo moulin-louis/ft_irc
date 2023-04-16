@@ -17,7 +17,6 @@
 NAME		=	ircserv
 
 ## add library here (minilibx, ncurses, libft, ...)
-LIB			=
 LIBDIR		=
 
 INCLDIR		=	$(addsuffix /inc,$(LIBDIR) .)
@@ -74,9 +73,9 @@ OBJ			=	$(SRC:%.cpp=$(BUILDIR)/%.o)
 DEP			=	$(SRC:%.cpp=$(DEPDIR)/%.d)
 
 CXX			=	c++
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O3
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
 CPPFLAGS	=	$(addprefix -I, $(INCLDIR))
-LDFLAGS		=	$(addprefix -L, $(LIBDIR)) $(addprefix -l, $(LIB))
+LDFLAGS		=
 DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 
 RM			=	/bin/rm -rf
@@ -122,6 +121,10 @@ BODY_WIDTH	=	$(shell printf "$$(($(HEAD_SIZE) - 1))")
 all:
 				@$(MAKE) -s $(NAME)
 
+bonus:
+				@$(MAKE) -C ./bot
+				@$(MAKE) -s $(NAME)
+
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
 				@mkdir -p build/ $(addprefix build/, $(SRCS_DIR))
 				@mkdir -p build/.deps/ $(addprefix build/.deps/, $(SRCS_DIR))
@@ -130,24 +133,28 @@ $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
 				@printf '$(DELPREV)%-*s$(GREEN)$(CHECK)$(DEFAULT)\n' $(BODY_WIDTH) $(notdir $@)
 
 $(NAME):		$(OBJ)
-				@printf "$(YELLOW)Linking source files and generating $(CYAN)$@$(DEFAULT) $(YELLOW)binary...\n$(DEFAULT)"
+				printf "$(YELLOW)Linking source files and generating $(CYAN)$@$(DEFAULT) $(YELLOW)binary...\n$(DEFAULT)"
 				$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
-				@printf "$(DELPREV)$(GREEN)Binary generated$(DEFAULT)\n"
+				printf "$(DELPREV)$(GREEN)Binary generated$(DEFAULT)\n"
 
 $(DEPDIR):
 				@printf "$(YELLOW)Creating $(BLUE)$@$(DEFAULT)$(YELLOW) folder...$(DEFAULT)\n"
-				@mkdir -p $@
+				mkdir -p $@
 				@printf "$(DELPREV)"
 $(DEP):
 -include $(wildcard $(DEP))
 
 clean:
+				@printf "$(YELLOW)BOT: Deleting object and dependency files...$(DEFAULT)\n"
+				$(MAKE) -C ./bot clean
 				@printf "$(YELLOW)Deleting object and dependency files...$(DEFAULT)\n"
 				$(RM) $(OBJ)
 				@printf "$(DELPREV)Build files deleted\n"
 
 fclean:			clean
-				@printf "$(YELLOW)Deleting build directory...$(DEFAULT)\n"
+				@printf "$(YELLOW)BOT: Deleting build directory and binary...$(DEFAULT)\n"
+				$(MAKE) -C ./bot fclean
+				@printf "$(YELLOW)Deleting build directory and binary...$(DEFAULT)\n"
 				$(RM) $(BUILDIR) $(NAME)
 				@printf "$(DELPREV)Build directory and binary deleted\n"
 

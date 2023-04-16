@@ -1,5 +1,6 @@
 # Other
 .idea/
+.env
 build/
 
 # Prerequisites
