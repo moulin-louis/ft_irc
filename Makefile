@@ -124,6 +124,10 @@ BODY_WIDTH	=	$(shell printf "$$(($(HEAD_SIZE) - 1))")
 all:
 				@$(MAKE) -s $(NAME)
 
+bonus:
+				@$(MAKE) -C ./bot
+				@$(MAKE) -s $(NAME)
+
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
 				@mkdir -p build/ $(addprefix build/, $(SRCS_DIR))
 				@mkdir -p build/.deps/ $(addprefix build/.deps/, $(SRCS_DIR))
@@ -144,12 +148,16 @@ $(DEP):
 -include $(wildcard $(DEP))
 
 clean:
+				@printf "$(YELLOW)BOT: Deleting object and dependency files...$(DEFAULT)\n"
+				$(MAKE) -C ./bot clean
 				@printf "$(YELLOW)Deleting object and dependency files...$(DEFAULT)\n"
 				$(RM) $(OBJ)
 				@printf "$(DELPREV)Build files deleted\n"
 
 fclean:			clean
-				@printf "$(YELLOW)Deleting build directory...$(DEFAULT)\n"
+				@printf "$(YELLOW)BOT: Deleting build directory and binary...$(DEFAULT)\n"
+				$(MAKE) -C ./bot fclean
+				@printf "$(YELLOW)Deleting build directory and binary...$(DEFAULT)\n"
 				$(RM) $(BUILDIR) $(NAME)
 				@printf "$(DELPREV)Build directory and binary deleted\n"
 

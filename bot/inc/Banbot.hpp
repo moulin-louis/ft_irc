@@ -27,6 +27,7 @@
 #include <csignal>
 #include <ctime>
 #include <pthread.h>
+#include "../temp/curl-8.0.1/include/curl/curl.h"
 using namespace std;
 
 #define endmsg "\r\n"
