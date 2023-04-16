@@ -28,6 +28,35 @@ SRCS_DIR	=	$(sort $(dir $(wildcard src/*/)))
 
 SRC			=	$(addprefix src/,		\
 						main.cpp		\
+					$(addprefix channel/,\
+						Channel.cpp		\
+					)					\
+					$(addprefix client/,\
+						Client.cpp		\
+						getter.cpp		\
+						setter.cpp		\
+					)					\
+					$(addprefix commands/,\
+						join.cpp		\
+						kick.cpp		\
+						kill.cpp		\
+						list.cpp		\
+						mode.cpp		\
+						motd.cpp		\
+						names.cpp		\
+						nick.cpp		\
+						oper.cpp		\
+						pass.cpp		\
+						ping.cpp		\
+						private_msg.cpp	\
+						quit.cpp		\
+						restart.cpp		\
+						topic.cpp 		\
+						user.cpp		\
+						part.cpp		\
+						wallops.cpp		\
+						who.cpp			\
+					)					\
 					$(addprefix server/,\
 						chan_management.cpp\
 						connection.cpp	\
@@ -36,40 +65,8 @@ SRC			=	$(addprefix src/,		\
 						server_tools.cpp\
 						Server.cpp		\
 					)					\
-					$(addprefix client/,\
-						Client.cpp		\
-						getter.cpp		\
-						setter.cpp		\
-					)					\
-					$(addprefix channel/,\
-						Channel.cpp		\
-					)					\
-					$(addprefix commands/,\
-						join.cpp		\
-						kill.cpp		\
-						mode.cpp		\
-						nick.cpp		\
-						oper.cpp		\
-						pass.cpp		\
-						ping.cpp		\
-						private_msg.cpp	\
-						quit.cpp		\
-						user.cpp		\
-						topic.cpp 		\
-						part.cpp		\
-						kick.cpp		\
-						list.cpp		\
-						who.cpp			\
-						restart.cpp		\
-						motd.cpp		\
-						wallops.cpp		\
-						names.cpp		\
-					)					\
 					$(addprefix tools/,	\
    						Tools.cpp		\
-					)					\
-					$(addprefix client/,\
-   						Client.cpp		\
 					)					\
 				)
 

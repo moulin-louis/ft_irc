@@ -28,7 +28,7 @@ void	Server::_accept_client( ) {
 		this->fd_map[csock].setHostname(hostname);
 	cout << BLUE << "Server: new connection from " << this->fd_map[csock].getHostname() << RESET << endl;
 	this->fd_map[csock].setFd(csock);
-	if (this->_epoll_ctl_add(this->_epfd, this->fd_map[csock].getFd(), EPOLLIN | EPOLLOUT | EPOLLHUP | EPOLLRDHUP) == -1)
+	if (epoll_ctl_add(this->_epfd, this->fd_map[csock].getFd(), EPOLLIN | EPOLLOUT | EPOLLHUP | EPOLLRDHUP) == -1)
 		throw runtime_error(string("epoll_ctl in _accept_client: ") + strerror(errno));
 }
 

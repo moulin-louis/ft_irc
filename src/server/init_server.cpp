@@ -24,27 +24,26 @@ Server::Server(const char *port, const string &password)
 		close (this->_sfd);
 		throw runtime_error(string("epoll_create1: ") + strerror(errno));
 	}
-	this->cmd_map.insert(make_pair("NICK", &Server::nick));
-	this->cmd_map.insert(make_pair("USER", &Server::user));
 	this->cmd_map.insert(make_pair("JOIN", &Server::join));
-	this->cmd_map.insert(make_pair("PRIVMSG", &Server::private_msg));
-	this->cmd_map.insert(make_pair("PASS", &Server::pass));
-	this->cmd_map.insert(make_pair("OPER", &Server::oper));
-	this->cmd_map.insert(make_pair("QUIT", &Server::quit));
-	this->cmd_map.insert(make_pair("MODE", &Server::mode));
-	this->cmd_map.insert(make_pair("PING", &Server::ping));
-	this->cmd_map.insert(make_pair("TOPIC", &Server::topic));
-	this->cmd_map.insert(make_pair("PART", &Server::part));
 	this->cmd_map.insert(make_pair("KICK", &Server::kick));
 	this->cmd_map.insert(make_pair("kill", &Server::kill));
 	this->cmd_map.insert (make_pair("LIST", &Server::list));
-	this->cmd_map.insert(make_pair("WHO", &Server::who));
+	this->cmd_map.insert(make_pair("MODE", &Server::mode));
 	this->cmd_map.insert(make_pair("motd", &Server::motd));
-	this->cmd_map.insert(make_pair("restart", &Server::restart));
-	this->cmd_map.insert(make_pair("wallops", &Server::wallops));
 	this->cmd_map.insert(make_pair("NAMES", &Server::names));
+	this->cmd_map.insert(make_pair("NICK", &Server::nick));
+	this->cmd_map.insert(make_pair("OPER", &Server::oper));
+	this->cmd_map.insert(make_pair("PART", &Server::part));
+	this->cmd_map.insert(make_pair("PASS", &Server::pass));
+	this->cmd_map.insert(make_pair("PING", &Server::ping));
+	this->cmd_map.insert(make_pair("PRIVMSG", &Server::private_msg));
+	this->cmd_map.insert(make_pair("QUIT", &Server::quit));
+	this->cmd_map.insert(make_pair("restart", &Server::restart));
+	this->cmd_map.insert(make_pair("TOPIC", &Server::topic));
+	this->cmd_map.insert(make_pair("USER", &Server::user));
+	this->cmd_map.insert(make_pair("wallops", &Server::wallops));
+	this->cmd_map.insert(make_pair("WHO", &Server::who));
     this->read_conf_file();
-	//MOTD, MAX_EVENT, MAX_USER ON NETWORK
 }
 
 void    Server::read_conf_file() {

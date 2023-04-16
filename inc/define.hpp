@@ -15,6 +15,5 @@
 
 # define MAX_EVENTS 64
 # define endmsg string("\r\n")
-# include "colors.h"
 
 #endif //FT_IRC_DEFINE_HPP

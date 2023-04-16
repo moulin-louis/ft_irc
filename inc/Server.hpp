@@ -11,17 +11,16 @@
 /* ************************************************************************** */
 
 #pragma once
-#include "Client.hpp"
-#include <string>
-#include <vector>
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
 # include "irc.hpp"
 
-ssize_t 	sendMessage( const Client &, const string& );
-void        little_split( vector<string> &list, string &str, const string& delimiter);
-string      displayTimestamp();
+ssize_t	sendMessage( const Client &, const string& );
+void	little_split( vector<string> &, string &, const string& );
+string	displayTimestamp();
+int		epoll_ctl_add(int , int , uint32_t );
+void	add_cmd_client(const string& , Client& , const Client& , const string& );
 
 class Server
 {
@@ -30,7 +29,6 @@ class Server
         Socket			_initiateSocket() ;
         void			_accept_client();
         void			_disconect_client( Socket );
-        int				_epoll_ctl_add(int epfd, int fd, uint32_t events);
         //private variable
 		const pid_t		_pid;
 		const string 	_password;
@@ -100,8 +98,6 @@ class Server
 
 	    //send messages
         void	notify_chan(Channel& , const string& , const string& , const Client &);
-        void	add_cmd_client(const string& , Client& , const Client&, const string&  ); //foo
-        void	add_cmd_client(const string&, Client&, const Client&, const string& , const Channel& );
 
         //read and setup conf file
         void	read_conf_file();
@@ -116,6 +112,5 @@ class Server
 				virtual const char* what() const throw();
 		};
 };
-
 
 #endif

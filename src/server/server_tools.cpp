@@ -24,7 +24,7 @@ string	displayTimestamp( )
 	return (buf);
 }
 
-int Server::_epoll_ctl_add(int epfd, int fd, uint32_t events)
+int epoll_ctl_add(int epfd, int fd, uint32_t events)
 {
 	struct epoll_event ev = {};
 	memset(&ev.data, 0, sizeof(ev.data));
@@ -55,7 +55,7 @@ Channel&	Server::find_channel(const string& name, Client& client) {
 	throw runtime_error("Channel not found");
 }
 
-void	Server::add_cmd_client(const string& content, Client& client, const Client& author, const string&  cmd) {
+void	add_cmd_client(const string& content, Client& client, const Client& author, const string&  cmd) {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname() + " " + cmd + " " + client.getNickname() + " :" + content + endmsg;
 	client.setBuff(client.getBuff() + msg);
 }
