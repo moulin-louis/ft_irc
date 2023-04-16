@@ -21,5 +21,3 @@ if [ -z "$libbrotli_path" ]; then
     echo "libbrotli library not found"
     exit 1
 fi
-
-

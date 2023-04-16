@@ -12,29 +12,72 @@ void handler_sigint(int sig) {
 	server_up = false;
 }
 
-void Banbot::chatgpt(string const &str)
+string  requestify(string const &str)
 {
-	CURL *curl;
-	CURLcode res;
+	string  res;
+	res = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + str + "\"}]}";
+	return (res);
+}
 
-	curl = curl_easy_init();
-	if(curl)
+size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
+{
+	size_t realsize = size * nmemb;
+	t_ms *mem = (t_ms *)userp;
+
+	char *ptr = (char *)realloc(mem->memory, mem->size + realsize + 1);
+	if (ptr == NULL)
 	{
-		struct curl_slist *headers = NULL;
-		headers = curl_slist_append(headers, "Content-Type: application/json");
-		string api = "Authorization: Bearer " + this->getApi();
-		headers = curl_slist_append(headers,  api.c_str());
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, GPT_REQUEST(str));
-		res = curl_easy_perform(curl);
+		free(mem->memory);
+		throw runtime_error(string("WriteMemoryCallback: enomem"));
+	}
+	mem->memory = ptr;
+	memcpy(&(mem->memory[mem->size]), contents, realsize);
+	mem->size += realsize;
+	mem->memory[mem->size] = 0;
+	return realsize;
+}
 
-		/* Check for errors */
-		if(res != CURLE_OK)
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-		/* always cleanup */
-		curl_easy_cleanup(curl);
-		curl_slist_free_all(headers);
+void    Banbot::chatgpt(string const &str)
+{
+	CURL        *curl;
+	CURLcode    res;
+	string      request;
+	string      api;
+	struct curl_slist *headers;
+	t_ms chunk;
+
+	headers = NULL;
+	chunk.memory = (char *)malloc(1);
+	chunk.size = 0;
+	api = "Authorization: Bearer " + this->getApi();
+	request = requestify(str);
+	curl = curl_easy_init();
+	if (curl)
+	{
+		try
+		{
+			headers = curl_slist_append(headers, "Content-Type: application/json");
+			headers = curl_slist_append(headers,  api.c_str());
+			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+			curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.c_str());
+			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+			curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
+			res = curl_easy_perform(curl);
+			if (res != CURLE_OK)
+				cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
+			cout << chunk.memory << endl;
+			curl_easy_cleanup(curl);
+			curl_slist_free_all(headers);
+			free(chunk.memory);
+		}
+		catch (exception& x)
+		{
+			cout << RED << x.what() << RESET << endl;
+			curl_easy_cleanup(curl);
+			curl_slist_free_all(headers);
+			throw runtime_error(string("chatgpt error:") + ::strerror(errno));
+		}
 	}
 }
 
@@ -139,7 +182,10 @@ void Banbot::check_all_chan() {
 		unsigned long pos;
 		while ((pos = msg.find(endmsg)) != string::npos) {
 			string buff = msg.substr(0, pos);
+			// mettre les condition pour voir si message de channel ou msg privé ici
+			// décider entre search_word et chatgpt
 			search_word(buff);
+			chatgpt(buff);
 			msg.erase(0, pos + 1);
 		}
 	}
