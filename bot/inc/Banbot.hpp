@@ -68,7 +68,7 @@ class Banbot {
 		void	routine();
 		void	initial_chan_join();
 		void	parse_recv_msg( string& str );
-		void	search_chan(string &str);
+		void	search_chan(string &str) const;
 		void	check_all_chan();
 		void	search_word( string& );
 

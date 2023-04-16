@@ -11,7 +11,7 @@ void handler_sigint(int sig) {
 	(void) sig;
 	server_up = false;
 }
-void Banbot::search_chan(string &str) {
+void Banbot::search_chan(string &str) const {
 	if (str.find("End of LIST") != string::npos) {
 		throw invalid_argument("end of list");
 	}
