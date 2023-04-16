@@ -30,17 +30,17 @@ string mode_to_str(const Mode &mode)
 	return (result);
 }
 
-void	handle_user( Server* server, const vector<string>& params, Client& client, Client &target)
+void	Server::handle_user( const vector<string>& params, Client& client, Client &target)
 {
 	if ( params.size() == 1 )
 	{
-		server->add_rply_from_server(mode_to_str(client.getMode()), target, "", RPL_UMODEIS);
+		this->add_rply_from_server(mode_to_str(client.getMode()), target, "", RPL_UMODEIS);
         return ;
 	}
 	string input = params[1];
 	if (input[0] != '+' && input[0] != '-')
 	{
-		server->add_rply_from_server(":Please use + or - with mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+		this->add_rply_from_server(":Please use + or - with mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 		throw invalid_argument("mode: Please use + or - with mode");
 	}
     if (input[0] == '+')
@@ -51,11 +51,11 @@ void	handle_user( Server* server, const vector<string>& params, Client& client, 
             switch (*it)
 			{
 				case 'a':
-					server->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+						this->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 					break ;
 				case 'o':
 					if (!client.isOperator)
-						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
+						this->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
 					else
 					{
 						target.isOperator = true;
@@ -73,15 +73,15 @@ void	handle_user( Server* server, const vector<string>& params, Client& client, 
 					break ;
 				case 'B':
 					if (!client.isOperator)
-						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "MODE", ERR_NOPRIVILEGES);
+						this->add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "MODE", ERR_NOPRIVILEGES);
 					else
 					{
-						server->get_botList().push_back(target.getNickname());
+						this->get_botList().push_back(target.getNickname());
 						target.setMode(B);
 					}
 					break ;
 				default:
-					server->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+					this->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 					break ;
 			}
         }
@@ -94,11 +94,11 @@ void	handle_user( Server* server, const vector<string>& params, Client& client, 
 			switch (*it)
 			{
 				case 'a':
-					server->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+					this->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 					throw invalid_argument("mode: Please use AWAY to set your mode to away");
 				case 'o':
 					if (!client.isOperator)
-						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
+						this->add_rply_from_server(":Permission Denied- You're not an IRC operator", client , "MODE", ERR_NOPRIVILEGES);
 					else
 					{
 						target.isOperator = false;
@@ -117,21 +117,21 @@ void	handle_user( Server* server, const vector<string>& params, Client& client, 
 				case 'B':
 					if (!client.isOperator)
 					{
-						server->add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "MODE", ERR_NOPRIVILEGES);
+						this->add_rply_from_server(":Permission Denied- You're not an IRC operator", client, "MODE", ERR_NOPRIVILEGES);
 					}
 					else
 					{
-						server->get_botList().erase(find(server->get_botList().begin(), server->get_botList().end(), target.getNickname()));
+						this->get_botList().erase(find(this->get_botList().begin(), this->get_botList().end(), target.getNickname()));
 						target.unSetMode(B);
 					}
 					break ;
 				default:
-					server->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
+					this->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 					throw invalid_argument("mode: Please use known mode");
 			}
         }
     }
-	server->add_rply_from_server(mode_to_str(target.getMode()), target, "", RPL_UMODEIS);
+	this->add_rply_from_server(mode_to_str(target.getMode()), target, "", RPL_UMODEIS);
 }
 
 void	Server::mode( const vector<string>& params, Client &client)
@@ -149,7 +149,7 @@ void	Server::mode( const vector<string>& params, Client &client)
 			throw invalid_argument("mode: Cannot change mode for other users");
 		}
 		Client &target = this->find_user(params[0], client, "MODE");
-		handle_user(this, params, client, target);
+		handle_user( params, client, target);
 	}
 	catch ( exception& x)
 	{

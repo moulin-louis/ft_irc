@@ -12,8 +12,7 @@
 
 #include "Server.hpp"
 
-string	displayTimestamp( )
-{
+string	displayTimestamp( ) {
 	struct tm *timestruct;
 	time_t timet;
 	char buf[24];
@@ -24,8 +23,7 @@ string	displayTimestamp( )
 	return (buf);
 }
 
-int epoll_ctl_add(int epfd, int fd, uint32_t events)
-{
+int epoll_ctl_add(int epfd, int fd, uint32_t events) {
 	struct epoll_event ev = {};
 	memset(&ev.data, 0, sizeof(ev.data));
 	ev.events = events;
@@ -36,23 +34,6 @@ int epoll_ctl_add(int epfd, int fd, uint32_t events)
 ssize_t 	sendMessage(const Client &client, const string& message) {
 	return (send(client.getFd(), message.c_str(), message.length(), MSG_NOSIGNAL));
 }
-
-//struct MyPred {
-//	string x;
-//	bool operator()(const std::pair<Socket, Client>& i) const { return (i.second.getNickname() == x); }
-//};
-//
-//Client&	Server::find_user(const string& nick, Client& client, const string& cmd) {
-//
-//	MyPred pred;
-//	pred.x = nick;
-//	map<Socket , Client>::iterator it = find_if(this->fd_map.begin(),this->fd_map.end(), pred);
-//	if (it == this->fd_map.end()) {
-//		add_rply_from_server(" : No such nick/channel", client, cmd, ERR_NOSUCHNICK);
-//		throw runtime_error("User not found");
-//	}
-//	return (it->second);
-//}
 
 Client&	Server::find_user(const string& nick, Client& client, const string& cmd) {
 	for (map<int, Client>::iterator it = this->fd_map.begin(); it != this->fd_map.end(); ++it) {
@@ -87,8 +68,7 @@ void	Server::add_rply_from_server(const string&  msg, Client& dest, const string
 }
 
 
-void	little_split( vector<string> &list, string &str, const string& delimiter)
-{
+void	little_split( vector<string> &list, string &str, const string& delimiter) {
 	size_t	pos;
 	while ((pos = str.find(delimiter)) != string::npos) {
 		string buff = str.substr(0, pos);
@@ -98,12 +78,10 @@ void	little_split( vector<string> &list, string &str, const string& delimiter)
 	list.push_back(str);
 }
 
-vector<string> Server::get_botList()
-{
+vector<string>& Server::get_botList() {
 	return (this->_botList);
 }
 
-const char *Server::NicknameInUse::what() const throw()
-{
+const char *Server::NicknameInUse::what() const throw() {
 	return ("Nickname already in use");
 }

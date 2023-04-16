@@ -92,8 +92,9 @@ class Server
 		void	process_part_cmd( Channel&, Client&, const string& );
 		void	process_part_cmd( Channel&, Client& );
 		void	process_kick_cmd( Channel&, const string&, Client&, const string& );
+		void	handle_user( const vector<string>& params, Client& client, Client &target);
 
-		//server run functions
+	//server run functions
 		void 	run(const bool& );
 
 	    //send messages
@@ -104,7 +105,7 @@ class Server
         void	conf_admin_pass( string& );
 		void	conf_motd( string& );
 		//Getter
-		vector<string>	get_botList();
+		vector<string>&	get_botList();
 		//exception
 		class NicknameInUse: exception
 		{
