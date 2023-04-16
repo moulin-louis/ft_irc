@@ -17,7 +17,6 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include "../libcurl/include/curl/curl.h"
 # include "irc.hpp"
 
 ssize_t 	sendMessage(Client &, const string& );

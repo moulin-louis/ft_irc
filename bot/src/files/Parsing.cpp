@@ -108,6 +108,21 @@ void Banbot::parse_password( string& file) {
 	cout << BOLD_PURPLE <<  "serv_passowrd is [" << this->serv_pass << "]" << RESET << endl;
 }
 
+void Banbot::parse_api( string& file) {
+    unsigned long tok_pos = file.find("api_key");
+    if (tok_pos == string::npos ) {
+        throw runtime_error("open conf file: cant find api_key");
+    }
+    tok_pos += strlen("api_key=");
+    unsigned long nl_pos = file.find('\n', tok_pos);
+    if ( nl_pos == string::npos ) {
+        throw runtime_error("open conf file: cant find newline for api_key");
+    }
+    string temp = file.substr(tok_pos, nl_pos - tok_pos);
+    this->_api = temp;
+    cout << BOLD_PURPLE <<  "api is [" << this->_api << "]" << RESET << endl;
+}
+
 void Banbot::parse_banfile( ) {
 	//opening the file and reading it into a string
 	fstream file;

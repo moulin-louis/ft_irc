@@ -19,6 +19,8 @@ NAME		=	banbot
 ## add library here (minilibx, ncurses, libft, ...)
 LIBDIR		=	libcurl/lib/
 
+API_KEY		= $(shell grep API_KEY ../.env | cut -d= -f2)
+
 INCLDIR		=	$(addsuffix /inc,$(LIBDIR) .)
 BUILDIR		=	build
 DEPDIR		=	$(BUILDIR)/.deps
@@ -39,7 +41,7 @@ OBJ			=	$(SRC:%.cpp=$(BUILDIR)/%.o)
 DEP			=	$(SRC:%.cpp=$(DEPDIR)/%.d)
 
 CXX			=	c++
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O2
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O2 -D API=$(API_KEY)
 CPPFLAGS	=	$(addprefix -I, $(INCLDIR))
 LDFLAGS		=	$(LIBDIR)libcurl.a
 DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
@@ -85,6 +87,7 @@ BODY_WIDTH	=	$(shell printf "$$(($(HEAD_SIZE) - 1))")
 .PHONY:			all bonus clean fclean header lib re verbose
 
 all:
+				@echo "api_key=$$(grep API_KEY ../.env | cut -d= -f2)" >> banbot.conf
 				@$(MAKE) -s $(NAME)
 
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)

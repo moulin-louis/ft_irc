@@ -17,7 +17,7 @@
 NAME		=	ircserv
 
 ## add library here (minilibx, ncurses, libft, ...)
-LIBDIR		=	libcurl/lib/
+LIBDIR		=
 
 INCLDIR		=	$(addsuffix /inc,$(LIBDIR) .)
 BUILDIR		=	build
@@ -78,7 +78,7 @@ DEP			=	$(SRC:%.cpp=$(DEPDIR)/%.d)
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
 CPPFLAGS	=	$(addprefix -I, $(INCLDIR))
-LDFLAGS		=	$(LIBDIR)libcurl.a
+LDFLAGS		=
 DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 
 RM			=	/bin/rm -rf

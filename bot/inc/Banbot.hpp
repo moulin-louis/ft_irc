@@ -27,7 +27,6 @@
 #include <csignal>
 #include <ctime>
 #include <pthread.h>
-#include "../libcurl/include/curl/curl.h"
 using namespace std;
 
 #define endmsg "\r\n"
@@ -41,10 +40,11 @@ using namespace std;
 #define	vec_str_iter vector<string>::iterator
 
 #define GPT_REQUEST(str) "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + str + "\"}]}"
-#define API_KEY "dummy"
 
 class Banbot {
-	public:
+    private:
+        string  _api;
+    public:
 		int 			sfd;
 		string 			admin_pasword;
 		string 			serv_pass;
@@ -64,6 +64,7 @@ class Banbot {
 		void	parse_admin_pass( string& );
 		void	parse_botname( string& );
 		void 	parse_password( string& );
+        void    parse_api( string& );
 		void	parse_banfile( );
 
 		//connection

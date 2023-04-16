@@ -11,6 +11,11 @@ void handler_sigint(int sig) {
 	server_up = false;
 }
 
+string  Banbot::getApi()
+{
+    return (this->_api);
+}
+
 void Banbot::chatgpt(string const &str)
 {
 	CURL *curl;
@@ -21,7 +26,7 @@ void Banbot::chatgpt(string const &str)
 	{
 		struct curl_slist *headers = NULL;
 		headers = curl_slist_append(headers, "Content-Type: application/json");
-		string api = "Authorization: Bearer " + API_KEY;
+		string api = "Authorization: Bearer " + this->getApi();
 		headers = curl_slist_append(headers,  api.c_str());
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 		curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
