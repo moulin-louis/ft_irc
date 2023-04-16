@@ -2,9 +2,6 @@
 // Created by loumouli on 4/1/23.
 //
 
-#define GPT_REQUEST(str) "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + "dis une blague" + "\"}]}"
-#define API_KEY "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"
-
 #include "Banbot.hpp"
 
 bool server_up = true;
