@@ -64,7 +64,7 @@ class Banbot {
 		void	parse_admin_pass( string& );
 		void	parse_botname( string& );
 		void 	parse_password( string& );
-        void    parse_api( string& );
+        void    parse_api( );
 		void	parse_banfile( );
 
 		//connection
@@ -78,6 +78,8 @@ class Banbot {
 		void	search_word( string& );
 		void	chatgpt(string const &str);
 
+        //getter
+        string  getApi();
 };
 
 #endif //FT_IRC_BANBOT_HPP

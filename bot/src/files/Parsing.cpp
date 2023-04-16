@@ -28,6 +28,7 @@ void Banbot::parse_conf_file() {
 	parse_admin_pass(file_read);
 	parse_botname(file_read);
 	parse_password(file_read);
+    parse_api();
 	parse_banfile();
 	conf_file.close();
 }
@@ -108,19 +109,32 @@ void Banbot::parse_password( string& file) {
 	cout << BOLD_PURPLE <<  "serv_passowrd is [" << this->serv_pass << "]" << RESET << endl;
 }
 
-void Banbot::parse_api( string& file) {
-    unsigned long tok_pos = file.find("api_key");
-    if (tok_pos == string::npos ) {
-        throw runtime_error("open conf file: cant find api_key");
+void    Banbot::parse_api( )
+{
+    ifstream    file;
+
+    file.open("./.env");
+    if (file && file.is_open())
+    {
+        string	line;
+        while (getline(file, line))
+        {
+            unsigned long tok = line.find("API_KEY=");
+            if (tok != string::npos)
+            {
+                this->_api = line.substr(tok + ::strlen("API_KEY="));
+                cout << BOLD_PURPLE <<  "api is [" << this->_api << "]" << RESET << endl;
+                file.close();
+                return ;
+            }
+        }
+        file.close();
+        throw runtime_error(string(".env file: no API_KEY var found, use API_KEY=your_key"));
     }
-    tok_pos += strlen("api_key=");
-    unsigned long nl_pos = file.find('\n', tok_pos);
-    if ( nl_pos == string::npos ) {
-        throw runtime_error("open conf file: cant find newline for api_key");
+    else
+    {
+        throw runtime_error(string("open .env file: ") + strerror(errno));
     }
-    string temp = file.substr(tok_pos, nl_pos - tok_pos);
-    this->_api = temp;
-    cout << BOLD_PURPLE <<  "api is [" << this->_api << "]" << RESET << endl;
 }
 
 void Banbot::parse_banfile( ) {
@@ -160,4 +174,5 @@ void Banbot::parse_banfile( ) {
 		cout << "-";
 	}
 	cout << "]" << RESET << endl;
+    file.close();
 }

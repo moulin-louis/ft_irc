@@ -11,11 +11,6 @@ void handler_sigint(int sig) {
 	server_up = false;
 }
 
-string  Banbot::getApi()
-{
-    return (this->_api);
-}
-
 //void Banbot::chatgpt(string const &str)
 //{
 //	CURL *curl;

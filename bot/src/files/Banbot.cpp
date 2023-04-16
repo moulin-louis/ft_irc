@@ -17,3 +17,8 @@ Banbot::~Banbot() {
 	if (this->sfd)
 		close(this->sfd);
 }
+
+string  Banbot::getApi()
+{
+    return (this->_api);
+}
