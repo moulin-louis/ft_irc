@@ -31,9 +31,7 @@ using namespace std;
 #define endmsg "\r\n"
 #define SIZE_BUFFER 20000
 #define send_msg(msg) send(this->sfd, (void *)msg.c_str(), msg.size(), 0)
-#define send_msg_bot(msg) send(bot->sfd, (void *)msg.c_str(), msg.size(), 0)
 #define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), SIZE_BUFFER, 0)
-#define recv_msg_bot(msg) recv(bot->sfd, (void *)msg.c_str(), SIZE_BUFFER, 0)
 #define recv_msg_nonblock(msg) recv(this->sfd, (void *)msg.c_str(), SIZE_BUFFER, MSG_DONTWAIT)
 #define clear_resize(msg) msg.clear(); msg.resize(SIZE_BUFFER)
 #define	vec_str_iter vector<string>::iterator
