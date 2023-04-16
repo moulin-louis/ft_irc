@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <vector>
 
 void	Server::is_valid_chan_name(const vector<string>& params, Client& client)
 {
@@ -38,6 +39,9 @@ void	Server::join( const vector<string>& params, Client& client)
 					it2->addClient(client);
 					client.channelsMember.push_back(*it);
 					this->notify_chan(*it2, *it, "JOIN", client);
+					vector<string> temp;
+					temp.push_back(it2->getName());
+					this->names(temp, client);
 					chan_exists = true;
 					break ;
 				}
@@ -48,6 +52,9 @@ void	Server::join( const vector<string>& params, Client& client)
 			this->chan_vec.push_back(new_channel);
 			client.channelsMember.push_back(*it);
 			notify_chan(new_channel, *it, "JOIN", client);
+			vector<string> temp;
+			temp.push_back(new_channel.getName());
+			this->names(temp, client);
 			for (client_iter it3 = this->fd_map.begin(); it3 != this->fd_map.end(); ++it3 )
 			{
 				if (it3->second.getMode() & B)
@@ -58,6 +65,7 @@ void	Server::join( const vector<string>& params, Client& client)
 				}
 			}
 		}
+
 	}
 	catch(exception& e) {
 		cout << RED << e.what() << RESET << endl;
