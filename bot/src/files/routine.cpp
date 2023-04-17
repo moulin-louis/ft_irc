@@ -3,7 +3,9 @@
 //
 
 #include "Banbot.hpp"
-#include <stdexcept>
+#include <cstddef>
+#include <cstring>
+#include <algorithm>
 
 bool server_up = true;
 
@@ -12,21 +14,18 @@ void handler_sigint(int sig) {
 	server_up = false;
 }
 
-string  requestify(string const &str)
-{
-	string  res;
+string requestify(string const &str) {
+	string res;
 	res = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + str + "\"}]}";
 	return (res);
 }
 
-size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
-{
+size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {
 	size_t realsize = size * nmemb;
-	t_ms *mem = (t_ms *)userp;
+	t_ms *mem = (t_ms *) userp;
 
-	char *ptr = (char *)realloc(mem->memory, mem->size + realsize + 1);
-	if (ptr == NULL)
-	{
+	char *ptr = (char *) realloc(mem->memory, mem->size + realsize + 1);
+	if (ptr == NULL) {
 		free(mem->memory);
 		throw runtime_error(string("WriteMemoryCallback: enomem"));
 	}
@@ -37,32 +36,29 @@ size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *user
 	return (realsize);
 }
 
-void    Banbot::chatgpt(string const &str)
-{
-	CURL        *curl;
-	CURLcode    res;
-	string      request;
-	string      api;
-	t_ms        chunk;
+void Banbot::chatgpt(string const &str) {
+	CURL *curl;
+	CURLcode res;
+	string request;
+	string api;
+	t_ms chunk;
 	struct curl_slist *headers;
 
 	headers = NULL;
-	chunk.memory = (char *)malloc(1);
+	chunk.memory = (char *) malloc(1);
 	chunk.size = 0;
 	api = "Authorization: Bearer " + this->getApi();
 	request = requestify(str);
 	curl = curl_easy_init();
-	if (curl)
-	{
-		try
-		{
+	if (curl) {
+		try {
 			headers = curl_slist_append(headers, "Content-Type: application/json");
-			headers = curl_slist_append(headers,  api.c_str());
+			headers = curl_slist_append(headers, api.c_str());
 			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 			curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.c_str());
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-			curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
+			curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *) &chunk);
 			res = curl_easy_perform(curl);
 			if (res != CURLE_OK)
 				cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
@@ -71,8 +67,7 @@ void    Banbot::chatgpt(string const &str)
 			curl_slist_free_all(headers);
 			free(chunk.memory);
 		}
-		catch (exception& x)
-		{
+		catch (exception &x) {
 			cout << RED << x.what() << RESET << endl;
 			curl_easy_cleanup(curl);
 			curl_slist_free_all(headers);
@@ -105,64 +100,75 @@ void Banbot::search_chan(string &str) const {
 	if (ret_val == -1) {
 		throw runtime_error(string("recv: ") + strerror(errno));
 	}
-	cout << YELLOW << "joined [" << str << "]" << RESET << endl;
 }
 
-void Banbot::parse_recv_msg( string& str ) {
-	while(true) {
+void Banbot::parse_recv_msg(string &str) {
+	while (true) {
 		size_t pos = str.find(endmsg);
 		if (pos != string::npos) {
 			string temp = str.substr(0, pos);
 			try {
 				search_chan(temp);
 			}
-			catch ( invalid_argument& x) {
-				return ;
+			catch (invalid_argument &x) {
+				return;
 			}
 			str.erase(0, pos + 2);
-		}
-		else
-			break ;
+		} else
+			break;
 	}
 }
 
-void	Banbot::initial_chan_join() {
+void Banbot::initial_chan_join() {
 	string msg = string("LIST ") + endmsg;
 	ssize_t ret_val = send_msg(msg);
-	if ( ret_val == -1 ) {
+	if (ret_val == -1) {
 		throw runtime_error(string("send: ") + strerror(errno));
 	}
 	clear_resize(msg);
 	ret_val = recv_msg(msg);
-	if ( ret_val == -1 ) {
+	if (ret_val == -1) {
 		throw runtime_error(string("recv: ") + strerror(errno));
 	}
 	msg.resize(ret_val);
 	parse_recv_msg(msg);
 }
 
-void Banbot::search_word( string& msg ) {
-	string user = msg.substr(msg.find(':') + 1, msg.find('!') - 1);
-	size_t hastag_pos = msg.find('#') + 1;
-	size_t end = 0;
-	while(msg[hastag_pos + end] != ' ') {
-		end++;
+int Banbot::search_word(string &msg) {
+	cout << "OG msg = [" << msg << "]" << endl;
+	string saving = msg;
+	size_t pos = msg.find("PRIVMSG");
+	if (pos == string::npos)
+		return 0;
+	pos += strlen("PRIVMSG") + 1;
+	msg.erase(0, pos);
+	cout << " msg is now [" << msg << "]" << endl;
+	string token = msg.substr(0, msg.find(' ') - 1);
+	if (token == this->bot_nickname) {
+		cout << "private msg" << endl;
+		return 0;
 	}
-	string chan = msg.substr(hastag_pos, end);
+	token.erase(0, 1);
+	cout << "token = [" << token << ']' << endl;
+	string content = msg.substr(msg.find(":") + 1, msg.length());
+	string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);
 	for ( vec_str_iter it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
 		string tmp = *it;
-		if ( msg.find("PRIVMSG") != string::npos && msg.find(tmp) != string::npos) {
+		if ( content.find(*it) != string::npos) {
 			string msg_to_send = "KICK #";
-			msg_to_send += chan + " ";
-			msg_to_send += chan + " :";
+			msg_to_send += token + " ";
+			msg_to_send += token + " :";
 			msg_to_send += user  + endmsg;
+			cout << "sending " << msg_to_send << endl;
 			ssize_t ret_val = send_msg(msg_to_send);
 			if (ret_val == -1) {
 				throw runtime_error(string("send: ") + strerror(errno));
 			}
 		}
 	}
+	return (1);
 }
+
 
 void Banbot::check_all_chan() {
 	while (server_up) {
@@ -179,13 +185,14 @@ void Banbot::check_all_chan() {
 		if (ret_val == 0)
 			continue;
 		msg.resize(ret_val);
+		cout << "msg received == [" << msg << "]" << endl;
 		unsigned long pos;
 		while ((pos = msg.find(endmsg)) != string::npos) {
 			string buff = msg.substr(0, pos);
-			// mettre les condition pour voir si message de channel ou msg privé ici
-			// décider entre search_word et chatgpt
-			search_word(buff);
-			chatgpt(buff);
+			if (search_word(buff)) {}
+			else {
+//				chatgpt(buff);
+			}
 			msg.erase(0, pos + 1);
 		}
 	}

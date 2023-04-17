@@ -21,6 +21,7 @@ void	little_split( vector<string> &, string &, const string& );
 string	displayTimestamp();
 int		epoll_ctl_add(int , int , uint32_t );
 void	add_cmd_client(const string& , Client& , const Client& , const string& );
+void	add_cmd_client(const string& content, Client& client, const Client& author, const string&  cmd, const Channel& chan);
 
 class Server
 {
