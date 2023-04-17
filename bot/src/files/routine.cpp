@@ -192,7 +192,7 @@ void Banbot::check_all_chan() {
 			string buff = msg.substr(0, pos);
 			if (search_word(buff)) {}
 			else {
-				cout << chatgpt(buff) << endl;
+				parse(chatgpt(buff) << endl;
 			}
 			msg.erase(0, pos + 1);
 		}
