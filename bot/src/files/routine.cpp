@@ -142,11 +142,8 @@ int Banbot::search_word(string &msg) {
 		return 0;
 	pos += strlen("PRIVMSG") + 1;
 	msg.erase(0, pos);
-	cout << " msg is now [" << msg << "]" << endl;
 	string token = msg.substr(0, msg.find(' '));
-	cout << "token = [" << token << ']' << endl;
 	if (token == this->bot_nickname) {
-		cout << "private msg" << endl;
 		return 0;
 	}
 	token.erase(0, 1);
@@ -185,7 +182,6 @@ void Banbot::check_all_chan() {
 		if (ret_val == 0)
 			continue;
 		msg.resize(ret_val);
-		cout << "msg received == [" << msg << "]" << endl;
 		unsigned long pos;
 		while ((pos = msg.find(endmsg)) != string::npos) {
 			string buff = msg.substr(0, pos);
