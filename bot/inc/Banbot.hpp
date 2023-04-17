@@ -83,7 +83,7 @@ class Banbot {
 		void	search_chan(string &str) const;
 		void	check_all_chan();
 		int	search_word( string& );
-		void	chatgpt(string const &str);
+		string	chatgpt(string const &str);
 
         //getter
         string  getApi();
