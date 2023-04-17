@@ -36,7 +36,7 @@ size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *user
 	return (realsize);
 }
 
-void Banbot::chatgpt(string const &str) {
+string	Banbot::chatgpt(string const &str) {
 	CURL *curl;
 	CURLcode res;
 	string request;
@@ -44,6 +44,9 @@ void Banbot::chatgpt(string const &str) {
 	t_ms chunk;
 	struct curl_slist *headers;
 
+	size_t pos = str.find("PRIVMSG");
+	if (pos == string::npos)
+		return ("Not a ChatGpt request");
 	headers = NULL;
 	chunk.memory = (char *) malloc(1);
 	chunk.size = 0;
@@ -62,10 +65,11 @@ void Banbot::chatgpt(string const &str) {
 			res = curl_easy_perform(curl);
 			if (res != CURLE_OK)
 				cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
-			cout << chunk.memory << endl;
 			curl_easy_cleanup(curl);
 			curl_slist_free_all(headers);
+			string ret(chunk.memory);
 			free(chunk.memory);
+			return (ret);
 		}
 		catch (exception &x) {
 			cout << RED << x.what() << RESET << endl;
@@ -74,6 +78,7 @@ void Banbot::chatgpt(string const &str) {
 			throw runtime_error(string("chatgpt error:") + ::strerror(errno));
 		}
 	}
+	return ("FAIL, this message should never show up");
 }
 
 void Banbot::search_chan(string &str) const {
@@ -144,6 +149,7 @@ int Banbot::search_word(string &msg) {
 	msg.erase(0, pos);
 	string token = msg.substr(0, msg.find(' '));
 	if (token == this->bot_nickname) {
+		msg = saving;
 		return 0;
 	}
 	token.erase(0, 1);
@@ -166,7 +172,6 @@ int Banbot::search_word(string &msg) {
 	return (1);
 }
 
-
 void Banbot::check_all_chan() {
 	while (server_up) {
 		string msg;
@@ -187,7 +192,7 @@ void Banbot::check_all_chan() {
 			string buff = msg.substr(0, pos);
 			if (search_word(buff)) {}
 			else {
-//				chatgpt(buff);
+				cout << chatgpt(buff) << endl;
 			}
 			msg.erase(0, pos + 1);
 		}
