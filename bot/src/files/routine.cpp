@@ -143,13 +143,13 @@ int Banbot::search_word(string &msg) {
 	pos += strlen("PRIVMSG") + 1;
 	msg.erase(0, pos);
 	cout << " msg is now [" << msg << "]" << endl;
-	string token = msg.substr(0, msg.find(' ') - 1);
+	string token = msg.substr(0, msg.find(' '));
+	cout << "token = [" << token << ']' << endl;
 	if (token == this->bot_nickname) {
 		cout << "private msg" << endl;
 		return 0;
 	}
 	token.erase(0, 1);
-	cout << "token = [" << token << ']' << endl;
 	string content = msg.substr(msg.find(":") + 1, msg.length());
 	string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);
 	for ( vec_str_iter it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
@@ -206,7 +206,7 @@ void Banbot::routine() {
     while(server_up) {
 		check_all_chan();
 	}
-	msg = "QUIT :TEST\r\n";
+	msg = "QUIT :STOPING THE SERVER\r\n";
 	send_msg(msg);
 	clear_resize(msg);
 	recv_msg(msg);
