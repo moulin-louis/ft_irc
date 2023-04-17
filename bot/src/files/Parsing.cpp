@@ -154,7 +154,6 @@ void Banbot::parse_banfile( ) {
 		}
 		result += ",";
 	}
-
 	//parsing the file into a vector of banword string
 	string	buff;
 	size_t	pos;
