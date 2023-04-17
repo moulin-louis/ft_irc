@@ -153,7 +153,7 @@ int Banbot::search_word(string &msg) {
 		return 0;
 	}
 	token.erase(0, 1);
-	string content = msg.substr(msg.find(":") + 1, msg.length());
+	string content = msg.substr(msg.find(':') + 1, msg.length());
 	string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);
 	for ( vec_str_iter it = this->ban_word.begin(); it != this->ban_word.end(); it++ ) {
 		string tmp = *it;

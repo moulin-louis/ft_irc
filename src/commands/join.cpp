@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:45:46 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/30 18:20:13 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/17 16:10:59 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	Server::join( const vector<string>& params, Client& client)
 					this->notify_chan(*it2, *it, "JOIN", client);
 					vector<string> temp;
 					temp.push_back(it2->getName());
+					add_rply_from_server(":" + it2->getTopic(), client, "TOPIC", RPL_TOPIC);
 					this->names(temp, client);
 					chan_exists = true;
 					break ;
@@ -55,6 +56,7 @@ void	Server::join( const vector<string>& params, Client& client)
 			vector<string> temp;
 			temp.push_back(new_channel.getName());
 			this->names(temp, client);
+			add_rply_from_server(":" + new_channel.getTopic(), client, "TOPIC", RPL_NOTOPIC);
 			for (client_iter it3 = this->fd_map.begin(); it3 != this->fd_map.end(); ++it3 )
 			{
 				if (it3->second.getMode() & B)
