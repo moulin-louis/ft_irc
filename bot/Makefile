@@ -36,7 +36,7 @@ DEP			=	$(SRC:%.cpp=$(DEPDIR)/%.d)
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O2
 CPPFLAGS	=	$(addprefix -I, $(INCLDIR))
-LDFLAGS		=	$(LIBDIR)libcurl.a -L/usr/lib -lz -L"$libbrotli_path" -lbrotlidec
+LDFLAGS		=	$(LIBDIR)libcurl.a -L/usr/lib -lssl -lcrypto -lz -L"$libbrotli_path" -lbrotlidec
 
 DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 RM			=	/bin/rm -rf

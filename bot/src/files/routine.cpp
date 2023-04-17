@@ -185,7 +185,6 @@ void Banbot::check_all_chan() {
 			// mettre les condition pour voir si message de channel ou msg privé ici
 			// décider entre search_word et chatgpt
 			search_word(buff);
-			chatgpt(buff);
 			msg.erase(0, pos + 1);
 		}
 	}
