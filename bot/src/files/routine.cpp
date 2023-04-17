@@ -166,7 +166,6 @@ int Banbot::search_word(string &msg) {
 	return (1);
 }
 
-
 void Banbot::check_all_chan() {
 	while (server_up) {
 		string msg;
