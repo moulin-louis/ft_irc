@@ -180,13 +180,21 @@ void	parse_the_answer(string &ans)
 		ans = ans.substr(tok + ::strlen("\"content\":\""));
 		unsigned long tok2 = ans.rfind("\"},\"finish_reason\":\"");
 		if (tok2 != string::npos)
+		{
 			ans = ans.substr(0, tok2);
+			unsigned long tok3 = ans.find("\\n", 0);
+			while (tok3 != string::npos)
+			{
+				ans.replace(tok3, 2, "\n");
+				tok3 = ans.find("\\n", tok3);
+			}
+			return ;
+		}
 		else
 		{
 			ans = "";
 			return ;
 		}
-		return ;
 	}
 	else
 	{
@@ -197,23 +205,32 @@ void	parse_the_answer(string &ans)
 
 string composeAnswer(string &msg, string &user)
 {
-	string msg_to_send = "PRIVMSG";
-	msg_to_send += " ";
-	msg_to_send += user;
-	msg_to_send += " :" + msg + endmsg;
-	return (msg_to_send);
+//	string msg_to_send = "PRIVMSG";
+//	msg_to_send += " ";
+//	msg_to_send += user;
+//	msg_to_send += " :" + msg + endmsg;
+	return ("PRIVMSG " + user + " :" + msg + endmsg);
 }
 
-void splitString(const string& inputString, vector<string> &chunks)
+void splitString(const string &inputString, vector<string> &chunks, size_t const &n)
 {
-	string::size_type startIndex = 0;
+	istringstream       ss(inputString);
+	string              word;
+	string              chunk;
 
-	while (startIndex < inputString.size())
+	while (ss >> word)
 	{
-		string chunk = inputString.substr(startIndex, 426);
-		chunks.push_back(chunk);
-		startIndex += chunk.size();
+		if (chunk.size() + word.size() + 1 > n)
+		{
+			chunks.push_back(chunk);
+			chunk.clear();
+		}
+		if (!chunk.empty())
+			chunk += " ";
+		chunk += word;
 	}
+	if (!chunk.empty())
+		chunks.push_back(chunk);
 }
 
 void Banbot::check_all_chan() {
