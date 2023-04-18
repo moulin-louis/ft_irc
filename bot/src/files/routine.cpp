@@ -46,7 +46,7 @@ string	Banbot::chatgpt(string const &str) {
 
 	size_t pos = str.find("PRIVMSG");
 	if (pos == string::npos)
-		return ("Not a ChatGpt request");
+		return ("");
 	headers = NULL;
 	chunk.memory = (char *) malloc(1);
 	chunk.size = 0;
@@ -78,7 +78,7 @@ string	Banbot::chatgpt(string const &str) {
 			throw runtime_error(string("chatgpt error:") + ::strerror(errno));
 		}
 	}
-	return ("FAIL, this message should never show up");
+	return ("");
 }
 
 void Banbot::search_chan(string &str) const {
@@ -172,6 +172,50 @@ int Banbot::search_word(string &msg) {
 	return (1);
 }
 
+void	parse_the_answer(string &ans)
+{
+	unsigned long tok = ans.find("\"content\":\"", 0);
+	if (tok != string::npos)
+	{
+		ans = ans.substr(tok + ::strlen("\"content\":\""));
+		unsigned long tok2 = ans.rfind("\"},\"finish_reason\":\"");
+		if (tok2 != string::npos)
+			ans = ans.substr(0, tok2);
+		else
+		{
+			ans = "";
+			return ;
+		}
+		return ;
+	}
+	else
+	{
+		ans = "";
+		return ;
+	}
+}
+
+string composeAnswer(string &msg, string &user)
+{
+	string msg_to_send = "PRIVMSG";
+	msg_to_send += " ";
+	msg_to_send += user;
+	msg_to_send += " :" + msg + endmsg;
+	return (msg_to_send);
+}
+
+void splitString(const string& inputString, vector<string> &chunks)
+{
+	string::size_type startIndex = 0;
+
+	while (startIndex < inputString.size())
+	{
+		string chunk = inputString.substr(startIndex, 426);
+		chunks.push_back(chunk);
+		startIndex += chunk.size();
+	}
+}
+
 void Banbot::check_all_chan() {
 	while (server_up) {
 		string msg;
@@ -192,7 +236,25 @@ void Banbot::check_all_chan() {
 			string buff = msg.substr(0, pos);
 			if (search_word(buff)) {}
 			else {
-				cout << chatgpt(buff) << endl;
+				string answer = chatgpt(buff);
+				parse_the_answer(answer);
+				if (answer.length())
+				{
+					string saving = msg;
+					size_t pos2 = msg.find(":");
+					pos2 += 1;
+					msg.erase(0, pos2);
+					string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);
+					vector<string> chunk;
+					splitString(answer, chunk);
+					for (size_t i = 0; i < chunk.size(); ++i)
+					{
+						ssize_t k = send_msg(composeAnswer(chunk[i], user));
+						if (k == -1)
+							throw runtime_error(string("send gpt answer: ") + strerror(errno));
+						usleep(50);
+					}
+				}
 			}
 			msg.erase(0, pos + 1);
 		}
