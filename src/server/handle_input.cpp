@@ -24,13 +24,12 @@ void	retryRegister(Client &client, Server &server, string &svrname)
 }
 
 void	Server::process_input(Socket fd ) {
-	client_iter it = this->fd_map.find(fd);
-	Client &client = it->second;
+	Client &client = (this->fd_map.find(fd))->second;
 	ssize_t byte_count;
 	string temp;
 
-	temp.resize(512);
-	byte_count = recv(fd, (void *)(temp.c_str()), temp.length(), MSG_DONTWAIT);
+	temp.resize(SERVER_LIMITS_SIZE);
+	byte_count = recv(fd, (void *)(temp.c_str()), SERVER_LIMITS_SIZE, MSG_DONTWAIT);
 	if (byte_count == -1)
 		throw runtime_error(string("recv: ") + strerror(errno));
 	if (byte_count == 0) {
@@ -38,15 +37,19 @@ void	Server::process_input(Socket fd ) {
 		return ;
 	}
 	temp.resize(byte_count);
-	cout << YELLOW << "str received = [" << temp << "]" << RESET << endl;
+	client.cmd_buff += temp;
+	if (client.cmd_buff.find("\r\n") == string::npos) {
+		return ;
+	}
+	cout << YELLOW << "str received = [" << client.cmd_buff << "]" << RESET << endl;
 	cout << YELLOW << byte_count << " bytes RECEIVED" << RESET << endl;
 	while (true) {
-		if (temp.find(endmsg) == string::npos)
+		if (client.cmd_buff.find(endmsg) == string::npos)
 			break;
-		string tok = temp.substr(0, temp.find(endmsg));
+		string tok = client.cmd_buff.substr(0, client.cmd_buff.find(endmsg));
 		try {
 			parse_command(tok, this->fd_map[fd]);
-			temp.erase(0, temp.find(endmsg) + 2);
+			client.cmd_buff.erase(0, client.cmd_buff.find(endmsg) + 2);
 			if (!client.isRegistered && client.asTriedNickname)
 				::retryRegister(client, *this, this->_server_name);
 		}

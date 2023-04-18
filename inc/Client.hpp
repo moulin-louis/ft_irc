@@ -34,6 +34,7 @@ class Client
         bool 	isOperator;
 		bool 	asTriedNickname;
 		bool    isLeaving;
+		string		cmd_buff;
 
 
         //canonical form
