@@ -27,7 +27,7 @@
 #include <csignal>
 #include <ctime>
 #include <sstream>
-#include "../temp/curl-8.0.1/include/curl/curl.h"
+#include "curl.h"
 using namespace std;
 
 #define endmsg "\r\n"

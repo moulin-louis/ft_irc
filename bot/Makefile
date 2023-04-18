@@ -17,7 +17,8 @@
 NAME		=	banbot
 ## add library here (minilibx, ncurses, libft, ...)
 LIBDIR		=	temp/curl-8.0.1/lib/.libs/
-INCLDIR		=	$(addsuffix /inc,$(LIBDIR) .)
+CURL_HEADER	=	./temp/curl-8.0.1/include/curl
+INCLDIR		=	$(addsuffix /inc,$(LIBDIR) .) $(CURL_HEADER)
 BUILDIR		=	build
 DEPDIR		=	$(BUILDIR)/.deps
 SRCS_DIR	=	$(sort $(dir $(wildcard src/*/)))

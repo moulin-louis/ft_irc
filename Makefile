@@ -123,7 +123,7 @@ all:
 
 bonus:
 				@$(MAKE) -C ./bot
-				@$(MAKE) $(NAME)
+				@$(MAKE) -s $(NAME)
 
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
 				@mkdir -p build/ $(addprefix build/, $(SRCS_DIR))
