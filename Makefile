@@ -123,7 +123,7 @@ all:
 
 bonus:
 				@$(MAKE) -C ./bot
-				@$(MAKE) -s $(NAME)
+				@$(MAKE) $(NAME)
 
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
 				@mkdir -p build/ $(addprefix build/, $(SRCS_DIR))
@@ -160,5 +160,8 @@ fclean:			clean
 
 re:				fclean
 				@$(MAKE) -s all
+
+rebonus:		fclean
+				@$(MAKE) -s bonus
 
 

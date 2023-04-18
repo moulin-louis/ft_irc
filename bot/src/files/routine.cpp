@@ -263,7 +263,7 @@ void Banbot::check_all_chan() {
 					msg.erase(0, pos2);
 					string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);
 					vector<string> chunk;
-					splitString(answer, chunk);
+					splitString(answer, chunk, CHUNK_SIZE);
 					for (size_t i = 0; i < chunk.size(); ++i)
 					{
 						ssize_t k = send_msg(composeAnswer(chunk[i], user));

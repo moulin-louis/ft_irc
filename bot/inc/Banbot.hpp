@@ -32,6 +32,7 @@ using namespace std;
 
 #define endmsg "\r\n"
 #define SIZE_BUFFER 20000
+#define CHUNK_SIZE 426
 #define send_msg(msg) send(this->sfd, (void *)msg.c_str(), msg.size(), 0)
 #define send_msg_bot(msg) send(bot->sfd, (void *)msg.c_str(), msg.size(), 0)
 #define recv_msg(msg) recv(this->sfd, (void *)msg.c_str(), SIZE_BUFFER, 0)
