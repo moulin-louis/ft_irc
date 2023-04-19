@@ -13,12 +13,14 @@
 #include "Server.hpp"
 
 void Server::is_valid_nickname( const string &nickname, Client& client) {
-	if (nickname.size() > 9) {
+	if (nickname.size() > 15) {
 		add_rply_from_server(":Nickname is too long", client, "NICK", ERR_ERRONEUSNICKNAME);
 		throw invalid_argument("nick: nickname too long");
 	}
 	for (unsigned int i = 0; i < nickname.size(); i++) {
-		if (nickname[i] == ' ' || nickname[i] == '@') {
+		if (nickname[i] == ' ' || nickname[i] == '@' || nickname[i] == '*'\
+			|| nickname[i] == ',' || nickname[i] == '!' || nickname[i] == '?'\
+			|| nickname[i] == '$' || nickname[i] == ':' || nickname[i] == '#') {
 			add_rply_from_server(" :Erroneous nickname", client, "NICK", ERR_ERRONEUSNICKNAME);
 			throw invalid_argument("nick: invalid character in nickname");
 		}
