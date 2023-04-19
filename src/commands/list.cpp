@@ -43,7 +43,10 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 void	Server::list( const vector<string>& params, Client &client)
 {
 	if (params.empty())
-		throw invalid_argument("list: invalid number of parameters");
+    {
+        cerr << RED << "list: invalid number of parameters" << RESET << endl;
+        return ;
+    }
 	if (!params[0].length())
 		::displayAllChannels(*this, client, this->chan_vec);
 	else if (params.size() == 1)
