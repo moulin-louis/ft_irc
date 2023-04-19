@@ -3,7 +3,6 @@
 //
 
 #include "Banbot.hpp"
-#include <pthread.h>
 
 Banbot::Banbot() {
 	memset(&(this->sin), 0, sizeof(sin));

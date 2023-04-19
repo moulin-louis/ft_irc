@@ -3,9 +3,6 @@
 //
 
 #include "Banbot.hpp"
-#include <cstddef>
-#include <cstring>
-#include <algorithm>
 
 bool server_up = true;
 
@@ -258,7 +255,7 @@ void Banbot::check_all_chan() {
 				if (answer.length())
 				{
 					string saving = msg;
-					size_t pos2 = msg.find(":");
+					size_t pos2 = msg.find(':');
 					pos2 += 1;
 					msg.erase(0, pos2);
 					string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);
