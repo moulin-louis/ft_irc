@@ -15,7 +15,10 @@
 static void displayAllChannels(Server &server, Client &client, vector<Channel> &chan_vec)
 {
 	for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); ++it)
-		server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "", RPL_LIST);
+	{
+		if (it->getMode() & ~p)
+			server.add_rply_from_server(":" + it->getName() + " " + itostr((int)it->clients.size()) + " " + it->getTopic(), client, "", RPL_LIST);
+	}
 	server.add_rply_from_server(":End of LIST", client, "", RPL_LISTEND);
 }
 

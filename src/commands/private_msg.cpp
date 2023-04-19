@@ -28,7 +28,7 @@ void	Server::private_msg( const vector<string>& params, Client& author) {
 		}
 		if (params[0][0] == '#') {
 			Channel& dest = find_channel(params[0], author);
-			if (dest.user_in_chan(author))
+			if (dest.user_in_chan(author) || dest.getMode() & ~n)
 			{				
 				string msg = params[1];
                 msg.erase(string::size_type(0), 1);

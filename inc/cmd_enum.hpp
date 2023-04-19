@@ -13,7 +13,7 @@
 #ifndef CMD_ENUM_HPP
 #define CMD_ENUM_HPP
 
-typedef enum e_modes
+typedef enum e_modesU
 {
 	a = 1 << 0,
 	i = 1 << 1,
@@ -21,7 +21,13 @@ typedef enum e_modes
 	w = 1 << 3,
 	r = 1 << 4,
 	B = 1 << 5,
-}	MODES;
+}	MODESU;
+
+typedef enum e_modesC
+{
+	p = 1 << 0,
+	n = 1 << 1
+}	MODESC;
 
 enum	cmd {
 	RPL_WELCOME = 1,

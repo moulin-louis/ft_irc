@@ -21,6 +21,7 @@ Channel::Channel() {
 Channel::Channel(const string &name, const Client& client) {
     cout << "Creating new channel " << name << endl;
     this->_name = name;
+	this->_modeChannel = 0;
     this->addClient(client);
 }
 
@@ -39,6 +40,7 @@ Channel::~Channel() {
 Channel &Channel::operator=(const Channel &rhs) {
     this->_name = rhs.getName();
     this->clients = rhs.clients;
+	this->_modeChannel = rhs._modeChannel;
     return (*this);
 }
 
@@ -70,4 +72,19 @@ void    Channel::addClient(const Client &client) {
 
 void    Channel::removeClient(const Client &client) {
 	this->clients.erase(find(this->clients.begin(), this->clients.end(), client.getFd()));
+}
+
+Mode    Channel::getMode() const
+{
+	return (this->_modeChannel);
+}
+
+void    Channel::setMode(Mode input)
+{
+	this->_modeChannel |= input;
+}
+
+void    Channel::unSetMode(Mode input)
+{
+	this->_modeChannel &= ~input;
 }

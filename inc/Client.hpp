@@ -50,7 +50,7 @@ class Client
 		const string 		&getHostname() const;
 		const Socket 		&getFd() const;
 		string		        getBuff() const;
-		Mode				getMode();
+		Mode				getMode() const;
 
 		void 	setNickname(const string&);
 		void 	setUsername(const string&);

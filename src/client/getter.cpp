@@ -37,6 +37,10 @@ string Client::getBuff() const {
 	return this->buffer;
 }
 
-Mode	Client::getMode() {
+Mode	Client::getMode() const {
 	return (this->modeUser);
+}
+
+const string &Client::getRealname() const {
+	return (this->realname);
 }

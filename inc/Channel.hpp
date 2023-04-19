@@ -19,8 +19,9 @@
 class Channel
 {
     private:
-        string _name;
-        string _topic;
+        string      _name;
+        string      _topic;
+		Mode        _modeChannel;
     public:
 		vector<string> ban;
         //vector of client's fd
@@ -44,6 +45,9 @@ class Channel
         //actions
         void    addClient(const Client &);
         void    removeClient(const Client &);
+		Mode    getMode() const;
+		void    setMode(Mode input);
+		void    unSetMode(Mode input);
 };
 
 #endif
