@@ -266,9 +266,7 @@ void Banbot::check_all_chan() {
 					string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);
                     vector<string> chunk;
                     if (answer.size() > CHUNK_SIZE)
-                    {
                         splitString(answer, chunk, CHUNK_SIZE);
-                    }
                     else
                         chunk.push_back(answer);
                     for (size_t i = 0; i < chunk.size(); ++i)
@@ -277,7 +275,7 @@ void Banbot::check_all_chan() {
                         ssize_t k = send_msg(composeAnswer(chunk[i], user));
                         if (k == -1)
                             throw runtime_error(string("send gpt answer: ") + strerror(errno));
-                        usleep(1000);
+                        usleep(10000);
                     }
 				}
 			}
