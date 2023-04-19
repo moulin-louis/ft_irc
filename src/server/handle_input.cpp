@@ -38,11 +38,11 @@ void	Server::process_input(Socket fd ) {
 	}
 	temp.resize(byte_count);
 	client.cmd_buff += temp;
+	cout << YELLOW << "str received = [" << client.cmd_buff << "]" << RESET << endl;
+	cout << YELLOW << byte_count << " bytes RECEIVED" << RESET << endl;
 	if (client.cmd_buff.find("\r\n") == string::npos) {
 		return ;
 	}
-	cout << YELLOW << "str received = [" << client.cmd_buff << "]" << RESET << endl;
-	cout << YELLOW << byte_count << " bytes RECEIVED" << RESET << endl;
 	while (true) {
 		if (client.cmd_buff.find(endmsg) == string::npos)
 			break;
