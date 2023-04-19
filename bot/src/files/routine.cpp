@@ -20,11 +20,16 @@ string requestify(string const &str) {
 	return (res);
 }
 
+string composeAnswer(string &msg, string &user)
+{
+    return ("PRIVMSG " + user + " :" + msg + endmsg);
+}
+
 size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {
 	size_t realsize = size * nmemb;
 	t_ms *mem = (t_ms *) userp;
 
-	char *ptr = (char *) realloc(mem->memory, mem->size + realsize + 1);
+	char *ptr = (char *)realloc(mem->memory, mem->size + realsize + 1);
 	if (ptr == NULL) {
 		free(mem->memory);
 		throw runtime_error(string("WriteMemoryCallback: enomem"));
@@ -42,19 +47,29 @@ string	Banbot::chatgpt(string const &str) {
 	string request;
 	string api;
 	t_ms chunk;
-	struct curl_slist *headers;
+	struct curl_slist *headers = NULL;
 
-	size_t pos = str.find("PRIVMSG");
-	if (pos == string::npos)
-		return ("");
-	headers = NULL;
-	chunk.memory = (char *) malloc(1);
-	chunk.size = 0;
+	if (str.find("PRIVMSG") == string::npos)
+        return ("");
+    unsigned long tok1 = str.find(":", 0);
+    unsigned long tok2 = str.find(":", tok1 + 1);
+    cout << YELLOW << str.substr(tok2 + 1) << RESET << endl;
+    if (str.size() > 426)
+        return ("I am sorry but your demand exceeds the limit set for basic request");
+    chunk.size = 0;
+	chunk.memory = (char *)malloc(1);
+    if (!chunk.memory)
+    {
+        throw runtime_error(string("chatGpt: enomem"));
+    }
 	api = "Authorization: Bearer " + this->getApi();
-	request = requestify(str);
+	request = requestify(str.substr(tok2 + 1));
 	curl = curl_easy_init();
-	if (curl) {
-		try {
+	if (curl)
+    {
+		try
+        {
+            cout << CYAN << "Request sent: " << request << RESET << endl;
 			headers = curl_slist_append(headers, "Content-Type: application/json");
 			headers = curl_slist_append(headers, api.c_str());
 			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
@@ -67,11 +82,12 @@ string	Banbot::chatgpt(string const &str) {
 				cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
 			curl_easy_cleanup(curl);
 			curl_slist_free_all(headers);
-			string ret(chunk.memory);
-			free(chunk.memory);
-			return (ret);
+            string ret(chunk.memory);
+            free(chunk.memory);
+            return (ret);
 		}
-		catch (exception &x) {
+		catch (exception &x)
+        {
 			cout << RED << x.what() << RESET << endl;
 			curl_easy_cleanup(curl);
 			curl_slist_free_all(headers);
@@ -188,28 +204,12 @@ void	parse_the_answer(string &ans)
 				ans.replace(tok3, 2, "\n");
 				tok3 = ans.find("\\n", tok3);
 			}
-			return ;
 		}
 		else
 		{
-			ans = "";
-			return ;
+			ans = "Sorry, error in feedback :(";
 		}
 	}
-	else
-	{
-		ans = "";
-		return ;
-	}
-}
-
-string composeAnswer(string &msg, string &user)
-{
-//	string msg_to_send = "PRIVMSG";
-//	msg_to_send += " ";
-//	msg_to_send += user;
-//	msg_to_send += " :" + msg + endmsg;
-	return ("PRIVMSG " + user + " :" + msg + endmsg);
 }
 
 void splitString(const string &inputString, vector<string> &chunks, size_t const &n)
@@ -253,7 +253,9 @@ void Banbot::check_all_chan() {
 			string buff = msg.substr(0, pos);
 			if (search_word(buff)) {}
 			else {
+                // Send buff to chatgpt
 				string answer = chatgpt(buff);
+                cout << CYAN << answer << RESET << endl;
 				parse_the_answer(answer);
 				if (answer.length())
 				{
@@ -262,15 +264,21 @@ void Banbot::check_all_chan() {
 					pos2 += 1;
 					msg.erase(0, pos2);
 					string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);
-					vector<string> chunk;
-					splitString(answer, chunk, CHUNK_SIZE);
-					for (size_t i = 0; i < chunk.size(); ++i)
-					{
-						ssize_t k = send_msg(composeAnswer(chunk[i], user));
-						if (k == -1)
-							throw runtime_error(string("send gpt answer: ") + strerror(errno));
-						usleep(50);
-					}
+                    vector<string> chunk;
+                    if (answer.size() > CHUNK_SIZE)
+                    {
+                        splitString(answer, chunk, CHUNK_SIZE);
+                    }
+                    else
+                        chunk.push_back(answer);
+                    for (size_t i = 0; i < chunk.size(); ++i)
+                    {
+                        cout << i << endl;
+                        ssize_t k = send_msg(composeAnswer(chunk[i], user));
+                        if (k == -1)
+                            throw runtime_error(string("send gpt answer: ") + strerror(errno));
+                        usleep(1000);
+                    }
 				}
 			}
 			msg.erase(0, pos + 1);
