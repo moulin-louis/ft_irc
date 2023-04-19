@@ -59,6 +59,7 @@ void	Server::process_input(Socket fd ) {
 			break ;
 		}
 	}
+	client.cmd_buff.clear();
 	cout << YELLOW << "sending = [" << client.getBuff() << "]" << RESET << endl;
 	//flushing all buffer from all client
 	flush_all_buffers();
