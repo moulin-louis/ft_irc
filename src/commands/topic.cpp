@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:46:02 by armendi           #+#    #+#             */
-/*   Updated: 2023/04/17 16:35:19 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/04/19 15:37:29 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,16 @@ void    Server::process_topic_cmd( const vector <string>& params, Client& client
 	for ( vector<string>::const_iterator it = (params.begin() + 1); it != params.end(); it ++) {
 		topic += *it;
 		topic += ' ';
+	}	
+	if (topic[0] == ':' && (topic.find_first_not_of(' ', 1) == string::npos)) {		
+		chan.setTopic("");
+		this->notify_chan(chan, chan.getTopic(), "TOPIC", client);
+		//add_rply_from_server(":" + chan.getTopic(), client, "TOPIC", RPL_NOTOPIC);
+		return ;
 	}
     chan.setTopic(topic.substr(1));
     this->notify_chan(chan, chan.getTopic(), "TOPIC", client);
-	add_rply_from_server(":" + chan.getTopic(), client, "TOPIC", RPL_TOPIC);
+	//add_rply_from_server(":" + chan.getTopic(), client, "TOPIC", RPL_TOPIC);
 }
 
 void	Server::topic( const vector<string>& params, Client& client )
@@ -40,7 +46,7 @@ void	Server::topic( const vector<string>& params, Client& client )
 			add_rply_from_server(":You're not an operator", client, "TOPIC", ERR_NOPRIVILEGES);
 			throw invalid_argument("topic: not an operator");
 		}
-		if (params.size() == 2 ) {
+		else {
 			for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); ++it) {
 				if (it->getName() == params[0]) {
 					if (it->user_in_chan(client))
