@@ -30,11 +30,11 @@ void	Server::kill( const vector<string>& params, Client &client) {
 	}
 	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); ++it) {
 		if (it->second.getNickname() == params[0]) {
-			add_rply_from_server(string(":") + params[1], client, "KILL", 0);
+			add_rply_from_server(params[1], client, "", 0);
 			sendMessage(client, client.getBuff());
 			this->_disconect_client(client.getFd());
 			throw runtime_error("client lost connection");
 		}
 	}
-	add_rply_from_server(string(params[0]) + ":No such channel", client, "TOPIC", ERR_NOSUCHCHANNEL);
+	add_rply_from_server(string(params[0]) + ":No such channel", client, "", ERR_NOSUCHCHANNEL);
 }
