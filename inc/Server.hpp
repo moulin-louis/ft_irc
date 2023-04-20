@@ -60,6 +60,7 @@ class Server
 
 		//respond from server
 		void	add_rply_from_server(const string& , Client& , const string& , int );
+		void    add_rply_from_server(const string &msg, Client &client, Channel &dest, const string &cmd, int code);
 
 		//checks
 		Client&		find_user(const string& , Client&, const string&);
@@ -94,6 +95,7 @@ class Server
 		void	process_part_cmd( Channel&, Client& );
 		void	process_kick_cmd( Channel&, const string&, Client&, const string& );
 		void	handle_user( const vector<string>& params, Client& client, Client &target);
+		void    handle_channel(const vector<string> &params, Client &client, Channel &dest);
 
 	//server run functions
 		void 	run(const bool& );
@@ -113,6 +115,8 @@ class Server
 			public:
 				virtual const char* what() const throw();
 		};
+
+	void add_rply_from_channel(const string &msg, Client &client, Channel &dest, const string &cmd, int code);
 };
 
 #endif

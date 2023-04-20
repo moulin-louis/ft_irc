@@ -16,7 +16,7 @@ static void displayAllChannels(Server &server, Client &client, vector<Channel> &
 {
 	for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); ++it)
 	{
-		if (it->getMode() & ~p)
+		if (!(it->getMode() & p))
 			server.add_rply_from_server(":" + it->getName() + " " + itostr((int)it->clients.size()) + " " + it->getTopic(), client, "", RPL_LIST);
 	}
 	server.add_rply_from_server(":End of LIST", client, "", RPL_LISTEND);
@@ -34,7 +34,7 @@ static void	getSpecifiedChannels(Server &server, Client &client, vector<Channel>
 			continue;
 		else
 			for (chan_iter it = chan_vec.begin(); it != chan_vec.end(); ++it)
-				if (it->getName() == chan_name && find(chan_names.begin(), chan_names.end(), chan_name) == chan_names.end())
+				if (it->getName() == chan_name && find(chan_names.begin(), chan_names.end(), chan_name) == chan_names.end() && (!(it->getMode() & p)))
 				{
 					chan_names.push_back(chan_name);
 					server.add_rply_from_server(":" + it->getName() + " " + itostr(it->clients.size()) + " " + it->getTopic(), client, "", RPL_LIST);

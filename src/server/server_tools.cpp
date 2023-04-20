@@ -67,6 +67,10 @@ void	Server::add_rply_from_server(const string&  msg, Client& dest, const string
 	dest.setBuff(dest.getBuff() + result);
 }
 
+void	Server::add_rply_from_server(const string&  msg, Client &client, Channel& dest, const string&  cmd, int code) {
+	string result = ":" + this->_server_name + " " + int_to_string(code) + " " + client.getNickname() + " " + dest.getName() + " " + cmd + msg + endmsg;
+	client.setBuff(client.getBuff() + result);
+}
 
 void	little_split( vector<string> &list, string &str, const string& delimiter) {
 	size_t	pos;

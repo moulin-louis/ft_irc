@@ -39,7 +39,7 @@ void	Server::topic( const vector<string>& params, Client& client )
 		}
 		if (params.size() == 1) {
 			Channel& temp_chan = find_channel(params[0], client);
-			add_cmd_client(temp_chan.getTopic(), client, client, "TOPIC", temp_chan);
+			add_rply_from_server(temp_chan.getTopic(), client, temp_chan, "", RPL_TOPIC);
 			return ;
 		}
 		if (!client.isOperator) {

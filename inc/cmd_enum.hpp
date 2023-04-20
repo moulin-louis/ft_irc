@@ -25,8 +25,8 @@ typedef enum e_modesU
 
 typedef enum e_modesC
 {
-	p = 1 << 0,
-	n = 1 << 1
+	p = 1 << 6,
+	n = 1 << 7
 }	MODESC;
 
 enum	cmd {

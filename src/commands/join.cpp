@@ -15,7 +15,7 @@
 
 void	Server::is_valid_chan_name(const vector<string>& params, Client& client)
 {
-	if (params.size() != 1) {
+	if (params.empty()) {
 		add_rply_from_server(":Not enough parameters", client, "JOIN", ERR_NEEDMOREPARAMS);
 		throw invalid_argument("join: invalid number of parameters");
 	}
@@ -41,7 +41,7 @@ void	Server::join( const vector<string>& params, Client& client)
 					this->notify_chan(*it2, *it, "JOIN", client);
 					vector<string> temp;
 					temp.push_back(it2->getName());
-					add_rply_from_server(":" + it2->getTopic(), client, "TOPIC", RPL_TOPIC);
+					add_rply_from_server(it2->getTopic(), client, *it2, "", RPL_TOPIC);
 					this->names(temp, client);
 					chan_exists = true;
 					break ;
@@ -56,7 +56,7 @@ void	Server::join( const vector<string>& params, Client& client)
 			vector<string> temp;
 			temp.push_back(new_channel.getName());
 			this->names(temp, client);
-			add_rply_from_server(":" + new_channel.getTopic(), client, "TOPIC", RPL_NOTOPIC);
+			add_rply_from_server(new_channel.getTopic(), client, new_channel, "", RPL_TOPIC);
 			for (client_iter it3 = this->fd_map.begin(); it3 != this->fd_map.end(); ++it3 )
 			{
 				if (it3->second.getMode() & B)
