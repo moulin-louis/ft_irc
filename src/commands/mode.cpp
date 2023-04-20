@@ -185,7 +185,7 @@ void    Server::handle_channel(const vector<string>& params, Client& client, Cha
 					dest.unSetMode(n);
 					break ;
 				default:
-					this->add_rply_from_server(":Please use known mode", client, dest, "MODE", ERR_UMODEUNKNOWNFLAG);
+					this->add_rply_from_server(":Please use known mode", client, dest, "MODE", ERR_UNKNOWNMODE);
 					throw invalid_argument("mode: Please use known mode");
 					break ;
 			}
