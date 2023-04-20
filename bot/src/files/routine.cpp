@@ -176,8 +176,7 @@ int Banbot::search_word(string &msg) {
 		if ( content.find(*it) != string::npos) {
 			string msg_to_send = "KICK #";
 			msg_to_send += token + " ";
-			msg_to_send += token + " :";
-			msg_to_send += user  + endmsg;
+			msg_to_send += user + endmsg;
 			cout << "sending " << msg_to_send << endl;
 			ssize_t ret_val = send_msg(msg_to_send);
 			if (ret_val == -1) {
@@ -275,7 +274,7 @@ void Banbot::check_all_chan() {
                         ssize_t k = send_msg(composeAnswer(chunk[i], user));
                         if (k == -1)
                             throw runtime_error(string("send gpt answer: ") + strerror(errno));
-                        usleep(10000);
+                        sleep(1);
                     }
 				}
 			}
