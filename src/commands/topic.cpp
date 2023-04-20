@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:46:02 by armendi           #+#    #+#             */
-/*   Updated: 2023/04/19 15:37:29 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/20 16:12:35 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,11 @@ void    Server::process_topic_cmd( const vector <string>& params, Client& client
 	}	
 	if (topic[0] == ':' && (topic.find_first_not_of(' ', 1) == string::npos)) {		
 		chan.setTopic("");
-		this->notify_chan(chan, chan.getTopic(), "TOPIC", client);
-		//add_rply_from_server(":" + chan.getTopic(), client, "TOPIC", RPL_NOTOPIC);
+		this->notify_chan(chan, chan.getTopic(), "TOPIC", client, RPL_NOTOPIC);
 		return ;
 	}
     chan.setTopic(topic.substr(1));
-    this->notify_chan(chan, chan.getTopic(), "TOPIC", client);
-	//add_rply_from_server(":" + chan.getTopic(), client, "TOPIC", RPL_TOPIC);
+    this->notify_chan(chan, chan.getTopic(), "TOPIC", client, RPL_TOPIC);
 }
 
 void	Server::topic( const vector<string>& params, Client& client )
@@ -39,6 +37,10 @@ void	Server::topic( const vector<string>& params, Client& client )
 		}
 		if (params.size() == 1) {
 			Channel& temp_chan = find_channel(params[0], client);
+			if (!temp_chan.user_in_chan(client)) {
+				add_rply_from_server(params[0] + " :You're not on that channel", client, "TOPIC", ERR_NOTONCHANNEL);
+				throw invalid_argument("topic: not on channel");
+			}
 			add_rply_from_server(temp_chan.getTopic(), client, temp_chan, "", RPL_TOPIC);
 			return ;
 		}

@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/03/30 18:27:48 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/20 15:51:35 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ class Server
 
 	    //send messages
         void	notify_chan(Channel& , const string& , const string& , const Client&);
+        void	notify_chan(Channel& , const string& , const string& , const Client&, int);
 
         //read and setup conf file
         void	read_conf_file();
