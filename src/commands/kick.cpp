@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:24:40 by mpignet           #+#    #+#             */
-/*   Updated: 2023/04/17 18:10:59 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/04/21 14:21:21 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ void	Server::kick( const vector<string>& params, Client& client)
 			if (it->getName() == chan_list[0]) {
 				found = true;
 				if (temp_vec.size() == 3)
-					process_kick_cmd(*it, temp_vec[1], client, temp_vec[1]);
-				else
 					process_kick_cmd(*it, temp_vec[1], client, temp_vec[2]);
+				else
+					process_kick_cmd(*it, temp_vec[1], client, temp_vec[1]);
 			}
 		}
 		if (!found)
