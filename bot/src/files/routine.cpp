@@ -51,8 +51,8 @@ string	Banbot::chatgpt(string const &str) {
 
 	if (str.find("PRIVMSG") == string::npos)
         return ("");
-    unsigned long tok1 = str.find(":", 0);
-    unsigned long tok2 = str.find(":", tok1 + 1);
+    unsigned long tok1 = str.find(':', 0);
+    unsigned long tok2 = str.find(':', tok1 + 1);
     cout << YELLOW << str.substr(tok2 + 1) << RESET << endl;
     if (str.size() > 426)
         return ("I am sorry but your demand exceeds the limit set for basic request");
@@ -259,7 +259,7 @@ void Banbot::check_all_chan() {
 				if (answer.length())
 				{
 					string saving = msg;
-					size_t pos2 = msg.find(":");
+					size_t pos2 = msg.find(':');
 					pos2 += 1;
 					msg.erase(0, pos2);
 					string user = saving.substr(saving.find(':') + 1, saving.find('!') - 1);

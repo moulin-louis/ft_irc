@@ -1,16 +1,24 @@
 #!/bin/bash
-if ! dpkg -s libbrotli-dev >/dev/null 2>&1; then
-  echo "libbrotli is not installed"
-  exit 1
-else
-  echo "libbrotli ok"
-fi
 libbrotli_path=$(find /usr -name libbrotlidec.a -print -quit 2>/dev/null)
+libssl_path=$(find /usr -name libssl.a -print -quit 2>/dev/null)
+libcrypto_path=$(find /usr -name libcrypto.a -print -quit 2>/dev/null)
 if [ -z "$libbrotli_path" ]; then
   echo "libbrotlidec.a library not found"
   exit 1
 else
   echo "libbrotlidec.a ok"
+fi
+if [ -z "$libssl_path" ]; then
+  echo "libssl.a library not found"
+  exit 1
+else
+  echo "libssl.a ok"
+fi
+if [ -z "$libcrypto_path" ]; then
+  echo "libcrypto.a library not found"
+  exit 1
+else
+  echo "libcrypto.a ok"
 fi
 if [ ! -d './temp' ]; then
   mkdir -p temp && cd temp || exit && \
