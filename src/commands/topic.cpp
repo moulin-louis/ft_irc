@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:46:02 by armendi           #+#    #+#             */
-/*   Updated: 2023/04/20 16:12:35 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/22 17:45:34 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void    Server::process_topic_cmd( const vector <string>& params, Client& client
 	for ( vector<string>::const_iterator it = (params.begin() + 1); it != params.end(); it ++) {
 		topic += *it;
 		topic += ' ';
-	}	
-	if (topic[0] == ':' && (topic.find_first_not_of(' ', 1) == string::npos)) {		
+	}
+	if (topic[0] == ':' && (topic.find_first_not_of(' ', 1) == string::npos)) {
 		chan.setTopic("");
-		this->notify_chan(chan, chan.getTopic(), "TOPIC", client, RPL_NOTOPIC);
+		this->notify_chan(chan, "No ", "TOPIC", client, RPL_NOTOPIC);
 		return ;
 	}
     chan.setTopic(topic.substr(1));

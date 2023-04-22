@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 14:55:30 by loumouli          #+#    #+#             */
-/*   Updated: 2023/04/21 15:29:00 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/04/22 16:10:23 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int		epoll_ctl_add(int , int , uint32_t );
 void	add_cmd_client(const string& , Client& , const Client& , const string& );
 void	add_cmd_client(const string& , Client& , const Client& , const string&, int );
 void	add_cmd_client(const string& , Client& , const Client& , const string& , const Channel& );
+void	add_cmd_client(const string& , Client& , const Client& , const string& , const string& , const Channel& );
 void	add_cmd_client(const string& , Client& , const Client& , const string& , const Channel& , int );
 
 class Server
@@ -95,6 +96,7 @@ class Server
 		void    process_topic_cmd( const vector <string>& , Client& , Channel& );
 		void	process_part_cmd( Channel&, Client&, const string& );
 		void	process_part_cmd( Channel&, Client& );
+		void	process_kick_cmd( Channel&, const string&, Client& );
 		void	process_kick_cmd( Channel&, const string&, Client&, const string& );
 		void	handle_user( const vector<string>& params, Client& client, Client &target);
 		void    handle_channel(const vector<string> &params, Client &client, Channel &dest);
@@ -104,6 +106,7 @@ class Server
 
 	    //send messages
         void	notify_chan(Channel& , const string& , const string& , const Client&);
+        void	notify_chan(Channel& , const string& , const string& , const string&, const Client&);
         void	notify_chan(Channel& , const string& , const string& , const Client&, int);
 
         //read and setup conf file
