@@ -78,7 +78,7 @@ void	Server::add_rply_from_server(const string&  msg, Client &client, Channel& d
 void	add_cmd_client(const string& content, Client& client, const Client& author, const string&  cmd, int code) {
 	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname();
 	msg += " " + int_to_string(code) + " " + cmd + " :" + content + endmsg;
-	client.setBuff(client.getBuff() + msg);	
+	client.setBuff(client.getBuff() + msg);
 }
 
 void	little_split( vector<string> &list, string &str, const string& delimiter) {
