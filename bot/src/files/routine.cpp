@@ -200,7 +200,7 @@ void	parse_the_answer(string &ans)
 			unsigned long tok3 = ans.find("\\n", 0);
 			while (tok3 != string::npos)
 			{
-				ans.replace(tok3, 2, "\n");
+				ans.replace(tok3, 2, " ");
 				tok3 = ans.find("\\n", tok3);
 			}
 		}
