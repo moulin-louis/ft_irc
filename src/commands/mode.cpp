@@ -28,7 +28,7 @@ string mode_to_str(const Mode &mode)
 	if (mode & B)
 		result += "B";
 	if (mode & p)
-        result += "p";
+		result += "p";
 	if (mode & n)
 		result += "n";
 	return (result);
@@ -39,7 +39,7 @@ void	Server::handle_user(const vector<string>& params, Client& client, Client &t
 	if ( params.size() == 1 )
 	{
 		this->add_rply_from_server(mode_to_str(client.getMode()), target, "", RPL_UMODEIS);
-        return ;
+		return ;
 	}
 	string input = params[1];
 	if (input[0] != '+' && input[0] != '-')
@@ -47,12 +47,12 @@ void	Server::handle_user(const vector<string>& params, Client& client, Client &t
 		this->add_rply_from_server(":Please use + or - with mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 		throw invalid_argument("mode: Please use + or - with mode");
 	}
-    if (input[0] == '+')
+	if (input[0] == '+')
 	{
 		input.erase(0, 1);
-        for (string::iterator it = input.begin(); it != input.end(); ++it)
+		for (string::iterator it = input.begin(); it != input.end(); ++it)
 		{
-            switch (*it)
+			switch (*it)
 			{
 				case 'a':
 						this->add_rply_from_server(":Please use AWAY to set your mode to away", client , "MODE", ERR_UMODEUNKNOWNFLAG);
@@ -88,12 +88,12 @@ void	Server::handle_user(const vector<string>& params, Client& client, Client &t
 					this->add_rply_from_server(":Please use known mode", client , "MODE", ERR_UMODEUNKNOWNFLAG);
 					break ;
 			}
-        }
-    }
-    else
+		}
+	}
+	else
 	{
 		input.erase(0, 1);
-        for (string::iterator it = input.begin(); it != input.end(); ++it)
+		for (string::iterator it = input.begin(); it != input.end(); ++it)
 		{
 			switch (*it)
 			{
@@ -204,23 +204,23 @@ void	Server::mode( const vector<string>& params, Client &client)
 			throw invalid_argument("mode: Not enough parameters");
 		}
 		else if (params[0][0] == '#')
-        {
-            Channel &dest = find_channel(params[0], client);
+		{
+			Channel &dest = find_channel(params[0], client);
 			if (dest.user_in_chan(client) || client.isOperator)
 				handle_channel(params, client, dest);
 			else
-	            add_rply_from_server(":" + dest.getName() + " :Cannot send to channel", client, "", ERR_CANNOTSENDTOCHAN);
-        }
+				add_rply_from_server(":" + dest.getName() + " :Cannot send to channel", client, "", ERR_CANNOTSENDTOCHAN);
+		}
 		else
-        {
-            if (client.getNickname() != params[0] && !client.isOperator)
-            {
-                add_rply_from_server(":Cannot change mode for other users", client, "MODE", ERR_USERSDONTMATCH);
-                throw invalid_argument("mode: Cannot change mode for other users");
-            }
-            Client &target = this->find_user(params[0], client, "MODE");
-            handle_user(params, client, target);
-        }
+		{
+			if (client.getNickname() != params[0] && !client.isOperator)
+			{
+				add_rply_from_server(":Cannot change mode for other users", client, "MODE", ERR_USERSDONTMATCH);
+				throw invalid_argument("mode: Cannot change mode for other users");
+			}
+			Client &target = this->find_user(params[0], client, "MODE");
+			handle_user(params, client, target);
+		}
 	}
 	catch ( exception& x)
 	{
