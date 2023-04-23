@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_tools.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 19:52:41 by loumouli          #+#    #+#             */
-/*   Updated: 2023/04/02 11:56:47 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/21 15:37:27 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ Client&	Server::find_user(const string& nick, Client& client, const string& cmd)
 		if (it->second.getNickname() == nick)
 			return it->second;
 	}
-	add_rply_from_server(" : No such nick/channel", client, cmd, ERR_NOSUCHNICK);
+	if (cmd == "PRIVMSG")
+		add_cmd_client(nick, client, client, cmd, ERR_NOSUCHNICK);
+	else
+		add_rply_from_server(" : No such nick/channel", client, cmd, ERR_NOSUCHNICK);
 	throw runtime_error("User not found");
 }
 
@@ -70,6 +73,12 @@ void	Server::add_rply_from_server(const string&  msg, Client& dest, const string
 void	Server::add_rply_from_server(const string&  msg, Client &client, Channel& dest, const string&  cmd, int code) {
 	string result = ":" + this->_server_name + " " + int_to_string(code) + " " + client.getNickname() + " " + dest.getName() + " " + cmd + msg + endmsg;
 	client.setBuff(client.getBuff() + result);
+}
+
+void	add_cmd_client(const string& content, Client& client, const Client& author, const string&  cmd, int code) {
+	string msg = ":" + author.getNickname() + "!" + author.getUsername() + "@" + author.getHostname();
+	msg += " " + int_to_string(code) + " " + cmd + " :" + content + endmsg;
+	client.setBuff(client.getBuff() + msg);	
 }
 
 void	little_split( vector<string> &list, string &str, const string& delimiter) {

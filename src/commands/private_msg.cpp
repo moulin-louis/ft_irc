@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   private_msg.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: waxxy <waxxy@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:25:58 by waxxy             #+#    #+#             */
-/*   Updated: 2023/04/07 15:26:14 by waxxy            ###   ########.fr       */
+/*   Updated: 2023/04/21 15:19:27 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	Server::private_msg( const vector<string>& params, Client& author) {
 		        add_rply_from_server(":User is restricted", author, "", ERR_RESTRICTED);
 		        throw invalid_argument("private_msg: receiver is restricted");
 	        }
-            ::add_cmd_client(msg, dest, author, "PRIVMSG");
+            add_cmd_client(msg, dest, author, "PRIVMSG");
 		}
 	}
 	catch (exception& e) {

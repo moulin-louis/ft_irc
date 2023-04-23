@@ -6,7 +6,7 @@
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:24:40 by mpignet           #+#    #+#             */
-/*   Updated: 2023/04/17 18:10:59 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/04/22 16:54:52 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,32 @@ void	split_kick_version( vector<string>& list, string& str, const string& delimi
 	list.push_back(str);
 }
 
+void	Server::process_kick_cmd(Channel& chan, const string& nick_user, Client& client)
+{
+	if (!chan.user_in_chan(client)) {
+		this->add_rply_from_server(" :" + chan.getName() + " :You're not on that channel", client, "KICK", ERR_NOTONCHANNEL);
+		return ;
+	}
+	Client& target = find_user(nick_user, client, "KICK");
+	if (chan.user_in_chan(target))
+	{
+		this->notify_chan(chan, nick_user, "KICK", client);
+		chan.removeClient(target);
+		if (!target.channelsMember.empty())
+		{
+			for (size_t i = 0; i < target.channelsMember.size(); i++)
+			{
+				if (target.channelsMember[i] == chan.getName())
+				{
+					target.channelsMember.erase(find(target.channelsMember.begin(), target.channelsMember.end(), chan.getName()));
+				}
+			}
+		}
+		return;
+	}
+	this->add_rply_from_server(" :"  + target.getNickname() + " " + chan.getName() + " :They aren't on that channel", client, "KICK", ERR_USERNOTINCHANNEL);
+}
+
 void	Server::process_kick_cmd(Channel& chan, const string& nick_user, Client& client, const string& reason)
 {
 	if (!chan.user_in_chan(client)) {
@@ -32,7 +58,7 @@ void	Server::process_kick_cmd(Channel& chan, const string& nick_user, Client& cl
 	Client& target = find_user(nick_user, client, "KICK");
 	if (chan.user_in_chan(target))
 	{
-		this->notify_chan(chan, reason, "KICK", client);
+		this->notify_chan(chan, nick_user, "KICK", reason, client);
 		chan.removeClient(target);
 		if (!target.channelsMember.empty())
 		{
@@ -67,10 +93,22 @@ void	Server::kick( const vector<string>& params, Client& client)
 		for (chan_iter it = this->chan_vec.begin(); it != this->chan_vec.end(); ++it) {
 			if (it->getName() == chan_list[0]) {
 				found = true;
-				if (temp_vec.size() == 3)
-					process_kick_cmd(*it, temp_vec[1], client, temp_vec[1]);
+				if (temp_vec.size() >= 3 && temp_vec[2].size() > 1)
+				{
+					cout << "kick with reason" << endl;
+					string reason;
+					for ( vector<string>::const_iterator it = (params.begin() + 2); it != params.end(); it ++) {
+						reason += *it;
+						reason += ' ';
+					}
+					reason = reason.substr(1, reason.size() - 2);
+					process_kick_cmd(*it, temp_vec[1], client, reason);
+				}
 				else
-					process_kick_cmd(*it, temp_vec[1], client, temp_vec[2]);
+				{
+					cout << "kick without reason" << endl;
+					process_kick_cmd(*it, temp_vec[1], client);
+				}
 			}
 		}
 		if (!found)
