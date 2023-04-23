@@ -6,7 +6,7 @@
 /*   By: armendi <armendi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:46:02 by armendi           #+#    #+#             */
-/*   Updated: 2023/04/20 16:12:35 by armendi          ###   ########.fr       */
+/*   Updated: 2023/04/23 19:14:15 by armendi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void    Server::process_topic_cmd( const vector <string>& params, Client& client
 	}	
 	if (topic[0] == ':' && (topic.find_first_not_of(' ', 1) == string::npos)) {		
 		chan.setTopic("");
-		this->notify_chan(chan, chan.getTopic(), "TOPIC", client, RPL_NOTOPIC);
+		this->notify_chan(chan, chan.getTopic(), "TOPIC", client);
 		return ;
 	}
     chan.setTopic(topic.substr(1));
-    this->notify_chan(chan, chan.getTopic(), "TOPIC", client, RPL_TOPIC);
+    this->notify_chan(chan, chan.getTopic(), "TOPIC", client);
 }
 
 void	Server::topic( const vector<string>& params, Client& client )
