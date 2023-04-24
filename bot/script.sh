@@ -1,4 +1,8 @@
 #!/bin/bash
+curl -Os https://curl.se/download/curl-8.0.1.tar.gz && \
+tar -xf curl-8.0.1.tar.gz && \
+rm -f curl-8.0.1.tar.gz && \
+echo "libcurl downloaded successfuly"
 libbrotli_path=$(find /usr -name libbrotlidec.a -print -quit 2>/dev/null)
 libssl_path=$(find /usr -name libssl.a -print -quit 2>/dev/null)
 libcrypto_path=$(find /usr -name libcrypto.a -print -quit 2>/dev/null)
@@ -24,7 +28,9 @@ if [ ! -d './temp' ]; then
   mkdir -p temp && cd temp || exit && \
   cp -r ../curl-8.0.1 . && \
   cd ./curl-8.0.1 || exit && \
-  ./configure --with-openssl \
+  ./configure --disable-test \
+              --disable-manual \
+              --with-openssl \
               --with-gnutls \
               --with-mbedtls \
               --with-schannel \

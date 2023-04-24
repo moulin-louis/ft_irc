@@ -87,7 +87,8 @@ BODY_WIDTH	=	$(shell printf "$$(($(HEAD_SIZE) - 1))")
 all:
 				$(info Running script.sh to install libcurl)
 				@sh ./script.sh
-				@$(MAKE) -s $(NAME)
+				$(info Making bot)
+				@$(MAKE) -sk $(NAME)
 
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)
 				@mkdir -p build/ $(addprefix build/, $(SRCS_DIR))
@@ -116,7 +117,7 @@ clean:
 
 fclean:			clean
 				@printf "$(YELLOW)Deleting build directory...$(DEFAULT)\n"
-				$(RM) $(BUILDIR) $(NAME) temp
+				$(RM) $(BUILDIR) $(NAME) temp curl-8.0.1
 				@printf "$(DELPREV)Build directory and binary deleted\n"
 
 re:				fclean
