@@ -13,7 +13,7 @@
 #include "Server.hpp"
 
 void Server::is_valid_username( const string &username, Client& client) {
-	if (username.size() > 9 || username.empty()) {
+	if (username.size() > 9 || username.empty() || client.getNickname() == "*") {
 		add_rply_from_server(":Username has invalid characters", client, " * ", ERR_ERRONEUSNICKNAME);
 		throw invalid_argument("user: invalid username");
 	}

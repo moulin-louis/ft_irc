@@ -74,7 +74,7 @@ OBJ			=	$(SRC:%.cpp=$(BUILDIR)/%.o)
 DEP			=	$(SRC:%.cpp=$(DEPDIR)/%.d)
 
 CXX			=	c++
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -O2
 CPPFLAGS	=	$(addprefix -I, $(INCLDIR))
 LDFLAGS		=
 DEPFLAGS	=	-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
