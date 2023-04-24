@@ -122,9 +122,8 @@ all:
 				@$(MAKE) -s $(NAME)
 
 bonus:
-				$(CYAN)$(info Building bot...)$(DEFAULT)
+				$(info Building bot...)
 				@$(MAKE) -C ./bot
-				$(CYAN)$(info Building IRC server...)$(DEFAULT)
 				@$(MAKE) -s $(NAME)
 
 $(BUILDIR)/%.o:	%.cpp | $(DEPDIR)

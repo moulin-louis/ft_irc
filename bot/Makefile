@@ -117,7 +117,8 @@ clean:
 
 fclean:			clean
 				@printf "$(YELLOW)Deleting build directory...$(DEFAULT)\n"
-				$(RM) $(BUILDIR) $(NAME) temp curl-8.0.1
+				$(RM) $(BUILDIR) $(NAME) temp
+				$(RM) curl-8.0.1
 				@printf "$(DELPREV)Build directory and binary deleted\n"
 
 re:				fclean
