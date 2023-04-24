@@ -24,6 +24,7 @@ class Client
 		string		realname;
 		string		hostname;
 		string		buffer;
+		string 		_awayMsg;
 		Socket		fd;
 		Mode		modeUser; // Use enum MODES to define flags ex: modeUser = a | i | w | o
 	public:
@@ -51,6 +52,7 @@ class Client
 		const Socket 		&getFd() const;
 		string		        getBuff() const;
 		Mode				getMode() const;
+		const string 		&getAway() const;
 
 		void 	setNickname(const string&);
 		void 	setUsername(const string&);
@@ -61,6 +63,7 @@ class Client
 		void 	clearBuff();
 		void 	setMode(Mode);
 		void	unSetMode(Mode);
+		void	setAway(const string &);
 };
 
 #endif

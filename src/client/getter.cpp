@@ -44,3 +44,8 @@ Mode	Client::getMode() const {
 const string &Client::getRealname() const {
 	return (this->realname);
 }
+
+const string &Client::getAway() const
+{
+	return (this->_awayMsg);
+}

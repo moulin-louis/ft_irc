@@ -43,6 +43,7 @@ Server::Server(const char *port, const string &password)
 	this->cmd_map.insert(make_pair("USER", &Server::user));
 	this->cmd_map.insert(make_pair("wallops", &Server::wallops));
 	this->cmd_map.insert(make_pair("WHO", &Server::who));
+	this->cmd_map.insert(make_pair("AWAY", &Server::away));
     this->read_conf_file();
 }
 

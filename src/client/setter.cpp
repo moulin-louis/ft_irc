@@ -50,3 +50,8 @@ void Client::unSetMode(Mode input)
 {
 	this->modeUser &= ~input;
 }
+
+void Client::setAway(const string& msg)
+{
+	this->_awayMsg = msg;
+}

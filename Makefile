@@ -55,6 +55,7 @@ SRC			=	$(addprefix src/,		\
 						part.cpp		\
 						wallops.cpp		\
 						who.cpp			\
+						away.cpp		\
 					)					\
 					$(addprefix server/,\
 						chan_management.cpp\

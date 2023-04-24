@@ -92,6 +92,7 @@ class Server
 		void	restart( const vector<string>&, Client& );
 		void	wallops( const  vector<string>&, Client& );
 		void	names( const vector<string>&, Client& );
+		void	away( const vector<string>&, Client& );
 		//command utils
 		void    process_topic_cmd( const vector <string>& , Client& , Channel& );
 		void	process_part_cmd( Channel&, Client&, const string& );

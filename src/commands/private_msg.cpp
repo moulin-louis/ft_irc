@@ -55,6 +55,10 @@ void	Server::private_msg( const vector<string>& params, Client& author) {
 		        add_rply_from_server(":User is restricted", author, "", ERR_RESTRICTED);
 		        throw invalid_argument("private_msg: receiver is restricted");
 	        }
+			else if (dest.getMode() & a) {
+				add_rply_from_server(dest.getNickname() + ": " + dest.getAway(), author, "", RPL_AWAY);
+				return ;
+			}
             add_cmd_client(msg, dest, author, "PRIVMSG");
 		}
 	}
