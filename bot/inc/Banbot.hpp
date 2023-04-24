@@ -41,8 +41,6 @@ using namespace std;
 #define clear_resize(msg) msg.clear(); msg.resize(SIZE_BUFFER)
 #define	vec_str_iter vector<string>::iterator
 
-#define GPT_REQUEST(str) ("{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + str + "\"}]}")
-
 typedef struct s_MemoryStruct
 {
 	char *memory;

@@ -3,9 +3,6 @@
 //
 
 #include "Banbot.hpp"
-#include <cstddef>
-#include <cstring>
-#include <algorithm>
 
 bool server_up = true;
 
@@ -25,19 +22,22 @@ string composeAnswer(string &msg, string &user)
     return ("PRIVMSG " + user + " :" + msg + endmsg);
 }
 
-size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {
+size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
+{
 	size_t realsize = size * nmemb;
-	t_ms *mem = (t_ms *) userp;
+	t_ms *mem;
 
+	mem = (t_ms *)userp;
 	char *ptr = (char *)realloc(mem->memory, mem->size + realsize + 1);
-	if (ptr == NULL) {
+	if (ptr == NULL)
+	{
 		free(mem->memory);
 		throw runtime_error(string("WriteMemoryCallback: enomem"));
 	}
 	mem->memory = ptr;
 	memcpy(&(mem->memory[mem->size]), contents, realsize);
 	mem->size += realsize;
-	mem->memory[mem->size] = 0;
+	mem->memory[mem->size] = '\0';
 	return (realsize);
 }
 
@@ -53,7 +53,6 @@ string	Banbot::chatgpt(string const &str) {
         return ("");
     unsigned long tok1 = str.find(':', 0);
     unsigned long tok2 = str.find(':', tok1 + 1);
-    cout << YELLOW << str.substr(tok2 + 1) << RESET << endl;
     if (str.size() > 426)
         return ("I am sorry but your demand exceeds the limit set for basic request");
     chunk.size = 0;
@@ -270,7 +269,6 @@ void Banbot::check_all_chan() {
                         chunk.push_back(answer);
                     for (size_t i = 0; i < chunk.size(); ++i)
                     {
-                        cout << i << endl;
                         ssize_t k = send_msg(composeAnswer(chunk[i], user));
                         if (k == -1)
                             throw runtime_error(string("send gpt answer: ") + strerror(errno));
