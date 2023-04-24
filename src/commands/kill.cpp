@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Channel.hpp                                        :+:      :+:    :+:   */
+/*   kill.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpignet <mpignet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:33:26 by mpignet           #+#    #+#             */
-/*   Updated: 2023/03/29 14:01:02 by mpignet          ###   ########.fr       */
+/*   Updated: 2023/04/24 15:29:03 by mpignet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void	Server::kill( const vector<string>& params, Client &client) {
 		if (it->second.getNickname() == params[0]) {
 			add_rply_from_server(params[1], client, "", 0);
 			sendMessage(client, client.getBuff());
-			this->_disconect_client(client.getFd());
+			this->_disconect_client(it->second.getFd());
 			throw runtime_error("client lost connection");
 		}
 	}
-	add_rply_from_server(string(params[0]) + ":No such channel", client, "", ERR_NOSUCHCHANNEL);
+	add_rply_from_server(" :" + params[0] + " :No such nick/channel", client, "KILL", ERR_NOSUCHNICK);
 }
