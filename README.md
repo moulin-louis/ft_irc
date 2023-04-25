@@ -25,4 +25,4 @@ Run `make bonus` to add the bot. The bot performs 2 tasks,
 
  --- 
 
-This project was awesomely carried out with [moulin-louis](https://github.com/moulin-louis) and [Maelp20](https://github.com/Maelp20) !
+This project was awesomely carried out by [moulin-louis](https://github.com/moulin-louis), [Maelp20](https://github.com/Maelp20) and [Noulens](https://github.com/Noulens?tab=repositories)!
