@@ -17,13 +17,6 @@ void Server::is_valid_username( const string &username, Client& client) {
 		add_rply_from_server(":Username has invalid characters", client, " * ", ERR_ERRONEUSNICKNAME);
 		throw invalid_argument("user: invalid username");
 	}
-	// On peut avoit plusieurs fois le même username
-/*	for ( client_iter it = this->fd_map.begin(); it != this->fd_map.end(); it++) {
-		if (it->second.getUsername() == username) {
-			add_rply_from_server(":Username is already in use", client, " * ", ERR_NICKNAMEINUSE);
-			throw invalid_argument("user: username already taken");
-		}
-	}*/
 }
 
 void	Server::user( const vector<string>& params, Client& client) {
