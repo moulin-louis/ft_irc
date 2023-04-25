@@ -18,7 +18,7 @@ void Server::oper( const vector<string>& params, Client &client) {
 			add_rply_from_server(":Not enough parameters", client, "OPER", ERR_NEEDMOREPARAMS);
 			throw invalid_argument("oper: Not enough parameters");
 		}
-		if (params[0] != client.getUsername()) {
+		if (params[0] != client.getNickname()) {
 			add_rply_from_server(":Username incorrect", client, "OPER", ERR_PASSWDMISMATCH);
 			throw invalid_argument("oper: Username incorrect");
 		}

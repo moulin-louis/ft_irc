@@ -48,7 +48,7 @@ void	Server::nick( const vector<string>& params, Client& client)
 		string old_nickname = client.getNickname();
 		client.setNickname(params[0]);
 		if (client.isRegistered) {
-			string msg = string(":") + old_nickname + " !" + old_nickname + "@127.0.0.1 NICK :";
+			string msg = string(":") + old_nickname + "!" + old_nickname + "@" + this->_server_name + " NICK :";
 			msg += client.getNickname() + endmsg;
 			client.setBuff(client.getBuff() + msg);
 		}
