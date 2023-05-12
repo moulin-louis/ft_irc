@@ -19,7 +19,7 @@ Run `make` in the root of the projet and launch as follows:
 
 Run `make bonus` to add the bot. The bot performs 2 tasks,
 - it monitors channels and kicks users writting banwords,
-- it forwards its private messages form other users to chatGPT using the **libcurl** and sends the answer back to the users in a private message:
+- it forwards its private messages form other users to chatGPT using the **libcurl** and sends the answer back to the users in a private message. tlaunch the bot, make sure you have a valid OpenAI key in a .env file in the bot folder and run:
 
     `./banbot`
 
